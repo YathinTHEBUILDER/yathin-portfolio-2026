@@ -46,6 +46,14 @@ export async function initAnimations() {
         });
       }
     });
+
+    // Instant reveal of Experiments elements
+    document.querySelectorAll("[data-experiment-card], [data-terminal-line]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      }
+    });
     return;
   }
 
@@ -262,4 +270,48 @@ export async function initAnimations() {
       );
     }
   });
+
+  // 6. Phase 4: AI Experiments Section Scroll Trigger
+  const expSection = document.querySelector("[data-experiment-section]");
+  if (expSection) {
+    const cards = expSection.querySelectorAll("[data-experiment-card]");
+    
+    const expTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: expSection,
+        start: "top 75%",
+        toggleActions: "play none none none",
+      }
+    });
+
+    if (cards.length > 0) {
+      expTl.fromTo(cards,
+        { opacity: 0, y: 60, rotateX: 8 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          rotateX: 0, 
+          duration: 1.0, 
+          stagger: 0.15, 
+          ease: "power3.out" 
+        }
+      );
+
+      // Animate terminal lines inside each experiment card
+      const lines = expSection.querySelectorAll("[data-terminal-line]");
+      if (lines.length > 0) {
+        expTl.fromTo(lines,
+          { opacity: 0, x: -12 },
+          { 
+            opacity: 1, 
+            x: 0, 
+            duration: 0.5, 
+            stagger: 0.08, 
+            ease: "power2.out" 
+          },
+          "-=0.6"
+        );
+      }
+    }
+  }
 }
