@@ -54,6 +54,21 @@ export async function initAnimations() {
         el.style.transform = "none";
       }
     });
+
+    // Instant reveal of Skills Topology elements
+    document.querySelectorAll("[data-skill-center], [data-skill-group], .skill-pill").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      }
+    });
+
+    // Make all connection paths fully visible
+    document.querySelectorAll("[data-skill-line]").forEach((el) => {
+      if (el instanceof SVGPathElement) {
+        el.style.strokeDashoffset = "0";
+      }
+    });
     return;
   }
 
@@ -312,6 +327,84 @@ export async function initAnimations() {
           "-=0.6"
         );
       }
+    }
+  }
+
+  // 7. Phase 5: Skills Topology Map Scroll Trigger
+  const skillsSection = document.querySelector("[data-skills-section]");
+  if (skillsSection) {
+    const centerNode = skillsSection.querySelector("[data-skill-center]");
+    const lines = skillsSection.querySelectorAll("[data-skill-line]");
+    const groups = skillsSection.querySelectorAll("[data-skill-group]");
+    const pills = skillsSection.querySelectorAll(".skill-pill");
+
+    const skillsTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: skillsSection,
+        start: "top 75%",
+        toggleActions: "play none none none",
+      }
+    });
+
+    // A. Center core node scales in
+    if (centerNode) {
+      skillsTl.fromTo(centerNode,
+        { opacity: 0, scale: 0.85 },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.5)" }
+      );
+    }
+
+    // B. Draw angled SVG connection lines
+    if (lines.length > 0) {
+      lines.forEach((line) => {
+        if (line instanceof SVGPathElement) {
+          const length = line.getTotalLength();
+          // Initialize path parameters dynamically
+          gsap.set(line, {
+            strokeDasharray: length,
+            strokeDashoffset: length,
+            opacity: 1
+          });
+        }
+      });
+
+      // Animate strokeDashoffset to 0
+      skillsTl.to(Array.from(lines), {
+        strokeDashoffset: 0,
+        duration: 1.2,
+        ease: "power2.out",
+      }, "-=0.5");
+    }
+
+    // C. Stagger group cards entry
+    if (groups.length > 0) {
+      skillsTl.fromTo(Array.from(groups),
+        { opacity: 0, y: 40, scale: 0.96 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          scale: 1, 
+          duration: 0.9, 
+          stagger: 0.12, 
+          ease: "power3.out" 
+        },
+        "-=0.8"
+      );
+    }
+
+    // D. Micro-stagger individual skill pills
+    if (pills.length > 0) {
+      skillsTl.fromTo(Array.from(pills),
+        { opacity: 0, y: 12 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.4, 
+          stagger: 0.03, 
+          ease: "power1.out" 
+        },
+        "-=0.6"
+      );
     }
   }
 }
