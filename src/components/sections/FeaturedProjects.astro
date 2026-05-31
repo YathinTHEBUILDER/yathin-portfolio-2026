@@ -1,6 +1,432 @@
-<section id="projects" class="section">
-  <div class="container">
-    <p data-reveal>FEATURED PROJECTS / PLACEHOLDER</p>
-    <h2 data-reveal>Coming next</h2>
+---
+import { projects } from "../../data/projects";
+import LiveDemoFrame from "../ui/LiveDemoFrame";
+
+// Filter only featured projects (InvoiceFlow and SortMySkills)
+const featuredProjects = projects.filter((p) => p.featured);
+---
+
+<section id="projects" class="projects-section">
+  <div class="grid-overlay"></div>
+
+  <div class="container projects-container">
+    {/* Section Header */}
+    <div class="section-header" data-reveal>
+      <div class="section-badge">
+        <span class="badge-num">03</span>
+        <span class="badge-line"></span>
+        <span class="badge-title">FEATURED WORK</span>
+      </div>
+      <h2 class="section-headline">Products that moved past the idea stage.</h2>
+    </div>
+
+    {/* Project Showcases */}
+    <div class="showcases-list">
+      {
+        featuredProjects.map((proj, index) => {
+          const isEven = index % 2 === 0;
+          return (
+            <div 
+              class={`project-showcase ${isEven ? "layout-normal" : "layout-reverse"}`}
+              data-project-showcase
+            >
+              {/* Project Radial Glow behind visual */}
+              <div class={`project-glow glow-${proj.accent}`}></div>
+
+              {/* Left Column: Project Copy */}
+              <div class="project-copy" data-project-copy>
+                <div class="showcase-eyebrow">
+                  <span class="showcase-num">0{index + 1}</span>
+                  <span class="showcase-divider">/</span>
+                  <span class={`showcase-type text-${proj.accent}`}>{proj.type}</span>
+                </div>
+                
+                <h3 class="showcase-name">{proj.name}</h3>
+                
+                <h4 class="showcase-headline">{proj.headline}</h4>
+                
+                <p class="showcase-desc">{proj.description}</p>
+                
+                <div class="showcase-stack">
+                  {proj.stack.map((tech) => (
+                    <span class="stack-badge">{tech}</span>
+                  ))}
+                </div>
+
+                <div class="showcase-actions">
+                  {proj.live && (
+                    <a 
+                      href={proj.live} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      class={`btn-launch bg-${proj.accent}`}
+                    >
+                      <span>Visit Live Site</span>
+                      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </a>
+                  )}
+                  {proj.github && (
+                    <a 
+                      href={proj.github} 
+                      target="_blank" 
+                      rel="noreferrer" 
+                      class="btn-code"
+                    >
+                      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="github-icon">
+                        <path d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z" fill="currentColor"/>
+                      </svg>
+                      <span>Repository</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {/* Right Column: Interactive Browser Preview */}
+              <div class="project-demo" data-demo-frame>
+                {proj.live && (
+                  <LiveDemoFrame 
+                    client:visible
+                    title={proj.name}
+                    url={proj.live}
+                    accent={proj.accent as any}
+                  />
+                )}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
   </div>
 </section>
+
+<style>
+  .projects-section {
+    position: relative;
+    padding: 10rem 2rem;
+    background: #030305;
+    overflow: hidden;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+  }
+
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 60px 60px;
+    background-position: center;
+    pointer-events: none;
+    z-index: -2;
+  }
+
+  .projects-container {
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8rem;
+  }
+
+  /* Section Header */
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 680px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 1.5rem;
+  }
+
+  .section-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .badge-num {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+  }
+
+  .badge-line {
+    width: 24px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .badge-title {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .section-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5.5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    margin: 0;
+  }
+
+  /* Showcases List */
+  .showcases-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10rem;
+  }
+
+  .project-showcase {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  /* Glowing backgrounds */
+  .project-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(130px);
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .glow-green {
+    background: radial-gradient(circle, rgba(61, 217, 160, 0.2) 0%, transparent 70%);
+    top: -10%;
+    right: -10%;
+  }
+
+  .glow-blue {
+    background: radial-gradient(circle, rgba(79, 124, 255, 0.2) 0%, transparent 70%);
+    top: -10%;
+    left: -10%;
+  }
+
+  /* Left Column: Copy */
+  .project-copy {
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+  }
+
+  .showcase-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+  }
+
+  .showcase-num {
+    color: var(--text-dim);
+  }
+
+  .showcase-divider {
+    color: rgba(255, 255, 255, 0.1);
+  }
+
+  .showcase-type {
+    text-transform: uppercase;
+  }
+
+  .text-green { color: var(--green); }
+  .text-blue { color: var(--blue); }
+
+  .showcase-name {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 6.2vw, 4.4rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    color: var(--text);
+    margin: 0 0 1.5rem 0;
+    text-transform: uppercase;
+  }
+
+  .showcase-headline {
+    font-family: var(--font-body);
+    font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--text);
+    margin: 0 0 1.5rem 0;
+    letter-spacing: -0.01em;
+  }
+
+  .showcase-desc {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0 0 2.5rem 0;
+  }
+
+  /* Stack tags */
+  .showcase-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .stack-badge {
+    font-family: monospace;
+    font-size: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.8rem;
+    border-radius: 99px;
+    color: var(--text-muted);
+    transition: all 0.3s var(--ease-out);
+  }
+
+  .stack-badge:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+    background: var(--surface-strong);
+  }
+
+  /* Buttons */
+  .showcase-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .btn-launch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.95rem 1.8rem;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #000;
+    transition: all 0.3s var(--ease-out);
+    cursor: pointer;
+  }
+
+  .bg-green {
+    background: var(--green);
+    border: 1px solid var(--green);
+  }
+  .bg-green:hover {
+    box-shadow: 0 0 25px rgba(61, 217, 160, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .bg-blue {
+    background: var(--blue);
+    border: 1px solid var(--blue);
+    color: #fff;
+  }
+  .bg-blue:hover {
+    box-shadow: 0 0 25px rgba(79, 124, 255, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .btn-launch svg {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .btn-launch:hover svg {
+    transform: translate(2px, -2px);
+  }
+
+  .btn-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.95rem 1.8rem;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    transition: all 0.3s var(--ease-out);
+    cursor: pointer;
+  }
+
+  .btn-code:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  .github-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Right Column: Demo */
+  .project-demo {
+    position: relative;
+    width: 100%;
+    z-index: 3;
+    perspective: 1200px;
+  }
+
+  /* Layout Alternation on Widescreen */
+  @media (min-width: 769px) {
+    .layout-reverse {
+      grid-template-columns: 1.15fr 1fr;
+    }
+    .layout-reverse .project-copy {
+      grid-column: 2;
+    }
+    .layout-reverse .project-demo {
+      grid-column: 1;
+      grid-row: 1;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .project-showcase {
+      gap: 3rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .projects-container {
+      gap: 5rem;
+    }
+    .showcases-list {
+      gap: 6rem;
+    }
+    .project-showcase {
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+    }
+    .showcase-stack {
+      margin-bottom: 2.5rem;
+    }
+    .project-glow {
+      display: none;
+    }
+  }
+</style>

@@ -30,6 +30,22 @@ export async function initAnimations() {
         el.style.filter = "none";
       }
     });
+
+    // Instant reveal of Showcase elements
+    document.querySelectorAll("[data-project-copy], [data-demo-frame]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.style.filter = "none";
+        // Also ensure children of data-project-copy are shown
+        el.querySelectorAll("*").forEach((child) => {
+          if (child instanceof HTMLElement) {
+            child.style.opacity = "1";
+            child.style.transform = "none";
+          }
+        });
+      }
+    });
     return;
   }
 
@@ -118,9 +134,9 @@ export async function initAnimations() {
     });
   });
 
-  // 4. Phase 2B: MotionCards Scroll Scrub Parallax
   const isMobile = window.innerWidth <= 768;
 
+  // 4. Phase 2B: MotionCards Scroll Scrub Parallax
   // We disable scrub fanning out on mobile for better touch performance and layout preservation
   if (!isMobile) {
     const section = document.querySelector(".motion-section");
@@ -196,4 +212,54 @@ export async function initAnimations() {
       );
     });
   }
+
+  // 5. Phase 3: Featured Project Showcases
+  gsap.utils.toArray<HTMLElement>("[data-project-showcase]").forEach((showcase) => {
+    const copyEl = showcase.querySelector("[data-project-copy]");
+    const demoEl = showcase.querySelector("[data-demo-frame]");
+
+    if (!copyEl || !demoEl) return;
+
+    // A. Reveal timeline
+    const showcaseTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: showcase,
+        start: "top 75%",
+        toggleActions: "play none none none",
+      }
+    });
+
+    // Stagger reveal text elements
+    const children = copyEl.children;
+    if (children.length > 0) {
+      showcaseTl.fromTo(Array.from(children),
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.12, ease: "power3.out" }
+      );
+    }
+
+    // Interactive Demo Frame Fly-In
+    showcaseTl.fromTo(demoEl,
+      { opacity: 0, y: 80, scale: 0.94, rotateX: 8, rotateY: -8 },
+      { opacity: 1, y: 0, scale: 1, rotateX: 0, rotateY: 0, duration: 1.2, ease: "power4.out" },
+      "-=0.6"
+    );
+
+    // B. Subtle scrub parallax on desktop
+    if (!isMobile) {
+      gsap.fromTo(demoEl,
+        { yPercent: 6 },
+        {
+          yPercent: -6,
+          ease: "none",
+          scrollTrigger: {
+            trigger: showcase,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          }
+        }
+      );
+    }
+  });
 }
