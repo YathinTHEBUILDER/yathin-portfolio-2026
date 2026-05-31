@@ -69,6 +69,20 @@ export async function initAnimations() {
         el.style.strokeDashoffset = "0";
       }
     });
+
+    // Instant reveal of Playground elements
+    document.querySelectorAll("[data-playground-copy], [data-playground-terminal]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.querySelectorAll("*").forEach((child) => {
+          if (child instanceof HTMLElement) {
+            child.style.opacity = "1";
+            child.style.transform = "none";
+          }
+        });
+      }
+    });
     return;
   }
 
@@ -402,6 +416,51 @@ export async function initAnimations() {
           duration: 0.4, 
           stagger: 0.03, 
           ease: "power1.out" 
+        },
+        "-=0.6"
+      );
+    }
+  }
+
+  // 8. Phase 6: Playground Interactive Terminal Scroll Trigger
+  const playgroundSection = document.querySelector("[data-playground-section]");
+  if (playgroundSection) {
+    const copyContainer = playgroundSection.querySelector("[data-playground-copy]");
+    const terminalEl = playgroundSection.querySelector("[data-playground-terminal]");
+
+    const playgroundTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: playgroundSection,
+        start: "top 75%",
+        toggleActions: "play none none none",
+      }
+    });
+
+    // Animate [data-playground-copy] children: opacity 0 -> 1, y 30 -> 0, stagger 0.1
+    if (copyContainer && copyContainer.children.length > 0) {
+      playgroundTl.fromTo(Array.from(copyContainer.children),
+        { opacity: 0, y: 30 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.8, 
+          stagger: 0.1, 
+          ease: "power3.out" 
+        }
+      );
+    }
+
+    // Animate [data-playground-terminal]: opacity 0 -> 1, y 70 -> 0, scale 0.96 -> 1, rotateX 8 -> 0
+    if (terminalEl) {
+      playgroundTl.fromTo(terminalEl,
+        { opacity: 0, y: 70, scale: 0.96, rotateX: 8 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          scale: 1, 
+          rotateX: 0, 
+          duration: 1.1, 
+          ease: "power4.out" 
         },
         "-=0.6"
       );

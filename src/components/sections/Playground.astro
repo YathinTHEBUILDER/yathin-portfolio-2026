@@ -1,6 +1,298 @@
-<section id="playground" class="section">
-  <div class="container">
-    <p data-reveal>PLAYGROUND / PLACEHOLDER</p>
-    <h2 data-reveal>Coming next</h2>
+---
+import PortfolioTerminal from "../ui/PortfolioTerminal.tsx";
+---
+
+<section id="playground" class="playground-section" data-playground-section>
+  <div class="grid-overlay"></div>
+  <div class="playground-glow"></div>
+
+  <div class="container playground-container">
+    {/* Left Column - Copy & Action suggestions */}
+    <div class="playground-left" data-playground-copy>
+      <div class="section-badge">
+        <span class="badge-num">06</span>
+        <span class="badge-line"></span>
+        <span class="badge-title">PLAYGROUND</span>
+      </div>
+      <h2 class="section-headline">A small command interface for exploring my work.</h2>
+      
+      <p class="playground-desc">
+        Click any action pill below or type directly into the terminal sandbox on the right. No real shell execution is conducted—it is a secure simulated environment to easily explore my background, stack, and launch live builds.
+      </p>
+
+      <div class="suggestion-panel">
+        <div class="suggestion-header">
+          <span class="terminal-dot"></span>
+          <span>QUICK COMMAND CHIPS</span>
+        </div>
+        <div class="chips-grid">
+          <button class="suggestion-chip" data-cmd="help" aria-label="Simulate help command">
+            <span class="chip-prompt">$</span> <span>help</span>
+          </button>
+          <button class="suggestion-chip" data-cmd="whoami" aria-label="Simulate whoami command">
+            <span class="chip-prompt">$</span> <span>whoami</span>
+          </button>
+          <button class="suggestion-chip" data-cmd="projects" aria-label="Simulate projects command">
+            <span class="chip-prompt">$</span> <span>projects</span>
+          </button>
+          <button class="suggestion-chip" data-cmd="stack" aria-label="Simulate stack command">
+            <span class="chip-prompt">$</span> <span>stack</span>
+          </button>
+          <button class="suggestion-chip" data-cmd="open sortmyskills" aria-label="Simulate open sortmyskills command">
+            <span class="chip-prompt">$</span> <span>open sortmyskills</span>
+          </button>
+          <button class="suggestion-chip" data-cmd="open invoiceflow" aria-label="Simulate open invoiceflow command">
+            <span class="chip-prompt">$</span> <span>open invoiceflow</span>
+          </button>
+          <button class="suggestion-chip" data-cmd="contact" aria-label="Simulate contact command">
+            <span class="chip-prompt">$</span> <span>contact</span>
+          </button>
+          <button class="suggestion-chip clear-chip" data-cmd="clear" aria-label="Simulate clear command">
+            <span class="chip-prompt">$</span> <span>clear</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {/* Right Column - Interactive Terminal Component */}
+    <div class="playground-right" data-playground-terminal>
+      <div class="terminal-ambient-glow"></div>
+      <PortfolioTerminal client:visible />
+    </div>
   </div>
 </section>
+
+<script>
+  const setupChips = () => {
+    const chips = document.querySelectorAll(".suggestion-chip");
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const cmd = chip.getAttribute("data-cmd");
+        if (cmd) {
+          window.dispatchEvent(
+            new CustomEvent("run-terminal-command", { detail: cmd })
+          );
+        }
+      });
+    });
+  };
+
+  // Run on load and on astro page updates
+  setupChips();
+  document.addEventListener("astro:page-load", setupChips);
+</script>
+
+<style>
+  .playground-section {
+    position: relative;
+    padding: 10rem 2rem;
+    background: #030305;
+    overflow: hidden;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+  }
+
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.007) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.007) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center;
+    pointer-events: none;
+    z-index: -2;
+    opacity: 0.8;
+  }
+
+  .playground-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+    top: 50%;
+    left: -10%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .playground-container {
+    display: grid;
+    grid-template-columns: 1.1fr 1.2fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  @media (max-width: 968px) {
+    .playground-container {
+      grid-template-columns: 1fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Left Column Styling */
+  .playground-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 1.8rem;
+  }
+
+  .section-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .badge-num {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+  }
+
+  .badge-line {
+    width: 24px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .badge-title {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .section-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .playground-desc {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0 0 1.2rem 0;
+    max-width: 520px;
+  }
+
+  /* Suggestions Panel */
+  .suggestion-panel {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.015);
+    padding: 1.2rem;
+    max-width: 520px;
+  }
+
+  .suggestion-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .terminal-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+  }
+
+  .chips-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .suggestion-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.45rem 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-out);
+  }
+
+  .suggestion-chip:hover {
+    background: rgba(51, 230, 255, 0.06);
+    border-color: rgba(51, 230, 255, 0.35);
+    color: var(--text);
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 12px rgba(51, 230, 255, 0.08);
+  }
+
+  .suggestion-chip:active {
+    transform: translateY(-0.5px);
+  }
+
+  .chip-prompt {
+    color: var(--cyan);
+    user-select: none;
+  }
+
+  .clear-chip {
+    border-color: rgba(255, 143, 163, 0.15);
+  }
+
+  .clear-chip:hover {
+    background: rgba(255, 143, 163, 0.06);
+    border-color: rgba(255, 143, 163, 0.35);
+    color: #ff8fa3;
+    box-shadow: 0 4px 12px rgba(255, 143, 163, 0.08);
+  }
+
+  .clear-chip .chip-prompt {
+    color: #ff8fa3;
+  }
+
+  /* Right Column Styling & Terminal glow */
+  .playground-right {
+    position: relative;
+    width: 100%;
+  }
+
+  .terminal-ambient-glow {
+    position: absolute;
+    width: 110%;
+    height: 110%;
+    top: -5%;
+    left: -5%;
+    border-radius: 24px;
+    background: radial-gradient(circle, rgba(51, 230, 255, 0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Support reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .suggestion-chip:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+  }
+</style>
