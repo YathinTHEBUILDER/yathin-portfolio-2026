@@ -135,8 +135,10 @@ const getSkillClass = (skillName: string) => {
 
             return (
               <div 
-                class={`topology-card ${positionClasses[index]} border-${cardAccent}`}
+                class={`topology-card ${positionClasses[index]} border-${cardAccent} depth-card scroll-3d-safe`}
                 data-skill-group
+                data-tilt-card
+                data-depth-layer={index + 1}
               >
                 {/* Background soft accent glow */}
                 <div class={`card-inner-glow bg-glow-${cardAccent}`}></div>
@@ -347,7 +349,7 @@ const getSkillClass = (skillName: string) => {
     justify-content: center;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.05), 0 12px 30px rgba(0, 0, 0, 0.5);
   }
 
   .core-glow {

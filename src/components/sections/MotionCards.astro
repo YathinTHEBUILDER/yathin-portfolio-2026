@@ -1,273 +1,695 @@
 ---
 ---
 
-<section id="motion" class="motion-section">
-  <!-- Interactive particle dots and background graphics -->
-  <div class="chrome-object"></div>
-  <div class="dots-overlay">
-    <div class="dot dot-pink"></div>
-    <div class="dot dot-cyan"></div>
+<section id="motion" class="motion-section" data-motion-section>
+  <!-- Background Grid & Subtle Particles -->
+  <div class="motion-grid-bg"></div>
+  <div class="motion-particles">
+    <div class="particle p-1"></div>
+    <div class="particle p-2"></div>
+    <div class="particle p-3"></div>
+    <div class="particle p-4"></div>
+  </div>
+
+  <!-- Massive Background Clipped Word "EXECUTION" -->
+  <div class="background-word-wrapper">
+    <span class="motion-bg-word" data-motion-word>EXECUTION</span>
   </div>
 
   <div class="container motion-container">
-    <div class="motion-header">
-      <span class="motion-number">02</span>
-      <p class="motion-sub" data-motion-text>
-        Ideas do not stay in notes.<br class="desktop-only" />
-        They become interfaces, systems, and shipped products.
-      </p>
+    <!-- Left Side: Massive Vertical Number 02 -->
+    <div class="motion-left-col">
+      <div class="motion-num-wrapper">
+        <span class="motion-number" data-motion-number>02</span>
+      </div>
+      <div class="motion-section-title">
+        <span class="title-slash">//</span>
+        <h2>EXECUTION LOOP</h2>
+      </div>
     </div>
 
-    <!-- Motion Cards Stack -->
-    <div class="cards-stack-wrapper">
-      <div class="cards-stack">
-        <!-- Card 1 -->
-        <div class="m-card card-1" data-motion-card="1">
-          <div class="card-num">01</div>
-          <h3 class="card-title">BUILD</h3>
-          <p class="card-desc">Translating logic into structured architectures and clean frontend pipelines.</p>
-          <div class="card-badge">Next.js / Astro / Three.js</div>
-        </div>
+    <!-- Center Column: Stacked Cards -->
+    <div class="motion-center-col">
+      <!-- Technical Grid Box around Cards -->
+      <div class="tech-grid-box">
+        <div class="corner-mark top-left">+</div>
+        <div class="corner-mark top-right">+</div>
+        <div class="corner-mark bottom-left">+</div>
+        <div class="corner-mark bottom-right">+</div>
+        
+        <!-- Technical Grid Lines -->
+        <div class="tech-line horizontal-line" data-motion-line="horizontal"></div>
+        <div class="tech-line vertical-line" data-motion-line="vertical"></div>
 
-        <!-- Card 2 -->
-        <div class="m-card card-2" data-motion-card="2">
-          <div class="card-num">02</div>
-          <h3 class="card-title">SHIP</h3>
-          <p class="card-desc">Deploying serverless, production-grade applications that scale seamlessly.</p>
-          <div class="card-badge">Supabase / Vercel / Cloudflare</div>
-        </div>
+        <!-- Cards Stack Container -->
+        <div class="cards-3d-wrapper">
+          <!-- Card 1: BUILD -->
+          <div class="slab-card card-build" data-motion-card="1">
+            <div class="slab-border-accent"></div>
+            <div class="slab-header">
+              <span class="slab-num">01 / STAGE: DESIGN</span>
+              <div class="slab-indicator active"></div>
+            </div>
+            <h3 class="slab-title">BUILD</h3>
+            <p class="slab-desc">Ideas move through systems. First they become interfaces.</p>
+            <div class="slab-footer">
+              <span class="slab-tech">ASTRO.JS // INTERFACE</span>
+              <span class="slab-status">[COMPILED]</span>
+            </div>
+          </div>
 
-        <!-- Card 3 -->
-        <div class="m-card card-3" data-motion-card="3">
-          <div class="card-num">03</div>
-          <h3 class="card-title">ITERATE</h3>
-          <p class="card-desc">Refining micro-interactions, optimizing page performance, and training models.</p>
-          <div class="card-badge">GSAP / Lenis / Groq / Gemini</div>
+          <!-- Card 2: SHIP -->
+          <div class="slab-card card-ship" data-motion-card="2">
+            <div class="slab-border-accent"></div>
+            <div class="slab-header">
+              <span class="slab-num">02 / STAGE: DEPLOY</span>
+              <div class="slab-indicator active"></div>
+            </div>
+            <h3 class="slab-title">SHIP</h3>
+            <p class="slab-desc">Then products. Scaled, secure, serverless implementations.</p>
+            <div class="slab-footer">
+              <span class="slab-tech">VERCEL // EDGE</span>
+              <span class="slab-status">[LIVE]</span>
+            </div>
+          </div>
+
+          <!-- Card 3: ITERATE -->
+          <div class="slab-card card-iterate" data-motion-card="3">
+            <div class="slab-border-accent"></div>
+            <div class="slab-header">
+              <span class="slab-num">03 / STAGE: OPTIMIZE</span>
+              <div class="slab-indicator active"></div>
+            </div>
+            <h3 class="slab-title">ITERATE</h3>
+            <p class="slab-desc">Then sharper versions. Metrics-driven micro-refinements.</p>
+            <div class="slab-footer">
+              <span class="slab-tech">GSAP // THREE.JS</span>
+              <span class="slab-status">[LOOPING]</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Right Side: Tech Annotations & Diagrams -->
+    <div class="motion-right-col">
+      <div class="tech-annotations">
+        <div class="annotation-item">
+          <span class="ann-label">SYS.REF</span>
+          <span class="ann-value">#98F-2026</span>
+        </div>
+        <div class="annotation-item">
+          <span class="ann-label">COORD</span>
+          <span class="ann-value">[40, -42, 9]</span>
+        </div>
+        <div class="annotation-item">
+          <span class="ann-label">FPS</span>
+          <span class="ann-value">60.0 // LENIS</span>
+        </div>
+        <div class="annotation-item">
+          <span class="ann-label">PIPELINE</span>
+          <span class="ann-value">CONTINUOUS</span>
+        </div>
+      </div>
+
+      <div class="tech-diagram">
+        <svg viewBox="0 0 100 80" class="diagram-svg" aria-hidden="true">
+          <rect x="10" y="10" width="80" height="60" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1" stroke-dasharray="2 2" />
+          <path d="M10 40 H90 M50 10 V70" stroke="rgba(0,0,0,0.08)" stroke-width="0.5" />
+          <circle cx="50" cy="40" r="25" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="0.75" stroke-dasharray="4 4" />
+          <path d="M25 25 L75 55 M25 55 L75 25" stroke="rgba(0,0,0,0.04)" stroke-width="0.75" />
+        </svg>
+      </div>
+
+      <div class="motion-tech-copy">
+        <p>A continuous loop of digital craftsmanship. Translating system logic and aesthetics into high-fidelity web experiences.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Tags Wrapper -->
+  <div class="floating-tags-container">
+    <div class="floating-tag tag-astro" data-motion-tag="1">ASTRO</div>
+    <div class="floating-tag tag-gsap" data-motion-tag="2">GSAP</div>
+    <div class="floating-tag tag-lenis" data-motion-tag="3">LENIS</div>
+    <div class="floating-tag tag-threejs" data-motion-tag="4">THREE.JS</div>
+    <div class="floating-tag tag-supabase" data-motion-tag="5">SUPABASE</div>
+    <div class="floating-tag tag-vercel" data-motion-tag="6">VERCEL</div>
   </div>
 </section>
 
 <style>
   .motion-section {
     position: relative;
-    padding: 10rem 2rem;
+    width: 100%;
+    min-height: 100vh;
     background: #f3f1ee;
     color: #050505;
     overflow: hidden;
-    z-index: 1;
+    padding: 10rem 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
   }
 
-  /* Abstract 3D-looking Chrome Object using CSS Gradients */
-  .chrome-object {
+  /* Background Grid Overlay */
+  .motion-grid-bg {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    background: 
-      radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, transparent 40%),
-      radial-gradient(circle at 70% 70%, rgba(51, 230, 255, 0.3) 0%, transparent 45%),
-      radial-gradient(circle at 80% 20%, rgba(255, 143, 163, 0.25) 0%, transparent 40%),
-      linear-gradient(135deg, #e4e0db 0%, #c4bfb7 50%, #9e978d 100%);
-    box-shadow: 
-      inset -20px -20px 50px rgba(0, 0, 0, 0.1),
-      inset 20px 20px 50px rgba(255, 255, 255, 0.6),
-      0 40px 80px rgba(0, 0, 0, 0.08);
-    opacity: 0.85;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(5, 5, 5, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(5, 5, 5, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center;
     pointer-events: none;
-    z-index: -1;
+    z-index: 0;
   }
 
-  /* Soft particles */
-  .dots-overlay {
+  /* Soft floating particles */
+  .motion-particles {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: -1;
+    z-index: 2;
   }
 
-  .dot {
+  .particle {
     position: absolute;
-    width: 140px;
-    height: 140px;
     border-radius: 50%;
-    filter: blur(50px);
-    opacity: 0.35;
+    filter: blur(40px);
+    opacity: 0.12;
+    pointer-events: none;
   }
 
-  .dot-pink {
-    background: #ff8fa3;
-    top: 20%;
-    left: 15%;
+  .p-1 {
+    width: 150px;
+    height: 150px;
+    background: var(--pink);
+    top: 15%;
+    left: 20%;
   }
 
-  .dot-cyan {
-    background: #33e6ff;
-    bottom: 25%;
-    right: 15%;
+  .p-2 {
+    width: 180px;
+    height: 180px;
+    background: var(--cyan);
+    bottom: 20%;
+    right: 25%;
   }
 
-  /* Container */
+  .p-3 {
+    width: 100px;
+    height: 100px;
+    background: var(--violet);
+    top: 50%;
+    left: 10%;
+  }
+
+  .p-4 {
+    width: 120px;
+    height: 120px;
+    background: var(--yellow);
+    bottom: 30%;
+    right: 8%;
+  }
+
+  /* Massive Backdrop Text */
+  .background-word-wrapper {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .motion-bg-word {
+    font-family: var(--font-display);
+    font-size: clamp(8rem, 20vw, 24rem);
+    font-weight: 900;
+    color: rgba(5, 5, 5, 0.02);
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    user-select: none;
+    line-height: 1;
+  }
+
+  /* Main Responsive Grid Container */
   .motion-container {
-    width: min(1200px, calc(100% - 2rem));
+    display: grid;
+    grid-template-columns: 220px 1fr 240px;
+    gap: 5rem;
+    align-items: center;
+    width: min(1200px, calc(100% - 4rem));
     margin: 0 auto;
+    z-index: 10;
+    position: relative;
+  }
+
+  /* Left Column: Vertical Header */
+  .motion-left-col {
     display: flex;
     flex-direction: column;
-    gap: 5rem;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: flex-start;
   }
 
-  /* Header */
-  .motion-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    padding-bottom: 2rem;
+  .motion-num-wrapper {
+    overflow: hidden;
   }
 
   .motion-number {
     font-family: var(--font-display);
-    font-size: clamp(4rem, 12vw, 10rem);
+    font-size: clamp(5rem, 11vw, 10rem);
     font-weight: 800;
     line-height: 0.8;
     letter-spacing: -0.06em;
-    color: rgba(0, 0, 0, 0.05);
-  }
-
-  .motion-sub {
-    font-family: var(--font-body);
-    font-size: clamp(1.2rem, 3.2vw, 2.2rem);
-    font-weight: 700;
-    line-height: 1.25;
-    letter-spacing: -0.03em;
     color: #050505;
-    text-align: right;
-    margin: 0;
+    display: block;
   }
 
-  /* Cards Stack layout */
-  .cards-stack-wrapper {
-    position: relative;
+  .motion-section-title {
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 6rem 0;
-    min-height: 480px;
+    gap: 0.5rem;
   }
 
-  .cards-stack {
-    position: relative;
-    width: 100%;
-    max-width: 360px;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .title-slash {
+    font-family: monospace;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--pink);
   }
 
-  /* Shared Card Styling */
-  .m-card {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(247, 246, 244, 0.85);
-    border: 1px solid #050505;
-    border-radius: var(--radius-lg);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    padding: 2.5rem;
-    display: flex;
-    flex-direction: column;
-    transition: box-shadow 0.3s var(--ease-out);
-    color: #050505;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  }
-
-  .m-card:hover {
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
-  }
-
-  .card-num {
+  .motion-section-title h2 {
     font-family: var(--font-display);
     font-size: 0.85rem;
-    font-weight: 700;
-    color: #9c9c9c;
-    letter-spacing: 0.1em;
-    margin-bottom: auto;
-  }
-
-  .card-title {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 5vw, 3.2rem);
     font-weight: 800;
-    line-height: 0.9;
-    letter-spacing: -0.05em;
-    margin: 0 0 1rem 0;
+    letter-spacing: 0.12em;
+    color: #050505;
+    margin: 0;
     text-transform: uppercase;
   }
 
-  .card-desc {
-    font-family: var(--font-body);
-    font-size: 0.95rem;
-    line-height: 1.5;
-    color: #666;
-    margin: 0 0 2.5rem 0;
+  /* Center Column: Slabs Stack Container */
+  .motion-center-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 15;
   }
 
-  .card-badge {
-    align-self: flex-start;
+  .tech-grid-box {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    padding: 3.5rem 2rem;
+    background: transparent;
+  }
+
+  /* Technical Annotation Marks */
+  .corner-mark {
+    position: absolute;
     font-family: monospace;
-    font-size: 0.75rem;
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    padding: 0.4rem 0.8rem;
-    border-radius: 99px;
+    font-size: 1.1rem;
+    color: rgba(5, 5, 5, 0.25);
+    font-weight: bold;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .corner-mark.top-left { top: 0; left: 0; }
+  .corner-mark.top-right { top: 0; right: 0; }
+  .corner-mark.bottom-left { bottom: 0; left: 0; }
+  .corner-mark.bottom-right { bottom: 0; right: 0; }
+
+  /* Technical Annotation Lines */
+  .tech-line {
+    position: absolute;
+    background: rgba(5, 5, 5, 0.05);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .horizontal-line {
+    top: 50%;
+    left: -30px;
+    right: -30px;
+    height: 1px;
+    transform-origin: center;
+    transform: scaleX(0);
+  }
+
+  .vertical-line {
+    left: 50%;
+    top: -30px;
+    bottom: -30px;
+    width: 1px;
+    transform-origin: center;
+    transform: scaleY(0);
+  }
+
+  /* Slabs Stack */
+  .cards-3d-wrapper {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    perspective: 1200px;
+    transform-style: preserve-3d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Premium Glass Slab Styling */
+  .slab-card {
+    position: absolute;
+    width: 100%;
+    max-width: 380px;
+    height: 380px;
+    background: rgba(247, 246, 244, 0.93);
+    border: 1.5px solid #050505;
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 2.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow 0.4s var(--ease-out), border-color 0.4s var(--ease-out);
+    transform-origin: center center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.015);
+  }
+
+  .slab-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  }
+
+  .slab-border-accent {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    border: 1px solid rgba(5, 5, 5, 0.04);
+    border-radius: 8px;
+    pointer-events: none;
+  }
+
+  .slab-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .slab-num {
+    font-family: monospace;
+    font-size: 0.68rem;
+    color: rgba(5, 5, 5, 0.45);
+    letter-spacing: 0.05em;
+    font-weight: bold;
+  }
+
+  .slab-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(5, 5, 5, 0.15);
+  }
+
+  .slab-indicator.active {
+    background: var(--pink);
+    box-shadow: 0 0 6px var(--pink);
+  }
+
+  .slab-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5.5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: #050505;
+    margin: 1.5rem 0 0.5rem 0;
+    text-transform: uppercase;
+  }
+
+  .slab-desc {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: rgba(5, 5, 5, 0.7);
+    margin: 0 0 auto 0;
+  }
+
+  .slab-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(5, 5, 5, 0.06);
+    padding-top: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .slab-tech {
+    font-family: monospace;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: rgba(5, 5, 5, 0.55);
+  }
+
+  .slab-status {
+    font-family: monospace;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: var(--pink);
+  }
+
+  /* Specific Card stacking indices */
+  .card-build { z-index: 3; }
+  .card-ship { z-index: 2; }
+  .card-iterate { z-index: 1; }
+
+  /* Right Column: Tech Details */
+  .motion-right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+    justify-content: center;
+  }
+
+  .tech-annotations {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    border-top: 1px solid rgba(5, 5, 5, 0.08);
+    padding-top: 1.5rem;
+  }
+
+  .annotation-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .ann-label {
+    font-family: monospace;
+    font-size: 0.62rem;
+    font-weight: bold;
+    color: rgba(5, 5, 5, 0.4);
+    letter-spacing: 0.08em;
+  }
+
+  .ann-value {
+    font-family: monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
     color: #050505;
   }
 
-  /* Specific Card stacking order */
-  .card-1 {
-    z-index: 3;
-  }
-  .card-2 {
-    z-index: 2;
-  }
-  .card-3 {
-    z-index: 1;
+  .tech-diagram {
+    border: 1px solid rgba(5, 5, 5, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.8rem;
   }
 
-  @media (max-width: 768px) {
-    .motion-section {
-      padding: 6rem 1rem;
+  .diagram-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .motion-tech-copy {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: rgba(5, 5, 5, 0.6);
+    margin: 0;
+  }
+
+  /* Floating tags absolute coordinates */
+  .floating-tags-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 12;
+  }
+
+  .floating-tag {
+    position: absolute;
+    font-family: monospace;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: #050505;
+    border: 1px solid #050505;
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    background: rgba(247, 246, 244, 0.95);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    opacity: 0.75;
+    transition: opacity 0.3s var(--ease-out);
+  }
+
+  .tag-astro { top: 15%; left: 42%; }
+  .tag-gsap { top: 22%; right: 38%; }
+  .tag-lenis { bottom: 22%; left: 38%; }
+  .tag-threejs { bottom: 15%; right: 42%; }
+  .tag-supabase { top: 40%; left: 24%; }
+  .tag-vercel { bottom: 40%; right: 24%; }
+
+  /* Media Queries: Large Screen / Tablet Adjustments */
+  @media (max-width: 1024px) {
+    .motion-container {
+      grid-template-columns: 180px 1fr 200px;
+      gap: 3rem;
     }
     
-    .motion-header {
+    .tag-supabase { left: 15%; }
+    .tag-vercel { right: 15%; }
+  }
+
+  /* Mobile Layout - Bypass pinning, vertical stacking, hide non-essential elements */
+  @media (max-width: 768px) {
+    .motion-section {
+      min-height: auto;
+      height: auto !important;
+      padding: 6rem 1.25rem;
+    }
+
+    .motion-container {
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+    }
+
+    .motion-left-col {
+      align-items: center;
+      text-align: center;
+    }
+
+    .motion-number {
+      font-size: 6.5rem;
+      text-align: center;
+    }
+
+    .motion-center-col {
+      width: 100%;
+    }
+
+    .tech-grid-box {
+      max-width: 100%;
+      padding: 0;
+    }
+
+    .cards-3d-wrapper {
+      height: auto;
+      perspective: none;
+      transform-style: flat;
+      display: flex;
       flex-direction: column;
-      align-items: flex-start;
       gap: 1.5rem;
+      width: 100%;
     }
 
-    .motion-sub {
-      text-align: left;
+    .slab-card {
+      position: relative !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      transform: none !important;
+      margin: 0 !important;
+      top: auto !important;
+      left: auto !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+      padding: 1.75rem;
     }
 
-    .cards-stack-wrapper {
-      padding: 3rem 0;
-      min-height: 380px;
+    .slab-title {
+      font-size: 2.5rem;
+      margin-top: 1rem;
     }
 
-    .cards-stack {
-      max-width: 320px;
-      height: 360px;
+    .slab-footer {
+      margin-top: 1.25rem;
+      padding-top: 0.85rem;
     }
 
-    .chrome-object {
-      width: 300px;
-      height: 300px;
+    .motion-right-col {
+      display: none; /* Hide complex diagrams/side text on mobile */
+    }
+
+    /* Floating tags stack cleanly at the bottom */
+    .floating-tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      position: relative;
+      inset: auto;
+      margin-top: 2rem;
+      pointer-events: auto;
+      width: 100%;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .floating-tag {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      right: auto !important;
+      bottom: auto !important;
+      opacity: 0.9;
+    }
+
+    .tech-line {
+      display: none !important;
+    }
+
+    .corner-mark {
+      display: none !important;
+    }
+
+    .background-word-wrapper {
+      display: none !important;
+    }
+  }
+
+  /* Support reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .slab-card {
+      transition: none !important;
+      transform: none !important;
+    }
+    .particle {
+      display: none !important;
+    }
+    .tech-line {
+      display: none !important;
     }
   }
 </style>
