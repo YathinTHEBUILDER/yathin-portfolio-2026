@@ -1,12 +1,148 @@
+---
+import { profile } from "../../data/profile";
+const githubUrl = profile.github;
+---
+
 <header class="site-nav">
-  <a href="#home">YATHIN.G</a>
-  <nav>
-    <a href="#about">About</a>
-    <a href="#projects">Work</a>
-    <a href="#skills">Stack</a>
-    <a href="#contact">Contact</a>
-  </nav>
+  <div class="nav-container">
+    {/* Brand Logo */}
+    <a href="#hero" class="brand-link nav-link" aria-label="Yathin G Home">
+      <span class="brand-logo-dot"></span>
+      <span class="brand-text">YATHIN.G</span>
+    </a>
+
+    {/* Navigation Menu Wrapper (Desktop links and mobile drawer) */}
+    <div class="nav-menu-wrapper">
+      <nav class="nav-menu" aria-label="Main Navigation">
+        <a href="#projects" class="nav-link">Work</a>
+        <a href="#experiments" class="nav-link">Experiments</a>
+        <a href="#skills" class="nav-link">Stack</a>
+        <a href="#playground" class="nav-link">Lab</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+      
+      {/* Right Side Social CTA for Mobile inside drawer */}
+      <a href={githubUrl} target="_blank" rel="noreferrer" class="mobile-github-link" aria-label="Visit GitHub Profile">
+        <span>GitHub</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="github-arrow-icon">
+          <line x1="7" y1="17" x2="17" y2="7" />
+          <polyline points="7 7 17 7 17 17" />
+        </svg>
+      </a>
+    </div>
+
+    {/* Desktop Right Side CTA */}
+    <div class="nav-right">
+      <a href={githubUrl} target="_blank" rel="noreferrer" class="btn-github-nav" aria-label="Visit Yathin's GitHub Profile">
+        <span>GitHub</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="github-arrow-icon">
+          <line x1="7" y1="17" x2="17" y2="7" />
+          <polyline points="7 7 17 7 17 17" />
+        </svg>
+      </a>
+
+      {/* Accessible Mobile Menu Button */}
+      <button class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="burger-bar line-top"></span>
+        <span class="burger-bar line-mid"></span>
+        <span class="burger-bar line-bot"></span>
+      </button>
+    </div>
+  </div>
 </header>
+
+<script>
+  const initNavbar = () => {
+    const header = document.querySelector(".site-nav");
+    const menuBtn = document.querySelector(".mobile-menu-btn");
+    const navMenu = document.querySelector(".nav-menu-wrapper");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    // 1. Scroll background transitions
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        header?.classList.add("scrolled");
+      } else {
+        header?.classList.remove("scrolled");
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // initialize on load
+
+    // 2. Mobile menu toggle
+    const toggleMenu = () => {
+      const expanded = menuBtn?.getAttribute("aria-expanded") === "true";
+      menuBtn?.setAttribute("aria-expanded", String(!expanded));
+      navMenu?.classList.toggle("open");
+      menuBtn?.classList.toggle("active");
+      document.body.classList.toggle("menu-open");
+    };
+
+    menuBtn?.addEventListener("click", toggleMenu);
+
+    // 3. Smooth scrolling with Lenis interceptor
+    navLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const targetId = link.getAttribute("href");
+        if (targetId && targetId.startsWith("#")) {
+          e.preventDefault();
+
+          // Close mobile menu if active
+          if (navMenu?.classList.contains("open")) {
+            menuBtn?.setAttribute("aria-expanded", "false");
+            navMenu.classList.remove("open");
+            menuBtn?.classList.remove("active");
+            document.body.classList.remove("menu-open");
+          }
+
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            const offset = 80;
+            // Access global Lenis if available
+            if ((window as any).lenis) {
+              (window as any).lenis.scrollTo(targetEl, { offset: -offset });
+            } else {
+              const elementPosition = targetEl.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.pageYOffset - offset;
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+              });
+            }
+          }
+        }
+      });
+    });
+
+    // 4. Scroll Spy - Active navigational highlighting
+    const sections = document.querySelectorAll("section[id], header[id]");
+    const handleActiveHighlight = () => {
+      const scrollPosition = window.scrollY + 120; // safe offset for sticky nav height
+
+      sections.forEach((section) => {
+        const sectionHeight = (section as HTMLElement).offsetHeight;
+        const sectionTop = (section as HTMLElement).offsetTop;
+        const sectionId = section.getAttribute("id");
+
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          document.querySelectorAll(`.nav-link[href="#${sectionId}"]`).forEach((l) => {
+            l.classList.add("active");
+          });
+        } else {
+          document.querySelectorAll(`.nav-link[href="#${sectionId}"]`).forEach((l) => {
+            l.classList.remove("active");
+          });
+        }
+      });
+    };
+    window.addEventListener("scroll", handleActiveHighlight, { passive: true });
+    handleActiveHighlight();
+  };
+
+  // Run on load and on astro page updates
+  initNavbar();
+  document.addEventListener("astro:page-load", initNavbar);
+</script>
 
 <style>
   .site-nav {
@@ -14,21 +150,287 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 50;
+    z-index: 100;
+    padding: 1.5rem 2rem;
+    color: var(--text);
+    border-bottom: 1px solid transparent;
+    transition: background 0.4s var(--ease-out), border-color 0.4s var(--ease-out), padding 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+  }
+
+  /* Scrolled glass navbar status */
+  .site-nav.scrolled {
+    background: rgba(3, 3, 5, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-color: var(--border);
+    padding: 0.9rem 2rem;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+  }
+
+  .nav-container {
+    width: min(1200px, 100%);
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.2rem 2rem;
+  }
+
+  /* Logo */
+  .brand-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    outline: none;
+  }
+
+  .brand-logo-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+  }
+
+  .brand-text {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
     color: var(--text);
   }
 
-  nav {
+  /* Navigation Links - Desktop */
+  .nav-menu-wrapper {
     display: flex;
-    gap: 1.2rem;
+    align-items: center;
+    gap: 2rem;
   }
 
-  a {
-    font-size: 0.85rem;
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 2.2rem;
+  }
+
+  .nav-link {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
     color: var(--text-muted);
+    transition: color 0.3s var(--ease-out);
+    position: relative;
+    outline: none;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--cyan);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .nav-link.active {
+    color: var(--text);
+  }
+
+  /* Right Action CTA - Desktop */
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .btn-github-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: all 0.3s var(--ease-out);
+    outline: none;
+  }
+
+  .btn-github-nav:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .btn-github-nav:focus-visible,
+  .nav-link:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  .github-arrow-icon {
+    width: 11px;
+    height: 11px;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .btn-github-nav:hover .github-arrow-icon {
+    transform: translate(1px, -1px);
+  }
+
+  .mobile-github-link {
+    display: none;
+  }
+
+  /* Mobile Burger Button */
+  .mobile-menu-btn {
+    display: none;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    z-index: 110;
+    outline: none;
+  }
+
+  .burger-bar {
+    width: 18px;
+    height: 1.5px;
+    background: var(--text);
+    border-radius: 9px;
+    transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out), background 0.3s var(--ease-out);
+  }
+
+  /* Mobile Media Queries */
+  @media (max-width: 768px) {
+    .site-nav {
+      padding: 1.2rem 1.5rem;
+    }
+    
+    .site-nav.scrolled {
+      padding: 0.9rem 1.5rem;
+    }
+
+    .btn-github-nav {
+      display: none;
+    }
+
+    .mobile-menu-btn {
+      display: flex;
+    }
+
+    /* Burger Active Animations */
+    .mobile-menu-btn.active .line-top {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .mobile-menu-btn.active .line-mid {
+      opacity: 0;
+    }
+
+    .mobile-menu-btn.active .line-bot {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    /* Mobile Navigation Overlay Drawer */
+    .nav-menu-wrapper {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 290px;
+      height: 100vh;
+      background: rgba(3, 3, 5, 0.96);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-left: 1px solid var(--border);
+      padding: 8rem 2.5rem 3rem 2.5rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3.5rem;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+
+    .nav-menu-wrapper.open {
+      transform: translateX(0);
+    }
+
+    .nav-menu {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2rem;
+      width: 100%;
+    }
+
+    .nav-link {
+      font-size: 1.15rem;
+      width: 100%;
+    }
+
+    .nav-link::after {
+      bottom: -4px;
+    }
+
+    .mobile-github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-top: auto;
+      text-decoration: none;
+    }
+
+    .mobile-github-link .github-arrow-icon {
+      width: 13px;
+      height: 13px;
+      color: var(--cyan);
+    }
+  }
+
+  /* Support reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .nav-menu-wrapper {
+      transition: opacity 0.25s ease-out !important;
+      transform: translateX(0) !important;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .nav-menu-wrapper.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .burger-bar, .github-arrow-icon, .nav-link::after {
+      transition: none !important;
+    }
   }
 </style>

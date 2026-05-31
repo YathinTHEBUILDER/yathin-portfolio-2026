@@ -83,6 +83,22 @@ export async function initAnimations() {
         });
       }
     });
+
+    // Instant reveal of Contact elements
+    document.querySelectorAll("[data-contact-copy], [data-contact-card], [data-contact-cta]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.style.scale = "1";
+        el.querySelectorAll("*").forEach((child) => {
+          if (child instanceof HTMLElement) {
+            child.style.opacity = "1";
+            child.style.transform = "none";
+            child.style.scale = "1";
+          }
+        });
+      }
+    });
     return;
   }
 
@@ -460,6 +476,66 @@ export async function initAnimations() {
           scale: 1, 
           rotateX: 0, 
           duration: 1.1, 
+          ease: "power4.out" 
+        },
+        "-=0.6"
+      );
+    }
+  }
+
+  // 9. Phase 7: Contact Section Scroll Trigger
+  const contactSection = document.querySelector("[data-contact-section]");
+  if (contactSection) {
+    const copyContainer = contactSection.querySelector("[data-contact-copy]");
+    const cards = contactSection.querySelectorAll("[data-contact-card]");
+    const ctaPanel = contactSection.querySelector("[data-contact-cta]");
+
+    const contactTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: contactSection,
+        start: "top 75%",
+        toggleActions: "play none none none",
+      }
+    });
+
+    // Animate [data-contact-copy] children: opacity 0 -> 1, y 40 -> 0, stagger 0.1
+    if (copyContainer && copyContainer.children.length > 0) {
+      contactTl.fromTo(Array.from(copyContainer.children),
+        { opacity: 0, y: 40 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.8, 
+          stagger: 0.1, 
+          ease: "power3.out" 
+        }
+      );
+    }
+
+    // Animate [data-contact-card] grid: opacity 0 -> 1, y 32 -> 0, stagger 0.08
+    if (cards.length > 0) {
+      contactTl.fromTo(Array.from(cards),
+        { opacity: 0, y: 32 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.8, 
+          stagger: 0.08, 
+          ease: "power3.out" 
+        },
+        "-=0.6"
+      );
+    }
+
+    // Animate [data-contact-cta] panel: opacity 0 -> 1, y 40 -> 0, scale 0.96 -> 1
+    if (ctaPanel) {
+      contactTl.fromTo(ctaPanel,
+        { opacity: 0, y: 40, scale: 0.96 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          scale: 1, 
+          duration: 1.0, 
           ease: "power4.out" 
         },
         "-=0.6"

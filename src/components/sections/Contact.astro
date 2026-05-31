@@ -1,6 +1,555 @@
-<section id="contact" class="section">
-  <div class="container">
-    <p data-reveal>CONTACT / PLACEHOLDER</p>
-    <h2 data-reveal>Coming next</h2>
+---
+import { profile } from "../../data/profile";
+import { socials } from "../../data/socials";
+
+const githubUrl = profile.github;
+const linkedinUrl = profile.linkedin;
+const emailUrl = `mailto:${profile.email}`;
+const emailText = profile.email;
+const locationText = profile.location;
+---
+
+<section id="contact" class="contact-section" data-contact-section>
+  <div class="grid-overlay"></div>
+  <div class="contact-glow glow-left"></div>
+  <div class="contact-glow glow-right"></div>
+
+  <div class="container contact-container">
+    {/* Section Header */}
+    <div class="contact-header" data-contact-copy>
+      <div class="section-badge">
+        <span class="badge-num">07</span>
+        <span class="badge-line"></span>
+        <span class="badge-title">CONTACT</span>
+      </div>
+      <h2 class="section-headline">Let's build something useful.</h2>
+      <p class="section-subtext">
+        I'm open to internships, collaborations, hackathons, and product ideas.
+      </p>
+    </div>
+
+    {/* Contact Cards Grid */}
+    <div class="contact-grid">
+      {/* Card 1: Email */}
+      <a href={emailUrl} class="contact-card border-accent" data-contact-card>
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect width="20" height="16" x="2" y="4" rx="2" />
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">EMAIL ADDRESS</span>
+          <span class="card-value">{emailText}</span>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </div>
+      </a>
+
+      {/* Card 2: GitHub */}
+      <a href={githubUrl} target="_blank" rel="noreferrer" class="contact-card border-accent" data-contact-card>
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+            <path d="M9 18c-4.51 2-5-2-7-2" />
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">GITHUB PROFILE</span>
+          <span class="card-value">@YathinTHEBUILDER</span>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </div>
+      </a>
+
+      {/* Card 3: LinkedIn */}
+      <a href={linkedinUrl} target="_blank" rel="noreferrer" class="contact-card border-accent" data-contact-card>
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+            <rect width="4" height="12" x="2" y="9" />
+            <circle cx="4" cy="4" r="2" />
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">LINKEDIN NETWORK</span>
+          <span class="card-value">yathin-gnaneshwar-5133b4367</span>
+        </div>
+        <div class="card-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </div>
+      </a>
+
+      {/* Card 4: Location */}
+      <div class="contact-card border-accent static-card" data-contact-card>
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+        </div>
+        <div class="card-content">
+          <span class="card-label">CURRENT LOCATION</span>
+          <span class="card-value">{locationText}</span>
+        </div>
+        <div class="card-arrow static-arrow">
+          <span class="live-dot-pulse"></span>
+        </div>
+      </div>
+    </div>
+
+    {/* Primary CTA Panel */}
+    <div class="cta-banner" data-contact-cta>
+      <div class="cta-mesh"></div>
+      <div class="cta-content">
+        <h3 class="cta-headline">Ready to start a project?</h3>
+        <p class="cta-desc">
+          Drop me an email directly or view my active repositories to audit current system builds. Let's make it real.
+        </p>
+      </div>
+      <div class="cta-actions">
+        <a href={emailUrl} class="btn-primary" aria-label="Send Yathin an email">
+          <span>Mail me</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <line x1="22" y1="2" x2="11" y2="13" />
+            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
+        </a>
+        <a href={githubUrl} target="_blank" rel="noreferrer" class="btn-secondary" aria-label="Visit Yathin's GitHub">
+          <span>View GitHub</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+          </svg>
+        </a>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .contact-section {
+    position: relative;
+    padding: 10rem 2rem 8rem 2rem;
+    background: #030305;
+    overflow: hidden;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+  }
+
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.007) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.007) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center;
+    pointer-events: none;
+    z-index: -2;
+    opacity: 0.8;
+  }
+
+  .contact-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.1;
+  }
+
+  .glow-left {
+    background: radial-gradient(circle, var(--violet) 0%, transparent 70%);
+    bottom: -10%;
+    left: -10%;
+  }
+
+  .glow-right {
+    background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+    top: -10%;
+    right: -10%;
+  }
+
+  .contact-container {
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  /* Section Header */
+  .contact-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    max-width: 700px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 1.8rem;
+  }
+
+  .section-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .badge-num {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+  }
+
+  .badge-line {
+    width: 24px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .badge-title {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .section-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5.8vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .section-subtext {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    line-height: 1.45;
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 580px;
+  }
+
+  /* Contact Cards Grid */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.8rem;
+  }
+
+  .contact-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.4s var(--ease-out);
+    text-decoration: none;
+    color: inherit;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .contact-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background 0.4s var(--ease-out);
+  }
+
+  .border-accent:hover {
+    border-color: rgba(51, 230, 255, 0.25);
+    box-shadow: 0 10px 30px -15px rgba(51, 230, 255, 0.1);
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.035);
+  }
+
+  .border-accent:hover::before {
+    background: linear-gradient(180deg, var(--cyan), rgba(51, 230, 255, 0.2));
+  }
+
+  .static-card {
+    cursor: default;
+  }
+
+  .static-card:hover {
+    border-color: var(--border);
+    box-shadow: none;
+    transform: none;
+    background: rgba(255, 255, 255, 0.015);
+  }
+
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.3s var(--ease-out);
+    shrink: 0;
+  }
+
+  .contact-card:hover .card-icon {
+    background: rgba(51, 230, 255, 0.05);
+    border-color: rgba(51, 230, 255, 0.2);
+    color: var(--cyan);
+  }
+
+  .static-card:hover .card-icon {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--border);
+    color: var(--text-muted);
+  }
+
+  .card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    overflow: hidden;
+  }
+
+  .card-label {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .card-value {
+    font-family: monospace;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .card-arrow {
+    margin-left: auto;
+    color: var(--text-dim);
+    transition: all 0.3s var(--ease-out);
+    shrink: 0;
+  }
+
+  .contact-card:hover .card-arrow {
+    color: var(--cyan);
+    transform: translate(2px, -2px);
+  }
+
+  .card-arrow svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .static-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .live-dot-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+    animation: live-pulse 1.8s infinite;
+  }
+
+  @keyframes live-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 1; }
+  }
+
+  /* Primary CTA Banner Panel */
+  .cta-banner {
+    position: relative;
+    background: rgba(13, 15, 23, 0.45);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 3.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4rem;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .cta-mesh {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 80% 50%, rgba(139, 92, 246, 0.05), transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .cta-content {
+    max-width: 560px;
+  }
+
+  .cta-headline {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin: 0 0 0.8rem 0;
+  }
+
+  .cta-desc {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .cta-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    shrink: 0;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 1rem 1.8rem;
+    background: var(--text);
+    color: #030305;
+    border-radius: 12px;
+    border: 1px solid var(--text);
+    transition: all 0.3s var(--ease-out);
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--text);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -10px rgba(255, 255, 255, 0.15);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 1rem 1.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    transition: all 0.3s var(--ease-out);
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  .btn-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Responsive styling */
+  @media (max-width: 968px) {
+    .cta-banner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2.2rem;
+      padding: 2.5rem;
+    }
+    .cta-actions {
+      width: 100%;
+    }
+    .btn-primary, .btn-secondary {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .contact-section {
+      padding: 6rem 1rem;
+    }
+    .contact-container {
+      gap: 3.5rem;
+    }
+    .contact-header {
+      padding-left: 1.2rem;
+    }
+    .cta-actions {
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .btn-primary, .btn-secondary {
+      width: 100%;
+    }
+  }
+
+  /* Support reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .border-accent:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+    .btn-primary:hover, .btn-secondary:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+    .live-dot-pulse {
+      animation: none;
+    }
+    .contact-card:hover .card-arrow {
+      transform: none !important;
+    }
+  }
+</style>

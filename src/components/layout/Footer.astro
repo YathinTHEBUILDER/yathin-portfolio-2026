@@ -1,12 +1,301 @@
-<footer class="footer">
-  <p>Designed and engineered by Yathin G.</p>
+---
+import { profile } from "../../data/profile";
+import { socials } from "../../data/socials";
+
+const githubUrl = profile.github;
+const linkedinUrl = profile.linkedin;
+const emailUrl = `mailto:${profile.email}`;
+const currentYear = 2026;
+---
+
+<footer class="footer-section">
+  <div class="footer-ambient-glow"></div>
+  
+  <div class="container footer-container">
+    {/* Upper Section */}
+    <div class="footer-top">
+      {/* Brand & Credit */}
+      <div class="footer-brand">
+        <a href="#hero" class="brand-link" aria-label="Yathin G Home">
+          <span class="brand-dot"></span>
+          <span class="brand-text">YATHIN.G</span>
+        </a>
+        <p class="brand-desc">
+          CSE student &amp; AI product builder developing high-performance web products, tools, and multimodal experiments.
+        </p>
+      </div>
+
+      {/* Navigation Sitemap */}
+      <div class="footer-links-col">
+        <span class="col-title">SITEMAP</span>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="#projects" class="footer-link">Work</a>
+          <a href="#experiments" class="footer-link">Experiments</a>
+          <a href="#skills" class="footer-link">Stack</a>
+          <a href="#playground" class="footer-link">Lab</a>
+          <a href="#contact" class="footer-link">Contact</a>
+        </nav>
+      </div>
+
+      {/* Social Networks */}
+      <div class="footer-links-col">
+        <span class="col-title">CONNECT</span>
+        <nav class="footer-nav" aria-label="Footer social links">
+          <a href={githubUrl} target="_blank" rel="noreferrer" class="footer-link social-link">
+            <span>GitHub</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+          </a>
+          <a href={linkedinUrl} target="_blank" rel="noreferrer" class="footer-link social-link">
+            <span>LinkedIn</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+          </a>
+          <a href={emailUrl} class="footer-link social-link">
+            <span>Email</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    {/* Bottom Section */}
+    <div class="footer-bottom">
+      <p class="copyright-text">
+        Designed and engineered by Yathin G. &copy; {currentYear}.
+      </p>
+      <div class="system-status">
+        <span class="status-indicator"></span>
+        <span class="status-label">ALL CORE SYSTEMS STANDBY</span>
+      </div>
+    </div>
+  </div>
 </footer>
 
+<script>
+  // Add smooth scroll interceptor for footer sitemap links
+  const setupFooterScroll = () => {
+    const footerLinks = document.querySelectorAll(".footer-link");
+    footerLinks.forEach((link) => {
+      const targetId = link.getAttribute("href");
+      if (targetId && targetId.startsWith("#")) {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            const offset = 80;
+            if ((window as any).lenis) {
+              (window as any).lenis.scrollTo(targetEl, { offset: -offset });
+            } else {
+              const elementPosition = targetEl.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.pageYOffset - offset;
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+              });
+            }
+          }
+        });
+      }
+    });
+  };
+
+  setupFooterScroll();
+  document.addEventListener("astro:page-load", setupFooterScroll);
+</script>
+
 <style>
-  .footer {
-    padding: 4rem 2rem;
-    text-align: center;
-    color: var(--text-muted);
+  .footer-section {
+    position: relative;
+    padding: 6rem 2rem 4rem 2rem;
+    background: #030305;
+    overflow: hidden;
+    z-index: 1;
     border-top: 1px solid var(--border);
+  }
+
+  .footer-ambient-glow {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.03) 0%, transparent 70%);
+    bottom: -20%;
+    right: 10%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .footer-container {
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4.5rem;
+  }
+
+  /* Top Section */
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 4rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-top {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  .brand-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+  }
+
+  .brand-text {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--text);
+  }
+
+  .brand-desc {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    max-width: 320px;
+    margin: 0;
+  }
+
+  /* Link Columns */
+  .footer-links-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .col-title {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .footer-link {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s var(--ease-out);
+    width: fit-content;
+    outline: none;
+  }
+
+  .footer-link:hover {
+    color: var(--text);
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .arrow-icon {
+    width: 10px;
+    height: 10px;
+    color: var(--text-dim);
+    transition: transform 0.3s var(--ease-out), color 0.3s var(--ease-out);
+  }
+
+  .social-link:hover .arrow-icon {
+    color: var(--cyan);
+    transform: translate(1px, -1px);
+  }
+
+  /* Bottom Section */
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    padding-top: 2rem;
+  }
+
+  @media (max-width: 580px) {
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.2rem;
+    }
+  }
+
+  .copyright-text {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin: 0;
+  }
+
+  .system-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .status-indicator {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+    display: inline-block;
+  }
+
+  .status-label {
+    font-family: monospace;
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-link:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 4px;
+    border-radius: 4px;
   }
 </style>
