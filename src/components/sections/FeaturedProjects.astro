@@ -84,15 +84,36 @@ const featuredProjects = projects.filter((p) => p.featured);
               </div>
 
               {/* Right Column: Interactive Browser Preview */}
-              <div class="project-demo" data-demo-frame>
-                {proj.live && (
-                  <LiveDemoFrame 
-                    client:visible
-                    title={proj.name}
-                    url={proj.live}
-                    accent={proj.accent as any}
-                  />
-                )}
+              <div class="project-demo perspective-scene scroll-3d-safe" data-project-depth-scene>
+                {/* Layer 1 & 2: Background UI Slabs */}
+                <div class="project-slab-bg slab-back depth-card" data-project-depth-layer="1"></div>
+                <div class="project-slab-bg slab-mid depth-card" data-project-depth-layer="2"></div>
+
+                {/* Layer 3: Main Browser Mockup Frame */}
+                <div class="project-slab-main depth-card" data-project-depth-layer="3" data-tilt-card>
+                  {proj.live && (
+                    <LiveDemoFrame 
+                      client:visible
+                      title={proj.name}
+                      url={proj.live}
+                      accent={proj.accent as any}
+                    />
+                  )}
+                </div>
+
+                {/* Technical Annotation Labels */}
+                <div class="project-annotation ann-left" data-project-annotation>
+                  <span class="ann-dot"></span>
+                  <span class="ann-txt">LIVE PRODUCT</span>
+                </div>
+                <div class="project-annotation ann-right" data-project-annotation>
+                  <span class="ann-dot"></span>
+                  <span class="ann-txt">VERIFIED BUILD</span>
+                </div>
+                <div class="project-annotation ann-bottom" data-project-annotation>
+                  <span class="ann-dot"></span>
+                  <span class="ann-txt">OPEN DEMO</span>
+                </div>
               </div>
             </div>
           );
@@ -388,8 +409,108 @@ const featuredProjects = projects.filter((p) => p.featured);
     position: relative;
     width: 100%;
     z-index: 3;
-    perspective: 1200px;
+    perspective: 1400px;
+    transform-style: preserve-3d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 4/3;
   }
+
+  .project-slab-main {
+    position: relative;
+    width: 100%;
+    z-index: 5;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+
+  .project-slab-bg {
+    position: absolute;
+    width: 95%;
+    height: 95%;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    pointer-events: none;
+    transition: all 0.6s var(--ease-out);
+  }
+
+  .slab-back {
+    z-index: 1;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.007) 0%, transparent 100%);
+    transform: translateZ(-60px) translateY(-10px) rotate(-3deg);
+  }
+
+  .slab-mid {
+    z-index: 2;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.015) 0%, transparent 100%);
+    transform: translateZ(-30px) translateY(10px) rotate(2deg);
+  }
+
+  /* Fintech accent overrides for InvoiceFlow slabs */
+  .project-showcase:nth-child(1) .slab-back {
+    border-color: rgba(61, 217, 160, 0.08);
+    background: radial-gradient(circle at 10% 20%, rgba(61, 217, 160, 0.03) 0%, transparent 60%);
+  }
+  .project-showcase:nth-child(1) .slab-mid {
+    border-color: rgba(51, 230, 255, 0.08);
+    background: radial-gradient(circle at 80% 70%, rgba(51, 230, 255, 0.03) 0%, transparent 60%);
+  }
+
+  /* Career/AI accent overrides for SortMySkills slabs */
+  .project-showcase:nth-child(2) .slab-back {
+    border-color: rgba(79, 124, 255, 0.08);
+    background: radial-gradient(circle at 10% 20%, rgba(79, 124, 255, 0.03) 0%, transparent 60%);
+  }
+  .project-showcase:nth-child(2) .slab-mid {
+    border-color: rgba(139, 92, 246, 0.08);
+    background: radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.03) 0%, transparent 60%);
+  }
+
+  /* Annotation labels */
+  .project-annotation {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: monospace;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: var(--text-dim);
+    background: rgba(7, 8, 13, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.35rem 0.65rem;
+    border-radius: 4px;
+    z-index: 10;
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    opacity: 0.7;
+    transition: opacity 0.3s var(--ease-out);
+  }
+
+  .ann-left {
+    top: 15%;
+    left: -40px;
+  }
+
+  .ann-right {
+    top: 40%;
+    right: -40px;
+  }
+
+  .ann-bottom {
+    bottom: -15px;
+    left: 10%;
+  }
+
+  .ann-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+  }
+
+  .project-showcase:nth-child(1) .ann-dot { background: var(--green); }
+  .project-showcase:nth-child(2) .ann-dot { background: var(--blue); }
 
   /* Layout Alternation on Widescreen */
   @media (min-width: 769px) {
@@ -427,6 +548,20 @@ const featuredProjects = projects.filter((p) => p.featured);
     }
     .project-glow {
       display: none;
+    }
+    .project-annotation {
+      display: none !important;
+    }
+    .project-slab-bg {
+      display: none !important;
+    }
+    .project-demo {
+      aspect-ratio: auto;
+      perspective: none !important;
+      transform-style: flat !important;
+    }
+    .project-slab-main {
+      transform: none !important;
     }
   }
 </style>

@@ -275,10 +275,11 @@ function initProjectShowcases(gsap: any, ScrollTrigger: any) {
 
   gsap.utils.toArray<HTMLElement>("[data-project-showcase]").forEach((showcase) => {
     const copyEl = showcase.querySelector("[data-project-copy]");
-    const demoEl = showcase.querySelector("[data-demo-frame]");
-
+    const demoEl = showcase.querySelector("[data-project-depth-scene]");
+    
     if (!copyEl || !demoEl) return;
 
+    // A. Entrance reveal timeline
     const showcaseTl = gsap.timeline({
       scrollTrigger: {
         trigger: showcase,
@@ -287,6 +288,7 @@ function initProjectShowcases(gsap: any, ScrollTrigger: any) {
       }
     });
 
+    // Stagger reveal text elements
     const children = copyEl.children;
     if (children.length > 0) {
       showcaseTl.fromTo(Array.from(children),
@@ -295,26 +297,74 @@ function initProjectShowcases(gsap: any, ScrollTrigger: any) {
       );
     }
 
-    showcaseTl.fromTo(demoEl,
-      { opacity: 0, y: 80, scale: 0.94, rotateX: 8, rotateY: -8 },
-      { opacity: 1, y: 0, scale: 1, rotateX: 0, rotateY: 0, duration: 1.2, ease: "power4.out" },
-      "-=0.6"
-    );
+    const mainFrame = demoEl.querySelector('[data-project-depth-layer="3"]');
+    const slabBack = demoEl.querySelector('[data-project-depth-layer="1"]');
+    const slabMid = demoEl.querySelector('[data-project-depth-layer="2"]');
+    const annotations = demoEl.querySelectorAll("[data-project-annotation]");
 
-    if (!isMobile) {
-      gsap.fromTo(demoEl,
-        { yPercent: 6 },
-        {
-          yPercent: -6,
-          ease: "none",
-          scrollTrigger: {
-            trigger: showcase,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          }
-        }
+    // Demo frame rotates into place
+    if (mainFrame) {
+      showcaseTl.fromTo(mainFrame,
+        { opacity: 0, y: 80, scale: 0.94, rotateX: 8, rotateY: -10 },
+        { opacity: 1, y: 0, scale: 1, rotateX: 0, rotateY: 0, duration: 1.3, ease: "power4.out" },
+        "-=0.7"
       );
+    }
+
+    // Reveal background slabs
+    if (slabBack) {
+      showcaseTl.fromTo(slabBack,
+        { opacity: 0, scale: 0.85, z: -100 },
+        { opacity: 1, scale: 1, z: -60, duration: 1.0, ease: "power3.out" },
+        "-=1.1"
+      );
+    }
+
+    if (slabMid) {
+      showcaseTl.fromTo(slabMid,
+        { opacity: 0, scale: 0.88, z: -80 },
+        { opacity: 1, scale: 1, z: -30, duration: 1.0, ease: "power3.out" },
+        "-=1.0"
+      );
+    }
+
+    // Draw in technical annotation labels
+    if (annotations.length > 0) {
+      showcaseTl.fromTo(Array.from(annotations),
+        { opacity: 0, scale: 0.8 },
+        { opacity: 0.7, scale: 1, duration: 0.6, stagger: 0.1, ease: "back.out(1.5)" },
+        "-=0.6"
+      );
+    }
+
+    // B. Desktop-only scroll-scrub parallax
+    if (!isMobile) {
+      const scrubTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: showcase,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        }
+      });
+
+      if (mainFrame) {
+        scrubTl.fromTo(mainFrame, { yPercent: 5 }, { yPercent: -5, ease: "none" }, 0);
+      }
+      if (slabBack) {
+        scrubTl.fromTo(slabBack, 
+          { z: -80, yPercent: 9, rotate: -4 }, 
+          { z: -40, yPercent: -9, rotate: -2, ease: "none" }, 
+          0
+        );
+      }
+      if (slabMid) {
+        scrubTl.fromTo(slabMid, 
+          { z: -45, yPercent: 4, rotate: 3 }, 
+          { z: -15, yPercent: -4, rotate: 1, ease: "none" }, 
+          0
+        );
+      }
     }
   });
 }
