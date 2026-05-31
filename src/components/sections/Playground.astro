@@ -55,9 +55,20 @@ import PortfolioTerminal from "../ui/PortfolioTerminal.tsx";
     </div>
 
     {/* Right Column - Interactive Terminal Component */}
-    <div class="playground-right" data-playground-terminal>
+    <div class="playground-right perspective-scene scroll-3d-safe" data-playground-terminal-scene>
+      {/* Layer 1: Ambient Glow Underneath */}
       <div class="terminal-ambient-glow"></div>
-      <PortfolioTerminal client:visible />
+
+      {/* Layer 2: Backplate Slab Behind Terminal */}
+      <div class="terminal-backplate depth-card" data-playground-depth-layer="1">
+        <div class="backplate-grid"></div>
+        <div class="backplate-label">SECURE_SANDBOX // SYS_v2.0</div>
+      </div>
+
+      {/* Layer 3: Main Simulated Dev Terminal (Floating Command Deck) */}
+      <div class="terminal-deck-wrapper depth-card" data-playground-depth-layer="2" data-tilt-card>
+        <PortfolioTerminal client:visible />
+      </div>
     </div>
   </div>
 </section>
@@ -274,6 +285,12 @@ import PortfolioTerminal from "../ui/PortfolioTerminal.tsx";
   .playground-right {
     position: relative;
     width: 100%;
+    transform-style: preserve-3d;
+    perspective: 1400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
   }
 
   .terminal-ambient-glow {
@@ -288,11 +305,88 @@ import PortfolioTerminal from "../ui/PortfolioTerminal.tsx";
     z-index: -1;
   }
 
+  /* Backplate slab behind terminal */
+  .terminal-backplate {
+    position: absolute;
+    width: 96%;
+    height: 96%;
+    border-radius: var(--radius-lg);
+    border: 1px dashed rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.003);
+    z-index: 1;
+    pointer-events: none;
+    transform: translateZ(-35px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.4s var(--ease-out);
+  }
+
+  .backplate-grid {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 100% 20px;
+    border-radius: inherit;
+    opacity: 0.5;
+  }
+
+  .backplate-label {
+    font-family: monospace;
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.15);
+    letter-spacing: 0.1em;
+  }
+
+  .playground-right:hover .terminal-backplate {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .terminal-deck-wrapper {
+    position: relative;
+    width: 100%;
+    z-index: 5;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+
+  @media (max-width: 968px) {
+    .playground-right {
+      min-height: auto;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .playground-right {
+      perspective: none !important;
+      transform-style: flat !important;
+    }
+    .terminal-backplate {
+      display: none !important;
+    }
+    .terminal-deck-wrapper {
+      transform: none !important;
+    }
+  }
+
   /* Support reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .suggestion-chip:hover {
       transform: none !important;
       box-shadow: none !important;
+    }
+    .playground-right {
+      perspective: none !important;
+      transform-style: flat !important;
+    }
+    .terminal-backplate {
+      display: none !important;
+    }
+    .terminal-deck-wrapper {
+      transform: none !important;
     }
   }
 </style>

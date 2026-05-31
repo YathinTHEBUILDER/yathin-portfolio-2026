@@ -371,7 +371,9 @@ function initProjectShowcases(gsap: any, ScrollTrigger: any) {
 
 // 6. AI Experiments Section
 function initExperiments(gsap: any, ScrollTrigger: any) {
+  const isMobile = window.innerWidth <= 768;
   const expSection = document.querySelector("[data-experiment-section]");
+  
   if (expSection) {
     const cards = expSection.querySelectorAll("[data-experiment-card]");
     
@@ -384,18 +386,36 @@ function initExperiments(gsap: any, ScrollTrigger: any) {
     });
 
     if (cards.length > 0) {
-      expTl.fromTo(cards,
-        { opacity: 0, y: 60, rotateX: 8 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          rotateX: 0, 
-          duration: 1.0, 
-          stagger: 0.15, 
-          ease: "power3.out" 
-        }
-      );
+      // Main card containers animate in
+      cards.forEach((cardWrapper) => {
+        const card = cardWrapper.querySelector(".experiment-card");
+        const slab = cardWrapper.querySelector("[data-experiment-depth-slab]");
+        const chips = cardWrapper.querySelectorAll(".diagnostic-chip");
 
+        expTl.fromTo(card,
+          { opacity: 0, y: 80, rotateX: 10 },
+          { opacity: 1, y: 0, rotateX: 0, duration: 1.1, ease: "power4.out" },
+          "-=0.9"
+        );
+
+        if (slab) {
+          expTl.fromTo(slab,
+            { opacity: 0, scale: 0.85, z: -80 },
+            { opacity: 1, scale: 1, z: -35, duration: 0.9, ease: "power3.out" },
+            "-=0.9"
+          );
+        }
+
+        if (chips.length > 0) {
+          expTl.fromTo(Array.from(chips),
+            { opacity: 0, scale: 0.7 },
+            { opacity: 0.25, scale: 1, duration: 0.5, stagger: 0.1, ease: "back.out(1.5)" },
+            "-=0.5"
+          );
+        }
+      });
+
+      // Animate terminal lines inside each experiment card AFTER they land
       const lines = expSection.querySelectorAll("[data-terminal-line]");
       if (lines.length > 0) {
         expTl.fromTo(lines,
@@ -407,15 +427,41 @@ function initExperiments(gsap: any, ScrollTrigger: any) {
             stagger: 0.08, 
             ease: "power2.out" 
           },
-          "-=0.6"
+          "-=0.4"
         );
       }
+    }
+
+    // Desktop-only subtle scrub parallax on rear slabs
+    if (!isMobile) {
+      const slabs = expSection.querySelectorAll("[data-experiment-depth-slab]");
+      slabs.forEach((slab) => {
+        gsap.fromTo(slab,
+          { yPercent: 4, z: -45 },
+          {
+            yPercent: -4,
+            z: -25,
+            ease: "none",
+            scrollTrigger: {
+              trigger: slab,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            }
+          }
+        );
+      });
     }
   }
 }
 
 // 7. Skills Topology Map
 function initSkillsTopology(gsap: any, ScrollTrigger: any) {
+  const isMobile = window.innerWidth <= 768;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
   const skillsSection = document.querySelector("[data-skills-section]");
   if (skillsSection) {
     const centerNode = skillsSection.querySelector("[data-skill-center]");
@@ -431,13 +477,15 @@ function initSkillsTopology(gsap: any, ScrollTrigger: any) {
       }
     });
 
+    // A. Center core node scales in and rotates slightly into place
     if (centerNode) {
       skillsTl.fromTo(centerNode,
-        { opacity: 0, scale: 0.85 },
-        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.5)" }
+        { opacity: 0, scale: 0.8, rotate: -30 },
+        { opacity: 1, scale: 1, rotate: 0, duration: 1.0, ease: "back.out(1.5)" }
       );
     }
 
+    // B. Draw angled SVG connection lines
     if (lines.length > 0) {
       lines.forEach((line) => {
         if (line instanceof SVGPathElement) {
@@ -454,24 +502,37 @@ function initSkillsTopology(gsap: any, ScrollTrigger: any) {
         strokeDashoffset: 0,
         duration: 1.2,
         ease: "power2.out",
-      }, "-=0.5");
+      }, "-=0.6");
     }
 
+    // C. Quadrant expansion entry for group cards
     if (groups.length > 0) {
-      skillsTl.fromTo(Array.from(groups),
-        { opacity: 0, y: 40, scale: 0.96 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          scale: 1, 
-          duration: 0.9, 
-          stagger: 0.12, 
-          ease: "power3.out" 
-        },
-        "-=0.8"
-      );
+      groups.forEach((group, idx) => {
+        // Expand outwards based on layout quadrant
+        let startX = 0, startY = 0, rotY = 0, rotX = 0;
+        if (group.classList.contains("position-languages")) { startX = -40; startY = -40; rotY = -12; rotX = 8; }
+        else if (group.classList.contains("position-frontend")) { startX = 40; startY = -40; rotY = 12; rotX = 8; }
+        else if (group.classList.contains("position-backend")) { startX = -40; startY = 40; rotY = -12; rotX = -8; }
+        else if (group.classList.contains("position-ai")) { startX = 40; startY = 40; rotY = 12; rotX = -8; }
+
+        skillsTl.fromTo(group,
+          { opacity: 0, x: startX, y: startY, rotateX: rotX, rotateY: rotY, scale: 0.94 },
+          { 
+            opacity: 1, 
+            x: 0, 
+            y: 0, 
+            rotateX: 0,
+            rotateY: 0,
+            scale: 1, 
+            duration: 1.0, 
+            ease: "power3.out" 
+          },
+          "-=0.9"
+        );
+      });
     }
 
+    // D. Micro-stagger individual skill pills
     if (pills.length > 0) {
       skillsTl.fromTo(Array.from(pills),
         { opacity: 0, y: 12 },
@@ -485,15 +546,46 @@ function initSkillsTopology(gsap: any, ScrollTrigger: any) {
         "-=0.6"
       );
     }
+
+    // E. Desktop-only Continuous Floating Loop
+    if (!isMobile && !prefersReducedMotion) {
+      // Float center core
+      if (centerNode) {
+        gsap.to(centerNode, {
+          y: -6,
+          duration: 3.5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
+        });
+      }
+
+      // Float quadrant cards staggered
+      if (groups.length > 0) {
+        groups.forEach((group, idx) => {
+          gsap.to(group, {
+            y: -4,
+            duration: 3 + idx * 0.5,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+            delay: idx * 0.4
+          });
+        });
+      }
+    }
   }
 }
 
 // 8. Playground Terminal
 function initPlayground(gsap: any, ScrollTrigger: any) {
+  const isMobile = window.innerWidth <= 768;
   const playgroundSection = document.querySelector("[data-playground-section]");
   if (playgroundSection) {
     const copyContainer = playgroundSection.querySelector("[data-playground-copy]");
-    const terminalEl = playgroundSection.querySelector("[data-playground-terminal]");
+    const terminalWrapper = playgroundSection.querySelector(".terminal-deck-wrapper");
+    const backplate = playgroundSection.querySelector(".terminal-backplate");
+    const chips = playgroundSection.querySelectorAll(".suggestion-chip");
 
     const playgroundTl = gsap.timeline({
       scrollTrigger: {
@@ -516,9 +608,9 @@ function initPlayground(gsap: any, ScrollTrigger: any) {
       );
     }
 
-    if (terminalEl) {
-      playgroundTl.fromTo(terminalEl,
-        { opacity: 0, y: 70, scale: 0.96, rotateX: 8 },
+    if (terminalWrapper) {
+      playgroundTl.fromTo(terminalWrapper,
+        { opacity: 0, y: 90, scale: 0.96, rotateX: 12 },
         { 
           opacity: 1, 
           y: 0, 
@@ -527,14 +619,67 @@ function initPlayground(gsap: any, ScrollTrigger: any) {
           duration: 1.1, 
           ease: "power4.out" 
         },
+        "-=0.7"
+      );
+    }
+
+    if (backplate) {
+      playgroundTl.fromTo(backplate,
+        { opacity: 0, scale: 0.9, z: -80 },
+        { 
+          opacity: 1, 
+          scale: 1, 
+          z: -35, 
+          duration: 1.0, 
+          ease: "power3.out" 
+        },
+        "-=0.9"
+      );
+    }
+
+    if (chips.length > 0) {
+      playgroundTl.fromTo(Array.from(chips),
+        { opacity: 0, scale: 0.85, y: 10 },
+        { 
+          opacity: 1, 
+          scale: 1, 
+          y: 0, 
+          duration: 0.5, 
+          stagger: 0.05, 
+          ease: "back.out(1.5)" 
+        },
         "-=0.6"
       );
+    }
+
+    // Scroll Parallax (Desktop only)
+    if (!isMobile) {
+      const scrubTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: playgroundSection,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        }
+      });
+
+      if (terminalWrapper) {
+        scrubTl.fromTo(terminalWrapper, { yPercent: 4 }, { yPercent: -4, ease: "none" }, 0);
+      }
+      if (backplate) {
+        scrubTl.fromTo(backplate, { z: -45, yPercent: 7 }, { z: -25, yPercent: -7, ease: "none" }, 0);
+      }
     }
   }
 }
 
 // 9. Contact Section
 function initContact(gsap: any, ScrollTrigger: any) {
+  const isMobile = window.innerWidth <= 768;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
   const contactSection = document.querySelector("[data-contact-section]");
   if (contactSection) {
     const copyContainer = contactSection.querySelector("[data-contact-copy]");
@@ -564,11 +709,12 @@ function initContact(gsap: any, ScrollTrigger: any) {
 
     if (cards.length > 0) {
       contactTl.fromTo(Array.from(cards),
-        { opacity: 0, y: 32 },
+        { opacity: 0, y: 35, rotateX: 6 },
         { 
           opacity: 1, 
           y: 0, 
-          duration: 0.8, 
+          rotateX: 0,
+          duration: 0.9, 
           stagger: 0.08, 
           ease: "power3.out" 
         },
@@ -578,16 +724,46 @@ function initContact(gsap: any, ScrollTrigger: any) {
 
     if (ctaPanel) {
       contactTl.fromTo(ctaPanel,
-        { opacity: 0, y: 40, scale: 0.96 },
+        { opacity: 0, y: 50, scale: 0.95, rotateX: 6 },
         { 
           opacity: 1, 
           y: 0, 
           scale: 1, 
-          duration: 1.0, 
+          rotateX: 0,
+          duration: 1.1, 
           ease: "power4.out" 
         },
         "-=0.6"
       );
+    }
+
+    // Micro-magnetic hover for CTA buttons (Desktop only)
+    if (!isMobile && !prefersReducedMotion) {
+      const buttons = contactSection.querySelectorAll(".cta-actions a");
+      buttons.forEach((btn) => {
+        if (!(btn instanceof HTMLElement)) return;
+
+        const xTo = gsap.quickTo(btn, "x", { duration: 0.3, ease: "power2.out" });
+        const yTo = gsap.quickTo(btn, "y", { duration: 0.3, ease: "power2.out" });
+
+        btn.addEventListener("mousemove", (e) => {
+          const rect = btn.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+
+          // Pull up to 10px towards mouse pointer
+          const moveX = (e.clientX - centerX) * 0.12;
+          const moveY = (e.clientY - centerY) * 0.12;
+
+          xTo(moveX);
+          yTo(moveY);
+        });
+
+        btn.addEventListener("mouseleave", () => {
+          xTo(0);
+          yTo(0);
+        });
+      });
     }
   }
 }
