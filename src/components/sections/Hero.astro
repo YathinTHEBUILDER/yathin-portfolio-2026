@@ -39,15 +39,21 @@ import { projects } from "../../data/projects";
       </div>
     </div>
 
-    <div class="hero-visual" data-hero-visual>
-      <!-- Floating background decorative card 1 -->
-      <div class="floating-card bg-card-1"></div>
+    <div class="hero-visual perspective-scene scroll-3d-safe" data-hero-visual>
+      <!-- Layer 1: System Grid Slab -->
+      <div class="floating-card bg-card-1 depth-card" data-depth-layer="1">
+        <div class="slab-grid-bg"></div>
+        <div class="slab-tech-label">SYS_GRID // NODE_01A</div>
+      </div>
       
-      <!-- Floating background decorative card 2 -->
-      <div class="floating-card bg-card-2"></div>
+      <!-- Layer 2: Project Status Slab -->
+      <div class="floating-card bg-card-2 depth-card" data-depth-layer="2">
+        <div class="slab-status-bg"></div>
+        <div class="slab-tech-label">STATUS // VERIFIED_BUILD</div>
+      </div>
 
-      <!-- Main Glass Product Lab Panel -->
-      <div class="product-lab-panel">
+      <!-- Layer 3: Main Glass Product Lab Panel (Command/Output Slab) -->
+      <div class="product-lab-panel depth-card" data-tilt-card data-depth-layer="3">
         <div class="panel-header">
           <div class="panel-dots">
             <span class="p-dot red"></span>
@@ -64,7 +70,7 @@ import { projects } from "../../data/projects";
             <div class="console-line c-dim">> product-lab@3.2.0 initialized successfully</div>
           </div>
 
-          <!-- Project Rows -->
+          <!-- Project Rows (Stacked Drawer Interface Layers) -->
           <div class="project-rows">
             {
               projects.slice(0, 3).map((proj) => (
@@ -291,6 +297,37 @@ import { projects } from "../../data/projects";
     border-color: rgba(51, 230, 255, 0.08);
   }
 
+  /* Layered Depth Slab Additions */
+  .slab-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: center;
+    opacity: 0.6;
+    border-radius: inherit;
+  }
+
+  .slab-status-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 70% 30%, rgba(51, 230, 255, 0.05) 0%, transparent 60%);
+    border-radius: inherit;
+  }
+
+  .slab-tech-label {
+    position: absolute;
+    bottom: 12px;
+    left: 16px;
+    font-family: monospace;
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 0.05em;
+  }
+
   /* Main Glass Panel */
   .product-lab-panel {
     position: relative;
@@ -367,27 +404,36 @@ import { projects } from "../../data/projects";
     color: var(--text-dim);
   }
 
-  /* Project Rows */
+  /* Project Rows (Stacked Drawer Interface Layers) */
   .project-rows {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
     margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-md);
+    overflow: hidden;
   }
 
   .project-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.85rem 1rem;
-    border-radius: var(--radius-md);
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: background 0.3s var(--ease-out);
+    padding: 0.95rem 1.25rem;
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.015);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.3s var(--ease-out);
+  }
+
+  .project-row:last-child {
+    border-bottom: none;
   }
 
   .project-row:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.035);
+    padding-left: 1.5rem;
+    border-bottom-color: rgba(255, 255, 255, 0.1);
   }
 
   .row-details {

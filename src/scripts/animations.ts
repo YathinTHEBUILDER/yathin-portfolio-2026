@@ -13,8 +13,10 @@ function initPreloader(gsap: any) {
   });
 }
 
-// 2. Cinematic Hero Timeline
-function initHeroAnimations(gsap: any) {
+// 2. Cinematic Hero Timeline & Scroll Scrub
+function initHeroAnimations(gsap: any, ScrollTrigger: any) {
+  const isMobile = window.innerWidth <= 768;
+
   const heroTl = gsap.timeline({
     delay: 0.5,
   });
@@ -69,6 +71,79 @@ function initHeroAnimations(gsap: any) {
       { opacity: 1, scale: 1, duration: 1.2, stagger: 0.15, ease: "power3.out" },
       "-=1.1"
     );
+  }
+
+  // Scroll Parallax / Depth separation for Hero (Desktop only)
+  if (!isMobile && visual) {
+    const heroSection = document.querySelector(".hero-section");
+    const panel = document.querySelector(".product-lab-panel");
+    const slab1 = document.querySelector('[data-depth-layer="1"]');
+    const slab2 = document.querySelector('[data-depth-layer="2"]');
+    const glowViolet = document.querySelector(".glow-violet");
+    const glowCyan = document.querySelector(".glow-cyan");
+
+    if (heroSection) {
+      if (title) {
+        gsap.to(title, {
+          y: -65,
+          opacity: 0.3,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroSection,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          }
+        });
+      }
+
+      const scrubTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroSection,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        }
+      });
+
+      if (panel) {
+        scrubTl.to(panel, {
+          rotateX: 10,
+          rotateY: 8,
+          y: 60,
+          ease: "none",
+        }, 0);
+      }
+
+      if (slab1) {
+        scrubTl.to(slab1, {
+          x: -80,
+          y: -50,
+          rotateZ: -12,
+          scale: 0.92,
+          opacity: 0.25,
+          ease: "none",
+        }, 0);
+      }
+
+      if (slab2) {
+        scrubTl.to(slab2, {
+          x: 80,
+          y: 70,
+          rotateZ: 8,
+          scale: 0.92,
+          opacity: 0.25,
+          ease: "none",
+        }, 0);
+      }
+
+      if (glowViolet) {
+        scrubTl.to(glowViolet, { y: 180, opacity: 0.1, ease: "none" }, 0);
+      }
+      if (glowCyan) {
+        scrubTl.to(glowCyan, { y: 120, opacity: 0.1, ease: "none" }, 0);
+      }
+    }
   }
 }
 
@@ -633,7 +708,7 @@ export async function initAnimations() {
 
   // Execute modular animations in sequence
   initPreloader(gsap);
-  initHeroAnimations(gsap);
+  initHeroAnimations(gsap, ScrollTrigger);
   initRevealAnimations(gsap, ScrollTrigger);
   initMotionCards(gsap, ScrollTrigger);
   initProjectShowcases(gsap, ScrollTrigger);
