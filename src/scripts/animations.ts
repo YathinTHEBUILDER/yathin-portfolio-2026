@@ -1,122 +1,20 @@
 let initialized = false;
 
-export async function initAnimations() {
-  if (initialized) return;
-  initialized = true;
-
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
-
+// 1. Preloader Animation
+function initPreloader(gsap: any) {
   const preloader = document.querySelector("[data-preloader]");
-
-  // Graceful degradation for reduced motion
-  if (prefersReducedMotion) {
-    preloader?.remove();
-    
-    // Instant reveal of all data-reveal elements
-    document.querySelectorAll("[data-reveal]").forEach((el) => {
-      if (el instanceof HTMLElement) {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-      }
-    });
-
-    // Instant reveal of Hero elements
-    document.querySelectorAll("[data-hero-eyebrow], [data-hero-title], [data-hero-copy], [data-hero-actions], [data-hero-visual]").forEach((el) => {
-      if (el instanceof HTMLElement) {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-        el.style.filter = "none";
-      }
-    });
-
-    // Instant reveal of Showcase elements
-    document.querySelectorAll("[data-project-copy], [data-demo-frame]").forEach((el) => {
-      if (el instanceof HTMLElement) {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-        el.style.filter = "none";
-        // Also ensure children of data-project-copy are shown
-        el.querySelectorAll("*").forEach((child) => {
-          if (child instanceof HTMLElement) {
-            child.style.opacity = "1";
-            child.style.transform = "none";
-          }
-        });
-      }
-    });
-
-    // Instant reveal of Experiments elements
-    document.querySelectorAll("[data-experiment-card], [data-terminal-line]").forEach((el) => {
-      if (el instanceof HTMLElement) {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-      }
-    });
-
-    // Instant reveal of Skills Topology elements
-    document.querySelectorAll("[data-skill-center], [data-skill-group], .skill-pill").forEach((el) => {
-      if (el instanceof HTMLElement) {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-      }
-    });
-
-    // Make all connection paths fully visible
-    document.querySelectorAll("[data-skill-line]").forEach((el) => {
-      if (el instanceof SVGPathElement) {
-        el.style.strokeDashoffset = "0";
-      }
-    });
-
-    // Instant reveal of Playground elements
-    document.querySelectorAll("[data-playground-copy], [data-playground-terminal]").forEach((el) => {
-      if (el instanceof HTMLElement) {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-        el.querySelectorAll("*").forEach((child) => {
-          if (child instanceof HTMLElement) {
-            child.style.opacity = "1";
-            child.style.transform = "none";
-          }
-        });
-      }
-    });
-
-    // Instant reveal of Contact elements
-    document.querySelectorAll("[data-contact-copy], [data-contact-card], [data-contact-cta]").forEach((el) => {
-      if (el instanceof HTMLElement) {
-        el.style.opacity = "1";
-        el.style.transform = "none";
-        el.style.scale = "1";
-        el.querySelectorAll("*").forEach((child) => {
-          if (child instanceof HTMLElement) {
-            child.style.opacity = "1";
-            child.style.transform = "none";
-            child.style.scale = "1";
-          }
-        });
-      }
-    });
-    return;
-  }
-
-  const gsap = (await import("gsap")).default;
-  const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  // 1. Preloader dismissal
+  if (!preloader) return;
   gsap.to(preloader, {
     opacity: 0,
     duration: 0.8,
     delay: 0.4,
     ease: "power3.out",
-    onComplete: () => preloader?.remove(),
+    onComplete: () => preloader.remove(),
   });
+}
 
-  // 2. Cinematic Hero Timeline
+// 2. Cinematic Hero Timeline
+function initHeroAnimations(gsap: any) {
   const heroTl = gsap.timeline({
     delay: 0.5,
   });
@@ -172,8 +70,10 @@ export async function initAnimations() {
       "-=1.1"
     );
   }
+}
 
-  // 3. Standard Scroll Reveal Elements
+// 3. Standard Scroll Reveal Elements
+function initRevealAnimations(gsap: any, ScrollTrigger: any) {
   gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
     gsap.to(el, {
       opacity: 1,
@@ -186,94 +86,124 @@ export async function initAnimations() {
       },
     });
   });
+}
 
+// 4. Execution Loop Section (Motion Slabs Explosion)
+function initMotionCards(gsap: any, ScrollTrigger: any) {
   const isMobile = window.innerWidth <= 768;
 
-  // 4. Phase 2B: MotionCards Scroll Scrub Parallax
-  // We disable scrub fanning out on mobile for better touch performance and layout preservation
   if (!isMobile) {
-    const section = document.querySelector(".motion-section");
+    const motionSection = document.querySelector("[data-motion-section]");
     const card1 = document.querySelector('[data-motion-card="1"]');
     const card2 = document.querySelector('[data-motion-card="2"]');
     const card3 = document.querySelector('[data-motion-card="3"]');
-    const chrome = document.querySelector(".chrome-object");
-    const num = document.querySelector(".motion-number");
+    const motionNum = document.querySelector("[data-motion-number]");
+    const motionWord = document.querySelector("[data-motion-word]");
+    const motionLines = document.querySelectorAll("[data-motion-line]");
+    const motionTags = document.querySelectorAll("[data-motion-tag]");
 
-    if (section && card1 && card2 && card3) {
+    if (motionSection && card1 && card2 && card3) {
+      gsap.set([card1, card2, card3], { transformOrigin: "center center" });
+      gsap.set(motionLines, { transformOrigin: "center center" });
+
       const cardsTl = gsap.timeline({
         scrollTrigger: {
-          trigger: section,
-          start: "top 60%",
-          end: "bottom 30%",
-          scrub: 1.2,
+          trigger: motionSection,
+          start: "top top",
+          end: "+=160%",
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
         }
       });
 
-      // Card 1 fans left and slightly up/rotated
-      cardsTl.fromTo(card1,
-        { x: 0, y: 0, rotate: 0 },
-        { x: -160, y: -40, rotate: -8, ease: "power2.out" },
-        0
-      );
-
-      // Card 2 moves slightly up and retains alignment
-      cardsTl.fromTo(card2,
-        { x: 0, y: 0, rotate: 0 },
-        { x: 0, y: -20, rotate: 0, ease: "power2.out" },
-        0
-      );
-
-      // Card 3 fans right and down/rotated
-      cardsTl.fromTo(card3,
-        { x: 0, y: 0, rotate: 0 },
-        { x: 160, y: 30, rotate: 8, ease: "power2.out" },
-        0
-      );
-
-      // Parallax effect on chrome ball and numbers
-      if (chrome) {
-        cardsTl.fromTo(chrome,
-          { yPercent: -10, rotate: 0 },
-          { yPercent: 10, rotate: 45, ease: "none" },
+      if (motionNum) {
+        cardsTl.fromTo(motionNum,
+          { yPercent: 0 },
+          { yPercent: -18, ease: "none" },
           0
         );
       }
 
-      if (num) {
-        cardsTl.fromTo(num,
-          { yPercent: 0 },
-          { yPercent: -30, ease: "none" },
+      if (motionWord) {
+        cardsTl.fromTo(motionWord,
+          { xPercent: 0 },
+          { xPercent: -18, ease: "none" },
+          0
+        );
+      }
+
+      cardsTl.fromTo(card1,
+        { x: 0, y: 0, rotate: 0, scale: 1 },
+        { x: "-42vw", y: -40, rotate: -9, scale: 0.96, ease: "power2.out" },
+        0
+      );
+
+      cardsTl.fromTo(card2,
+        { x: 0, y: 0, rotate: 0, scale: 1 },
+        { x: 0, y: -24, rotate: 0, scale: 1.04, ease: "power2.out" },
+        0
+      );
+
+      cardsTl.fromTo(card3,
+        { x: 0, y: 0, rotate: 0, scale: 1 },
+        { x: "42vw", y: 40, rotate: 9, scale: 0.96, ease: "power2.out" },
+        0
+      );
+
+      if (motionTags.length > 0) {
+        cardsTl.fromTo(motionTags,
+          { x: 0, y: 0, opacity: 0 },
+          { 
+            x: (i: number) => [-35, 45, -45, 35, -25, 25][i % 6],
+            y: (i: number) => [-50, -35, 40, 50, -15, 20][i % 6],
+            opacity: 0.8,
+            stagger: 0.04,
+            ease: "power2.out"
+          },
+          0.05
+        );
+      }
+
+      if (motionLines.length > 0) {
+        cardsTl.fromTo(motionLines,
+          { scaleX: 0 },
+          { scaleX: 1, ease: "power2.inOut" },
           0
         );
       }
     }
   } else {
-    // Mobile fallback reveal
-    const cards = document.querySelectorAll(".m-card");
-    cards.forEach((card, index) => {
-      gsap.fromTo(card,
+    const cards = document.querySelectorAll("[data-motion-card]");
+    if (cards.length > 0) {
+      gsap.fromTo(cards,
         { opacity: 0, y: 30 },
         { 
           opacity: 1, 
           y: 0, 
           duration: 0.8, 
+          stagger: 0.15,
+          ease: "power2.out",
           scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
+            trigger: "[data-motion-section]",
+            start: "top 75%",
           } 
         }
       );
-    });
+    }
   }
+}
 
-  // 5. Phase 3: Featured Project Showcases
+// 5. Featured Project Showcases
+function initProjectShowcases(gsap: any, ScrollTrigger: any) {
+  const isMobile = window.innerWidth <= 768;
+
   gsap.utils.toArray<HTMLElement>("[data-project-showcase]").forEach((showcase) => {
     const copyEl = showcase.querySelector("[data-project-copy]");
     const demoEl = showcase.querySelector("[data-demo-frame]");
 
     if (!copyEl || !demoEl) return;
 
-    // A. Reveal timeline
     const showcaseTl = gsap.timeline({
       scrollTrigger: {
         trigger: showcase,
@@ -282,7 +212,6 @@ export async function initAnimations() {
       }
     });
 
-    // Stagger reveal text elements
     const children = copyEl.children;
     if (children.length > 0) {
       showcaseTl.fromTo(Array.from(children),
@@ -291,14 +220,12 @@ export async function initAnimations() {
       );
     }
 
-    // Interactive Demo Frame Fly-In
     showcaseTl.fromTo(demoEl,
       { opacity: 0, y: 80, scale: 0.94, rotateX: 8, rotateY: -8 },
       { opacity: 1, y: 0, scale: 1, rotateX: 0, rotateY: 0, duration: 1.2, ease: "power4.out" },
       "-=0.6"
     );
 
-    // B. Subtle scrub parallax on desktop
     if (!isMobile) {
       gsap.fromTo(demoEl,
         { yPercent: 6 },
@@ -315,8 +242,10 @@ export async function initAnimations() {
       );
     }
   });
+}
 
-  // 6. Phase 4: AI Experiments Section Scroll Trigger
+// 6. AI Experiments Section
+function initExperiments(gsap: any, ScrollTrigger: any) {
   const expSection = document.querySelector("[data-experiment-section]");
   if (expSection) {
     const cards = expSection.querySelectorAll("[data-experiment-card]");
@@ -342,7 +271,6 @@ export async function initAnimations() {
         }
       );
 
-      // Animate terminal lines inside each experiment card
       const lines = expSection.querySelectorAll("[data-terminal-line]");
       if (lines.length > 0) {
         expTl.fromTo(lines,
@@ -359,8 +287,10 @@ export async function initAnimations() {
       }
     }
   }
+}
 
-  // 7. Phase 5: Skills Topology Map Scroll Trigger
+// 7. Skills Topology Map
+function initSkillsTopology(gsap: any, ScrollTrigger: any) {
   const skillsSection = document.querySelector("[data-skills-section]");
   if (skillsSection) {
     const centerNode = skillsSection.querySelector("[data-skill-center]");
@@ -376,7 +306,6 @@ export async function initAnimations() {
       }
     });
 
-    // A. Center core node scales in
     if (centerNode) {
       skillsTl.fromTo(centerNode,
         { opacity: 0, scale: 0.85 },
@@ -384,12 +313,10 @@ export async function initAnimations() {
       );
     }
 
-    // B. Draw angled SVG connection lines
     if (lines.length > 0) {
       lines.forEach((line) => {
         if (line instanceof SVGPathElement) {
           const length = line.getTotalLength();
-          // Initialize path parameters dynamically
           gsap.set(line, {
             strokeDasharray: length,
             strokeDashoffset: length,
@@ -398,7 +325,6 @@ export async function initAnimations() {
         }
       });
 
-      // Animate strokeDashoffset to 0
       skillsTl.to(Array.from(lines), {
         strokeDashoffset: 0,
         duration: 1.2,
@@ -406,7 +332,6 @@ export async function initAnimations() {
       }, "-=0.5");
     }
 
-    // C. Stagger group cards entry
     if (groups.length > 0) {
       skillsTl.fromTo(Array.from(groups),
         { opacity: 0, y: 40, scale: 0.96 },
@@ -422,7 +347,6 @@ export async function initAnimations() {
       );
     }
 
-    // D. Micro-stagger individual skill pills
     if (pills.length > 0) {
       skillsTl.fromTo(Array.from(pills),
         { opacity: 0, y: 12 },
@@ -437,8 +361,10 @@ export async function initAnimations() {
       );
     }
   }
+}
 
-  // 8. Phase 6: Playground Interactive Terminal Scroll Trigger
+// 8. Playground Terminal
+function initPlayground(gsap: any, ScrollTrigger: any) {
   const playgroundSection = document.querySelector("[data-playground-section]");
   if (playgroundSection) {
     const copyContainer = playgroundSection.querySelector("[data-playground-copy]");
@@ -452,7 +378,6 @@ export async function initAnimations() {
       }
     });
 
-    // Animate [data-playground-copy] children: opacity 0 -> 1, y 30 -> 0, stagger 0.1
     if (copyContainer && copyContainer.children.length > 0) {
       playgroundTl.fromTo(Array.from(copyContainer.children),
         { opacity: 0, y: 30 },
@@ -466,7 +391,6 @@ export async function initAnimations() {
       );
     }
 
-    // Animate [data-playground-terminal]: opacity 0 -> 1, y 70 -> 0, scale 0.96 -> 1, rotateX 8 -> 0
     if (terminalEl) {
       playgroundTl.fromTo(terminalEl,
         { opacity: 0, y: 70, scale: 0.96, rotateX: 8 },
@@ -482,8 +406,10 @@ export async function initAnimations() {
       );
     }
   }
+}
 
-  // 9. Phase 7: Contact Section Scroll Trigger
+// 9. Contact Section
+function initContact(gsap: any, ScrollTrigger: any) {
   const contactSection = document.querySelector("[data-contact-section]");
   if (contactSection) {
     const copyContainer = contactSection.querySelector("[data-contact-copy]");
@@ -498,7 +424,6 @@ export async function initAnimations() {
       }
     });
 
-    // Animate [data-contact-copy] children: opacity 0 -> 1, y 40 -> 0, stagger 0.1
     if (copyContainer && copyContainer.children.length > 0) {
       contactTl.fromTo(Array.from(copyContainer.children),
         { opacity: 0, y: 40 },
@@ -512,7 +437,6 @@ export async function initAnimations() {
       );
     }
 
-    // Animate [data-contact-card] grid: opacity 0 -> 1, y 32 -> 0, stagger 0.08
     if (cards.length > 0) {
       contactTl.fromTo(Array.from(cards),
         { opacity: 0, y: 32 },
@@ -527,7 +451,6 @@ export async function initAnimations() {
       );
     }
 
-    // Animate [data-contact-cta] panel: opacity 0 -> 1, y 40 -> 0, scale 0.96 -> 1
     if (ctaPanel) {
       contactTl.fromTo(ctaPanel,
         { opacity: 0, y: 40, scale: 0.96 },
@@ -542,4 +465,128 @@ export async function initAnimations() {
       );
     }
   }
+}
+
+// 10. Global 3D Hover Tilt system
+function initGlobal3DHover(gsap: any) {
+  // To be implemented in Step 3
+}
+
+// Main Entry Point
+export async function initAnimations() {
+  if (initialized) return;
+  initialized = true;
+
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  const preloader = document.querySelector("[data-preloader]");
+
+  // Graceful degradation for reduced motion
+  if (prefersReducedMotion) {
+    preloader?.remove();
+    
+    // Instant reveal of all data-reveal elements
+    document.querySelectorAll("[data-reveal]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      }
+    });
+
+    // Instant reveal of Hero elements
+    document.querySelectorAll("[data-hero-eyebrow], [data-hero-title], [data-hero-copy], [data-hero-actions], [data-hero-visual]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.style.filter = "none";
+      }
+    });
+
+    // Instant reveal of Showcase elements
+    document.querySelectorAll("[data-project-copy], [data-demo-frame]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.style.filter = "none";
+        el.querySelectorAll("*").forEach((child) => {
+          if (child instanceof HTMLElement) {
+            child.style.opacity = "1";
+            child.style.transform = "none";
+          }
+        });
+      }
+    });
+
+    // Instant reveal of Experiments elements
+    document.querySelectorAll("[data-experiment-card], [data-terminal-line]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      }
+    });
+
+    // Instant reveal of Skills Topology elements
+    document.querySelectorAll("[data-skill-center], [data-skill-group], .skill-pill").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      }
+    });
+
+    document.querySelectorAll("[data-skill-line]").forEach((el) => {
+      if (el instanceof SVGPathElement) {
+        el.style.strokeDashoffset = "0";
+      }
+    });
+
+    // Instant reveal of Playground elements
+    document.querySelectorAll("[data-playground-copy], [data-playground-terminal]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.querySelectorAll("*").forEach((child) => {
+          if (child instanceof HTMLElement) {
+            child.style.opacity = "1";
+            child.style.transform = "none";
+          }
+        });
+      }
+    });
+
+    // Instant reveal of Contact elements
+    document.querySelectorAll("[data-contact-copy], [data-contact-card], [data-contact-cta]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.style.scale = "1";
+        el.querySelectorAll("*").forEach((child) => {
+          if (child instanceof HTMLElement) {
+            child.style.opacity = "1";
+            child.style.transform = "none";
+            child.style.scale = "1";
+          }
+        });
+      }
+    });
+    return;
+  }
+
+  const gsap = (await import("gsap")).default;
+  const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Execute modular animations in sequence
+  initPreloader(gsap);
+  initHeroAnimations(gsap);
+  initRevealAnimations(gsap, ScrollTrigger);
+  initMotionCards(gsap, ScrollTrigger);
+  initProjectShowcases(gsap, ScrollTrigger);
+  initExperiments(gsap, ScrollTrigger);
+  initSkillsTopology(gsap, ScrollTrigger);
+  initPlayground(gsap, ScrollTrigger);
+  initContact(gsap, ScrollTrigger);
+  initGlobal3DHover(gsap);
 }
