@@ -1,0 +1,16 @@
+---
+const { index } = Astro.props;
+---
+<div class="stacked-card" data-card-index={index}>
+  <slot />
+</div>
+
+<style>
+  .stacked-card {
+    position: relative;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-soft);
+    padding: 2rem;
+  }
+</style>

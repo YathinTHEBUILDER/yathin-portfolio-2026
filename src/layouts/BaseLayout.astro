@@ -1,0 +1,43 @@
+---
+import "../styles/global.css";
+
+import SEO from "../components/layout/SEO.astro";
+import Navbar from "../components/layout/Navbar.astro";
+import Footer from "../components/layout/Footer.astro";
+import Preloader from "../components/global/Preloader.astro";
+import BackgroundScene from "../components/global/BackgroundScene";
+import Cursor from "../components/global/Cursor";
+---
+
+<html lang="en">
+  <head>
+    <SEO />
+  </head>
+  <body>
+    <Preloader />
+    <BackgroundScene client:load />
+    <Cursor client:load />
+
+    <Navbar />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      import { initSmoothScroll } from "../scripts/lenis";
+      import { initAnimations } from "../scripts/animations";
+
+      document.addEventListener("astro:page-load", () => {
+        initSmoothScroll();
+        initAnimations();
+      });
+      
+      // Fallback lifecycle triggers for direct static loads without transitions
+      initSmoothScroll();
+      initAnimations();
+    </script>
+  </body>
+</html>

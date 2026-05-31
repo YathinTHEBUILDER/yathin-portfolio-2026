@@ -1,0 +1,64 @@
+---
+const { url } = Astro.props;
+---
+<div class="browser-mockup">
+  <div class="browser-header">
+    <div class="dots">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+    </div>
+    <div class="address-bar">{url}</div>
+  </div>
+  <div class="browser-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .browser-mockup {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+    overflow: hidden;
+  }
+
+  .browser-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dots {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .red { background: #ff5f56; }
+  .yellow { background: #ffbd2e; }
+  .green { background: #27c93f; }
+
+  .address-bar {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    background: var(--bg);
+    padding: 0.25rem;
+    border-radius: 4px;
+    max-width: 400px;
+  }
+
+  .browser-content {
+    min-height: 200px;
+  }
+</style>

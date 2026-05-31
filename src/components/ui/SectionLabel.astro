@@ -1,0 +1,14 @@
+---
+const { label } = Astro.props;
+---
+<span class="section-label">{label}</span>
+
+<style>
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+</style>
