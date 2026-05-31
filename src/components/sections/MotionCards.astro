@@ -1,6 +1,273 @@
-<section id="motion" class="section">
-  <div class="container">
-    <p data-reveal>MOTION CARDS / PLACEHOLDER</p>
-    <h2 data-reveal>Coming next</h2>
+---
+---
+
+<section id="motion" class="motion-section">
+  <!-- Interactive particle dots and background graphics -->
+  <div class="chrome-object"></div>
+  <div class="dots-overlay">
+    <div class="dot dot-pink"></div>
+    <div class="dot dot-cyan"></div>
+  </div>
+
+  <div class="container motion-container">
+    <div class="motion-header">
+      <span class="motion-number">02</span>
+      <p class="motion-sub" data-motion-text>
+        Ideas do not stay in notes.<br class="desktop-only" />
+        They become interfaces, systems, and shipped products.
+      </p>
+    </div>
+
+    <!-- Motion Cards Stack -->
+    <div class="cards-stack-wrapper">
+      <div class="cards-stack">
+        <!-- Card 1 -->
+        <div class="m-card card-1" data-motion-card="1">
+          <div class="card-num">01</div>
+          <h3 class="card-title">BUILD</h3>
+          <p class="card-desc">Translating logic into structured architectures and clean frontend pipelines.</p>
+          <div class="card-badge">Next.js / Astro / Three.js</div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="m-card card-2" data-motion-card="2">
+          <div class="card-num">02</div>
+          <h3 class="card-title">SHIP</h3>
+          <p class="card-desc">Deploying serverless, production-grade applications that scale seamlessly.</p>
+          <div class="card-badge">Supabase / Vercel / Cloudflare</div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="m-card card-3" data-motion-card="3">
+          <div class="card-num">03</div>
+          <h3 class="card-title">ITERATE</h3>
+          <p class="card-desc">Refining micro-interactions, optimizing page performance, and training models.</p>
+          <div class="card-badge">GSAP / Lenis / Groq / Gemini</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .motion-section {
+    position: relative;
+    padding: 10rem 2rem;
+    background: #f3f1ee;
+    color: #050505;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  /* Abstract 3D-looking Chrome Object using CSS Gradients */
+  .chrome-object {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: 
+      radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, transparent 40%),
+      radial-gradient(circle at 70% 70%, rgba(51, 230, 255, 0.3) 0%, transparent 45%),
+      radial-gradient(circle at 80% 20%, rgba(255, 143, 163, 0.25) 0%, transparent 40%),
+      linear-gradient(135deg, #e4e0db 0%, #c4bfb7 50%, #9e978d 100%);
+    box-shadow: 
+      inset -20px -20px 50px rgba(0, 0, 0, 0.1),
+      inset 20px 20px 50px rgba(255, 255, 255, 0.6),
+      0 40px 80px rgba(0, 0, 0, 0.08);
+    opacity: 0.85;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Soft particles */
+  .dots-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .dot {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    filter: blur(50px);
+    opacity: 0.35;
+  }
+
+  .dot-pink {
+    background: #ff8fa3;
+    top: 20%;
+    left: 15%;
+  }
+
+  .dot-cyan {
+    background: #33e6ff;
+    bottom: 25%;
+    right: 15%;
+  }
+
+  /* Container */
+  .motion-container {
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  /* Header */
+  .motion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 2rem;
+  }
+
+  .motion-number {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 12vw, 10rem);
+    font-weight: 800;
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    color: rgba(0, 0, 0, 0.05);
+  }
+
+  .motion-sub {
+    font-family: var(--font-body);
+    font-size: clamp(1.2rem, 3.2vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: #050505;
+    text-align: right;
+    margin: 0;
+  }
+
+  /* Cards Stack layout */
+  .cards-stack-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6rem 0;
+    min-height: 480px;
+  }
+
+  .cards-stack {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Shared Card Styling */
+  .m-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(247, 246, 244, 0.85);
+    border: 1px solid #050505;
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.3s var(--ease-out);
+    color: #050505;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  }
+
+  .m-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-num {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #9c9c9c;
+    letter-spacing: 0.1em;
+    margin-bottom: auto;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+  }
+
+  .card-desc {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #666;
+    margin: 0 0 2.5rem 0;
+  }
+
+  .card-badge {
+    align-self: flex-start;
+    font-family: monospace;
+    font-size: 0.75rem;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 0.4rem 0.8rem;
+    border-radius: 99px;
+    color: #050505;
+  }
+
+  /* Specific Card stacking order */
+  .card-1 {
+    z-index: 3;
+  }
+  .card-2 {
+    z-index: 2;
+  }
+  .card-3 {
+    z-index: 1;
+  }
+
+  @media (max-width: 768px) {
+    .motion-section {
+      padding: 6rem 1rem;
+    }
+    
+    .motion-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .motion-sub {
+      text-align: left;
+    }
+
+    .cards-stack-wrapper {
+      padding: 3rem 0;
+      min-height: 380px;
+    }
+
+    .cards-stack {
+      max-width: 320px;
+      height: 360px;
+    }
+
+    .chrome-object {
+      width: 300px;
+      height: 300px;
+    }
+  }
+</style>

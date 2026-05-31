@@ -1,11 +1,528 @@
 ---
 import { profile } from "../../data/profile";
+import { projects } from "../../data/projects";
 ---
 
-<section id="home" class="section hero-section">
-  <div class="container">
-    <p data-reveal>YATHIN.G / AI PRODUCT BUILDER</p>
-    <h1 data-reveal>{profile.headline}</h1>
-    <p data-reveal>{profile.subheadline}</p>
+<section id="home" class="hero-section">
+  <!-- Visual background effects -->
+  <div class="radial-glow glow-violet"></div>
+  <div class="radial-glow glow-cyan"></div>
+  <div class="grid-overlay"></div>
+
+  <div class="container hero-container">
+    <div class="hero-text">
+      <p class="hero-eyebrow" data-hero-eyebrow>
+        <span>YATHIN.G</span>
+        <span class="divider">/</span>
+        <span>AI PRODUCT BUILDER</span>
+      </p>
+      
+      <h1 class="hero-title" data-hero-title>
+        I BUILD<br />THINGS THAT<br />THINK.
+      </h1>
+      
+      <p class="hero-copy" data-hero-copy>
+        {profile.subheadline}
+      </p>
+      
+      <div class="hero-actions" data-hero-actions>
+        <a href="#projects" class="btn btn-primary">
+          <span>Explore Work</span>
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 3L13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13 8H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </a>
+        <a href="#contact" class="btn btn-secondary">
+          <span>Contact Me</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual" data-hero-visual>
+      <!-- Floating background decorative card 1 -->
+      <div class="floating-card bg-card-1"></div>
+      
+      <!-- Floating background decorative card 2 -->
+      <div class="floating-card bg-card-2"></div>
+
+      <!-- Main Glass Product Lab Panel -->
+      <div class="product-lab-panel">
+        <div class="panel-header">
+          <div class="panel-dots">
+            <span class="p-dot red"></span>
+            <span class="p-dot yellow"></span>
+            <span class="p-dot green"></span>
+          </div>
+          <div class="panel-title">product-lab // active-projects</div>
+        </div>
+
+        <div class="panel-content">
+          <!-- Terminal output eyebrow -->
+          <div class="fake-console">
+            <div class="console-line"><span class="c-accent">yathing-portfolio</span> $ npm run dev:ai</div>
+            <div class="console-line c-dim">> product-lab@3.2.0 initialized successfully</div>
+          </div>
+
+          <!-- Project Rows -->
+          <div class="project-rows">
+            {
+              projects.slice(0, 3).map((proj) => (
+                <div class="project-row">
+                  <div class="row-details">
+                    <span class="project-name">{proj.name}</span>
+                    <span class="project-type">{proj.type}</span>
+                  </div>
+                  <div class="row-status">
+                    <span class={`status-dot ${proj.accent}`}></span>
+                    <span class="status-text">{proj.status}</span>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+
+          <!-- Command Logs -->
+          <div class="fake-commands">
+            <div class="cmd-line"><span class="cmd-op">build</span>.<span class="cmd-fn">product</span>()</div>
+            <div class="cmd-line"><span class="cmd-op">ship</span>.<span class="cmd-fn">fast</span>()</div>
+            <div class="cmd-line"><span class="cmd-op">iterate</span>.<span class="cmd-fn">always</span>()</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 2rem 6rem;
+    background: #030305;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  /* Grid Overlay & Noise */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center;
+    pointer-events: none;
+    z-index: -2;
+  }
+
+  /* Radial Glow Effects */
+  .radial-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.45;
+  }
+
+  .glow-violet {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
+    top: 15%;
+    left: -10%;
+  }
+
+  .glow-cyan {
+    width: 650px;
+    height: 650px;
+    background: radial-gradient(circle, rgba(51, 230, 255, 0.18) 0%, transparent 70%);
+    bottom: 10%;
+    right: -5%;
+  }
+
+  /* Container */
+  .hero-container {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0 auto;
+  }
+
+  /* Left Column - Hero Text */
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--cyan);
+    margin-bottom: 2rem;
+  }
+
+  .hero-eyebrow .divider {
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3.2rem, 9.5vw, 7.8rem);
+    line-height: 0.88;
+    letter-spacing: -0.06em;
+    font-weight: 800;
+    color: var(--text);
+    margin: 0 0 2rem 0;
+    text-transform: uppercase;
+  }
+
+  .hero-copy {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 0 3rem 0;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 1rem 2rem;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s var(--ease-out);
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: var(--text);
+    color: #000;
+    border: 1px solid var(--text);
+  }
+
+  .btn-primary:hover {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    box-shadow: 0 0 25px rgba(51, 230, 255, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .btn-primary svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .btn-primary:hover svg {
+    transform: translateX(4px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  /* Right Column - Hero Visual */
+  .hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+    perspective: 1000px;
+  }
+
+  /* Floating Background Cards */
+  .floating-card {
+    position: absolute;
+    width: 320px;
+    height: 240px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.015) 0%, rgba(255, 255, 255, 0.003) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 1;
+    pointer-events: none;
+    transition: all 0.8s var(--ease-out);
+  }
+
+  .bg-card-1 {
+    transform: translate(-30px, -20px) rotate(-6deg);
+    background: linear-gradient(135deg, rgba(79, 124, 255, 0.03) 0%, transparent 100%);
+    border-color: rgba(79, 124, 255, 0.08);
+  }
+
+  .bg-card-2 {
+    transform: translate(30px, 30px) rotate(4deg);
+    background: linear-gradient(135deg, rgba(51, 230, 255, 0.03) 0%, transparent 100%);
+    border-color: rgba(51, 230, 255, 0.08);
+  }
+
+  /* Main Glass Panel */
+  .product-lab-panel {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    background: rgba(13, 15, 23, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .panel-dots {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .p-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    opacity: 0.75;
+  }
+
+  .p-dot.red { background: #ff5f56; }
+  .p-dot.yellow { background: #ffbd2e; }
+  .p-dot.green { background: #27c93f; }
+
+  .panel-title {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .panel-content {
+    padding: 1.5rem;
+  }
+
+  /* Fake Console */
+  .fake-console {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.5rem;
+    font-family: monospace;
+    font-size: 0.75rem;
+  }
+
+  .console-line {
+    margin-bottom: 0.25rem;
+  }
+  .console-line:last-child {
+    margin-bottom: 0;
+  }
+
+  .c-accent {
+    color: var(--cyan);
+  }
+
+  .c-dim {
+    color: var(--text-dim);
+  }
+
+  /* Project Rows */
+  .project-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.3s var(--ease-out);
+  }
+
+  .project-row:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .row-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .project-name {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .project-type {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+  }
+
+  .row-status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.3rem 0.6rem;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    position: relative;
+  }
+
+  /* Pulses for status dots */
+  .status-dot::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: status-pulse 2s infinite;
+  }
+
+  .status-dot.green { background: var(--green); }
+  .status-dot.green::after { border: 1px solid var(--green); }
+  
+  .status-dot.blue { background: var(--blue); }
+  .status-dot.blue::after { border: 1px solid var(--blue); }
+
+  .status-dot.yellow { background: var(--yellow); }
+  .status-dot.yellow::after { border: 1px solid var(--yellow); }
+
+  .status-text {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+  }
+
+  /* Fake Commands */
+  .fake-commands {
+    font-family: monospace;
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .cmd-line {
+    color: var(--text-dim);
+  }
+
+  .cmd-op {
+    color: var(--violet);
+  }
+
+  .cmd-fn {
+    color: var(--cyan);
+  }
+
+  @keyframes status-pulse {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .hero-container {
+      gap: 3rem;
+    }
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 7rem 1rem 4rem;
+    }
+    .hero-container {
+      grid-template-columns: 1fr;
+      gap: 4rem;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .hero-copy {
+      margin: 0 auto 2.5rem;
+    }
+    .hero-actions {
+      justify-content: center;
+    }
+    .hero-visual {
+      margin-top: 1rem;
+      width: 100%;
+    }
+    .product-lab-panel {
+      max-width: 100%;
+    }
+    .floating-card {
+      display: none; /* Hide background cards on small screens for visual simplicity */
+    }
+  }
+</style>

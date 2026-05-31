@@ -30,14 +30,18 @@ import Cursor from "../components/global/Cursor";
       import { initSmoothScroll } from "../scripts/lenis";
       import { initAnimations } from "../scripts/animations";
 
-      document.addEventListener("astro:page-load", () => {
+      const boot = () => {
         initSmoothScroll();
         initAnimations();
-      });
-      
-      // Fallback lifecycle triggers for direct static loads without transitions
-      initSmoothScroll();
-      initAnimations();
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", boot, { once: true });
+      } else {
+        boot();
+      }
+
+      document.addEventListener("astro:page-load", boot);
     </script>
   </body>
 </html>

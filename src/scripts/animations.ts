@@ -10,12 +10,24 @@ export async function initAnimations() {
 
   const preloader = document.querySelector("[data-preloader]");
 
+  // Graceful degradation for reduced motion
   if (prefersReducedMotion) {
     preloader?.remove();
+    
+    // Instant reveal of all data-reveal elements
     document.querySelectorAll("[data-reveal]").forEach((el) => {
       if (el instanceof HTMLElement) {
         el.style.opacity = "1";
         el.style.transform = "none";
+      }
+    });
+
+    // Instant reveal of Hero elements
+    document.querySelectorAll("[data-hero-eyebrow], [data-hero-title], [data-hero-copy], [data-hero-actions], [data-hero-visual]").forEach((el) => {
+      if (el instanceof HTMLElement) {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+        el.style.filter = "none";
       }
     });
     return;
@@ -26,6 +38,7 @@ export async function initAnimations() {
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // 1. Preloader dismissal
   gsap.to(preloader, {
     opacity: 0,
     duration: 0.8,
@@ -34,6 +47,64 @@ export async function initAnimations() {
     onComplete: () => preloader?.remove(),
   });
 
+  // 2. Cinematic Hero Timeline
+  const heroTl = gsap.timeline({
+    delay: 0.5,
+  });
+
+  const eyebrow = document.querySelector("[data-hero-eyebrow]");
+  const title = document.querySelector("[data-hero-title]");
+  const copy = document.querySelector("[data-hero-copy]");
+  const actions = document.querySelector("[data-hero-actions]");
+  const visual = document.querySelector("[data-hero-visual]");
+
+  if (eyebrow) {
+    heroTl.fromTo(eyebrow, 
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+    );
+  }
+
+  if (title) {
+    heroTl.fromTo(title,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 1.0, ease: "power4.out" },
+      "-=0.6"
+    );
+  }
+
+  if (copy) {
+    heroTl.fromTo(copy,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      "-=0.7"
+    );
+  }
+
+  if (actions) {
+    heroTl.fromTo(actions,
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      "-=0.7"
+    );
+  }
+
+  if (visual) {
+    heroTl.fromTo(visual,
+      { opacity: 0, y: 50, rotateX: 12, rotateY: -12, filter: "blur(20px)" },
+      { opacity: 1, y: 0, rotateX: 0, rotateY: 0, filter: "blur(0px)", duration: 1.4, ease: "power4.out" },
+      "-=1.0"
+    );
+
+    // Subtle entrance for floating card backdrops
+    heroTl.fromTo(".floating-card",
+      { opacity: 0, scale: 0.9 },
+      { opacity: 1, scale: 1, duration: 1.2, stagger: 0.15, ease: "power3.out" },
+      "-=1.1"
+    );
+  }
+
+  // 3. Standard Scroll Reveal Elements
   gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
     gsap.to(el, {
       opacity: 1,
@@ -46,4 +117,83 @@ export async function initAnimations() {
       },
     });
   });
+
+  // 4. Phase 2B: MotionCards Scroll Scrub Parallax
+  const isMobile = window.innerWidth <= 768;
+
+  // We disable scrub fanning out on mobile for better touch performance and layout preservation
+  if (!isMobile) {
+    const section = document.querySelector(".motion-section");
+    const card1 = document.querySelector('[data-motion-card="1"]');
+    const card2 = document.querySelector('[data-motion-card="2"]');
+    const card3 = document.querySelector('[data-motion-card="3"]');
+    const chrome = document.querySelector(".chrome-object");
+    const num = document.querySelector(".motion-number");
+
+    if (section && card1 && card2 && card3) {
+      const cardsTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top 60%",
+          end: "bottom 30%",
+          scrub: 1.2,
+        }
+      });
+
+      // Card 1 fans left and slightly up/rotated
+      cardsTl.fromTo(card1,
+        { x: 0, y: 0, rotate: 0 },
+        { x: -160, y: -40, rotate: -8, ease: "power2.out" },
+        0
+      );
+
+      // Card 2 moves slightly up and retains alignment
+      cardsTl.fromTo(card2,
+        { x: 0, y: 0, rotate: 0 },
+        { x: 0, y: -20, rotate: 0, ease: "power2.out" },
+        0
+      );
+
+      // Card 3 fans right and down/rotated
+      cardsTl.fromTo(card3,
+        { x: 0, y: 0, rotate: 0 },
+        { x: 160, y: 30, rotate: 8, ease: "power2.out" },
+        0
+      );
+
+      // Parallax effect on chrome ball and numbers
+      if (chrome) {
+        cardsTl.fromTo(chrome,
+          { yPercent: -10, rotate: 0 },
+          { yPercent: 10, rotate: 45, ease: "none" },
+          0
+        );
+      }
+
+      if (num) {
+        cardsTl.fromTo(num,
+          { yPercent: 0 },
+          { yPercent: -30, ease: "none" },
+          0
+        );
+      }
+    }
+  } else {
+    // Mobile fallback reveal
+    const cards = document.querySelectorAll(".m-card");
+    cards.forEach((card, index) => {
+      gsap.fromTo(card,
+        { opacity: 0, y: 30 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.8, 
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+          } 
+        }
+      );
+    });
+  }
 }
