@@ -469,7 +469,60 @@ function initContact(gsap: any, ScrollTrigger: any) {
 
 // 10. Global 3D Hover Tilt system
 function initGlobal3DHover(gsap: any) {
-  // To be implemented in Step 3
+  const isMobile = window.innerWidth <= 768;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (isMobile || prefersReducedMotion) return;
+
+  const cards = document.querySelectorAll("[data-tilt-card]");
+
+  cards.forEach((card) => {
+    if (!(card instanceof HTMLElement)) return;
+
+    // Fast, responsive quickTo targets for X/Y rotation, scaling, and elevation
+    const rotateXTo = gsap.quickTo(card, "rotateX", { duration: 0.4, ease: "power2.out" });
+    const rotateYTo = gsap.quickTo(card, "rotateY", { duration: 0.4, ease: "power2.out" });
+    const yTo = gsap.quickTo(card, "y", { duration: 0.4, ease: "power2.out" });
+    const scaleTo = gsap.quickTo(card, "scale", { duration: 0.4, ease: "power2.out" });
+
+    card.style.transformStyle = "preserve-3d";
+    if (card.parentElement) {
+      card.parentElement.style.perspective = "1400px";
+    }
+
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      // Normalize offsets from element center (-1 to 1)
+      const percentX = (x - centerX) / centerX;
+      const percentY = (y - centerY) / centerY;
+
+      // Premium, controlled maximum X/Y rotation (5 degrees max)
+      const maxRotation = 5;
+
+      const rotateY = percentX * maxRotation;
+      const rotateX = -percentY * maxRotation;
+
+      rotateXTo(rotateX);
+      rotateYTo(rotateY);
+      yTo(-6);
+      scaleTo(1.02);
+    });
+
+    card.addEventListener("mouseleave", () => {
+      rotateXTo(0);
+      rotateYTo(0);
+      yTo(0);
+      scaleTo(1);
+    });
+  });
 }
 
 // Main Entry Point
