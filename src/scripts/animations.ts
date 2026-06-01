@@ -16,7 +16,7 @@ function initPreloader(gsap: any) {
 // 2. Cinematic Hero Timeline & Scroll Scrub
 function initHeroAnimations(gsap: any, ScrollTrigger: any, isMobile: boolean) {
   const heroTl = gsap.timeline({
-    delay: 0.5,
+    delay: 0.1,
   });
 
   const eyebrow = document.querySelector("[data-hero-eyebrow]");
@@ -27,32 +27,17 @@ function initHeroAnimations(gsap: any, ScrollTrigger: any, isMobile: boolean) {
 
   if (eyebrow) {
     heroTl.fromTo(eyebrow, 
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+      { opacity: 0, y: 32, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power3.out" },
+      0
     );
   }
 
   if (title) {
     heroTl.fromTo(title,
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 1.0, ease: "power4.out" },
-      "-=0.6"
-    );
-  }
-
-  if (copy) {
-    heroTl.fromTo(copy,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
-      "-=0.7"
-    );
-  }
-
-  if (actions) {
-    heroTl.fromTo(actions,
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
-      "-=0.7"
+      { opacity: 0, y: 32, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7, ease: "power4.out" },
+      0.1
     );
   }
 
@@ -60,23 +45,39 @@ function initHeroAnimations(gsap: any, ScrollTrigger: any, isMobile: boolean) {
     if (isMobile) {
       heroTl.fromTo(visual,
         { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" },
-        "-=0.7"
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+        0.2
       );
     } else {
       heroTl.fromTo(visual,
-        { opacity: 0, y: 50, rotateX: 12, rotateY: -12, filter: "blur(20px)" },
-        { opacity: 1, y: 0, rotateX: 0, rotateY: 0, filter: "blur(0px)", duration: 1.4, ease: "power4.out" },
-        "-=1.0"
+        { opacity: 0, y: 32, rotateX: 12, rotateY: -12, filter: "blur(8px)" },
+        { opacity: 1, y: 0, rotateX: 0, rotateY: 0, filter: "blur(0px)", duration: 1.0, ease: "power4.out" },
+        0.2
       );
 
       // Subtle entrance for floating card backdrops
       heroTl.fromTo(".floating-card",
         { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1, duration: 1.2, stagger: 0.15, ease: "power3.out" },
-        "-=1.1"
+        { opacity: 1, scale: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" },
+        0.3
       );
     }
+  }
+
+  if (copy) {
+    heroTl.fromTo(copy,
+      { opacity: 0, y: 32, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power3.out" },
+      0.25
+    );
+  }
+
+  if (actions) {
+    heroTl.fromTo(actions,
+      { opacity: 0, y: 32, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power3.out" },
+      0.35
+    );
   }
 
   // Scroll Parallax / Depth separation for Hero (Desktop only)
