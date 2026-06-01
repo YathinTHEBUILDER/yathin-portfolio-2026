@@ -110,7 +110,12 @@ const locationText = profile.location;
     </div>
 
     {/* Primary CTA Panel */}
-    <div class="perspective-scene scroll-3d-safe">
+    <div class="perspective-scene scroll-3d-safe cta-wrapper">
+      {/* Subtle Rear Slab */}
+      <div class="cta-backplate depth-card" data-contact-cta-slab>
+        <div class="cta-backplate-grid"></div>
+      </div>
+
       <div class="cta-banner depth-card" data-contact-cta>
         <div class="cta-mesh"></div>
         <div class="cta-content">
@@ -253,7 +258,7 @@ const locationText = profile.location;
   /* Contact Cards Grid */
   .contact-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.8rem;
   }
 
@@ -400,6 +405,35 @@ const locationText = profile.location;
   }
 
   /* Primary CTA Banner Panel */
+  .cta-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cta-backplate {
+    position: absolute;
+    width: 98%;
+    height: 98%;
+    border-radius: var(--radius-lg);
+    border: 1px dashed rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.003);
+    z-index: 1;
+    pointer-events: none;
+    transform: translateZ(-30px) translateY(12px) rotateX(2deg);
+    transition: border-color 0.4s var(--ease-out);
+  }
+
+  .cta-backplate-grid {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 100% 15px;
+    border-radius: inherit;
+  }
+
   .cta-banner {
     position: relative;
     background: rgba(13, 15, 23, 0.45);

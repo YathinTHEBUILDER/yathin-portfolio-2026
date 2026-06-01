@@ -9,6 +9,7 @@ interface HistoryItem {
 export default function PortfolioTerminal() {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [isFocused, setIsFocused] = useState(true);
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -335,7 +336,9 @@ export default function PortfolioTerminal() {
   return (
     <div
       onClick={handleTerminalClick}
-      className="relative flex flex-col w-full h-[380px] bg-[#030305]/85 border border-white/10 rounded-2xl overflow-hidden font-mono text-xs cursor-text shadow-[0_20px_50px_rgba(0,0,0,0.5),_0_0_30px_rgba(51,230,255,0.05)] select-none"
+      className={`relative flex flex-col w-full h-[380px] bg-[#030305]/85 border rounded-2xl overflow-hidden font-mono text-xs cursor-text shadow-[0_20px_50px_rgba(0,0,0,0.5)] select-none transition-all duration-300 ${
+        isFocused ? "border-[#3dd9a0]/40 shadow-[0_0_20px_rgba(51,230,255,0.12)]" : "border-white/10"
+      }`}
     >
       {/* Scanline CRT overlay */}
       <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,_rgba(0,0,0,0.25)_50%),_linear-gradient(90deg,_rgba(255,0,0,0.06),_rgba(0,255,0,0.02),_rgba(0,0,255,0.06))] bg-[size:100%_4px,_6px_100%] opacity-40 z-10"></div>
@@ -381,19 +384,24 @@ export default function PortfolioTerminal() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full bg-transparent border-none outline-none text-white/95 caret-transparent font-mono p-0 select-text"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            style={{
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              boxShadow: "none",
+              color: "#f5f7fb",
+              fontFamily: "monospace",
+              fontSize: "0.75rem",
+              caretColor: "#3dd9a0",
+              width: "100%",
+              padding: 0,
+            }}
             autoFocus
             autoComplete="off"
             spellCheck="false"
             placeholder="Type a command..."
-          />
-          {/* Custom Caret since standard input is set to caret-transparent */}
-          <div
-            className="absolute pointer-events-none bg-[#3dd9a0] w-1.5 h-3.5 animate-caret-blink"
-            style={{
-              left: `${input.length * 7.2}px`, // approximate spacing per char in monospace
-              transition: "left 0.05s ease-out",
-            }}
           />
         </div>
       </div>
@@ -420,14 +428,6 @@ export default function PortfolioTerminal() {
         }
         .animate-reveal {
           animation: reveal 0.25s var(--ease-out) forwards;
-        }
-
-        @keyframes caret-blink {
-          0%, 100% { opacity: 0; }
-          50% { opacity: 1; }
-        }
-        .animate-caret-blink {
-          animation: caret-blink 0.9s steps(1) infinite;
         }
       ` }} />
     </div>

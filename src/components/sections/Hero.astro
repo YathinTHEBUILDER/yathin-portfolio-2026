@@ -52,8 +52,14 @@ import { projects } from "../../data/projects";
         <div class="slab-tech-label">STATUS // VERIFIED_BUILD</div>
       </div>
 
-      <!-- Layer 3: Main Glass Product Lab Panel (Command/Output Slab) -->
-      <div class="product-lab-panel depth-card" data-tilt-card data-depth-layer="3">
+      <!-- Layer 3: Command Output Slab -->
+      <div class="floating-card bg-card-3 depth-card" data-depth-layer="3">
+        <div class="slab-command-bg"></div>
+        <div class="slab-tech-label">CMD // OUTPUT_STREAM</div>
+      </div>
+
+      <!-- Layer 4: Main Glass Product Lab Panel -->
+      <div class="product-lab-panel depth-card" data-tilt-card data-depth-layer="4">
         <div class="panel-header">
           <div class="panel-dots">
             <span class="p-dot red"></span>
@@ -103,10 +109,10 @@ import { projects } from "../../data/projects";
 <style>
   .hero-section {
     position: relative;
-    min-height: 100vh;
+    min-height: calc(100vh - 20px);
     display: flex;
     align-items: center;
-    padding: 8rem 2rem 6rem;
+    padding: 7.5rem 2rem 5rem;
     background: #030305;
     overflow: hidden;
     z-index: 1;
@@ -154,8 +160,8 @@ import { projects } from "../../data/projects";
   /* Container */
   .hero-container {
     display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 4rem;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 3.5rem;
     align-items: center;
     width: min(1200px, calc(100% - 2rem));
     margin: 0 auto;
@@ -166,6 +172,7 @@ import { projects } from "../../data/projects";
     display: flex;
     flex-direction: column;
     z-index: 5;
+    text-align: left;
   }
 
   .hero-eyebrow {
@@ -177,7 +184,7 @@ import { projects } from "../../data/projects";
     font-weight: 700;
     letter-spacing: 0.15em;
     color: var(--cyan);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem; /* Reduced from 2rem */
   }
 
   .hero-eyebrow .divider {
@@ -187,22 +194,22 @@ import { projects } from "../../data/projects";
 
   .hero-title {
     font-family: var(--font-display);
-    font-size: clamp(3.2rem, 9.5vw, 7.8rem);
+    font-size: clamp(3.4rem, 8.5vw, 7.2rem); /* Adjusted for better fold visibility */
     line-height: 0.88;
     letter-spacing: -0.06em;
     font-weight: 800;
     color: var(--text);
-    margin: 0 0 2rem 0;
+    margin: 0 0 1.2rem 0; /* Reduced from 2rem */
     text-transform: uppercase;
   }
 
   .hero-copy {
     font-family: var(--font-body);
-    font-size: clamp(1rem, 2.5vw, 1.25rem);
-    line-height: 1.6;
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    line-height: 1.55;
     color: var(--text-muted);
-    max-width: 520px;
-    margin: 0 0 3rem 0;
+    max-width: 540px;
+    margin: 0 0 2.2rem 0; /* Reduced from 3rem */
   }
 
   .hero-actions {
@@ -269,7 +276,7 @@ import { projects } from "../../data/projects";
     justify-content: center;
     align-items: center;
     z-index: 3;
-    perspective: 1000px;
+    perspective: 1400px;
   }
 
   /* Floating Background Cards */
@@ -286,15 +293,21 @@ import { projects } from "../../data/projects";
   }
 
   .bg-card-1 {
-    transform: translate(-30px, -20px) rotate(-6deg);
+    transform: translate(-45px, -35px) rotate(-6deg);
     background: linear-gradient(135deg, rgba(79, 124, 255, 0.03) 0%, transparent 100%);
     border-color: rgba(79, 124, 255, 0.08);
   }
 
   .bg-card-2 {
-    transform: translate(30px, 30px) rotate(4deg);
+    transform: translate(40px, 45px) rotate(4deg);
     background: linear-gradient(135deg, rgba(51, 230, 255, 0.03) 0%, transparent 100%);
     border-color: rgba(51, 230, 255, 0.08);
+  }
+
+  .bg-card-3 {
+    transform: translate(-10px, 35px) rotate(-2deg);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, transparent 100%);
+    border-color: rgba(139, 92, 246, 0.06);
   }
 
   /* Layered Depth Slab Additions */
@@ -317,6 +330,13 @@ import { projects } from "../../data/projects";
     border-radius: inherit;
   }
 
+  .slab-command-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.04) 0%, transparent 60%);
+    border-radius: inherit;
+  }
+
   .slab-tech-label {
     position: absolute;
     bottom: 12px;
@@ -324,7 +344,7 @@ import { projects } from "../../data/projects";
     font-family: monospace;
     font-size: 0.6rem;
     font-weight: bold;
-    color: rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.2);
     letter-spacing: 0.05em;
   }
 
@@ -534,28 +554,32 @@ import { projects } from "../../data/projects";
   /* Responsive Design */
   @media (max-width: 1024px) {
     .hero-container {
-      gap: 3rem;
+      gap: 2.5rem;
     }
     .hero-title {
-      font-size: clamp(3rem, 8vw, 6rem);
+      font-size: clamp(3rem, 7.5vw, 6rem);
     }
   }
 
   @media (max-width: 768px) {
     .hero-section {
-      padding: 7rem 1rem 4rem;
+      padding: 7rem 1.2rem 4rem;
+      min-height: auto;
     }
     .hero-container {
       grid-template-columns: 1fr;
-      gap: 4rem;
+      gap: 3rem;
+      text-align: center;
+    }
+    .hero-text {
       text-align: center;
     }
     .hero-eyebrow {
       justify-content: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
     }
     .hero-copy {
-      margin: 0 auto 2.5rem;
+      margin: 0 auto 2rem;
     }
     .hero-actions {
       justify-content: center;

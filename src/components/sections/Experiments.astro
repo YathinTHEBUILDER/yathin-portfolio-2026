@@ -48,7 +48,9 @@ const experimentalProjects = projects.filter((p) => !p.featured);
 
               {/* Layer 2: Floating Diagnostic Chips */}
               <div class="diagnostic-chip chip-tl">[ SYS_LOG::{proj.slug.toUpperCase()} ]</div>
-              <div class="diagnostic-chip chip-br">[ HZ_SWEEP::{proj.accent === "yellow" ? "50MS" : "40MS"} ]</div>
+              <div class="diagnostic-chip chip-tr">[ LATENCY::{proj.accent === "yellow" ? "<45MS" : "<40MS"} ]</div>
+              <div class="diagnostic-chip chip-bl">[ SIGNAL::ACTIVE ]</div>
+              <div class="diagnostic-chip chip-br">[ STATUS::LIVE ]</div>
 
               {/* Layer 3: Main AI Lab Monitor Card */}
               <div class={`experiment-card border-${proj.accent} depth-card`} data-tilt-card>
@@ -293,6 +295,16 @@ const experimentalProjects = projects.filter((p) => !p.featured);
 
   .chip-tl {
     top: -15px;
+    left: 10px;
+  }
+
+  .chip-tr {
+    top: -15px;
+    right: 10px;
+  }
+
+  .chip-bl {
+    bottom: -15px;
     left: 10px;
   }
 

@@ -29,12 +29,12 @@ const getSkillClass = (skillName: string) => {
     {/* The Interactive System Map Wrapper */}
     <div class="topology-map-wrapper">
       {/* SVG Network Connector Lines (Hidden on Mobile) */}
-      <svg class="connection-lines" viewBox="0 0 1000 600" fill="none" preserveAspectRatio="none">
+      <svg class="connection-lines" viewBox="0 0 1000 500" fill="none" preserveAspectRatio="none">
         <!-- Top-Left connection to Languages -->
         <path 
           class="connection-line line-tl" 
           data-skill-line 
-          d="M 500,300 L 400,300 L 320,180 L 220,180" 
+          d="M 500,260 L 410,260 L 330,150 L 230,150" 
           stroke="url(#grad-tl)" 
           stroke-width="1.5"
           stroke-linecap="round"
@@ -43,7 +43,7 @@ const getSkillClass = (skillName: string) => {
         <path 
           class="connection-line line-tr" 
           data-skill-line 
-          d="M 500,300 L 600,300 L 680,180 L 780,180" 
+          d="M 500,260 L 590,260 L 670,150 L 770,150" 
           stroke="url(#grad-tr)" 
           stroke-width="1.5"
           stroke-linecap="round"
@@ -52,7 +52,7 @@ const getSkillClass = (skillName: string) => {
         <path 
           class="connection-line line-bl" 
           data-skill-line 
-          d="M 500,300 L 400,300 L 320,420 L 220,420" 
+          d="M 500,260 L 410,260 L 330,370 L 230,370" 
           stroke="url(#grad-bl)" 
           stroke-width="1.5"
           stroke-linecap="round"
@@ -61,7 +61,7 @@ const getSkillClass = (skillName: string) => {
         <path 
           class="connection-line line-br" 
           data-skill-line 
-          d="M 500,300 L 600,300 L 680,420 L 780,420" 
+          d="M 500,260 L 590,260 L 670,370 L 770,370" 
           stroke="url(#grad-br)" 
           stroke-width="1.5"
           stroke-linecap="round"
@@ -255,8 +255,9 @@ const getSkillClass = (skillName: string) => {
   .topology-map-wrapper {
     position: relative;
     width: 100%;
-    height: 600px;
-    margin-top: 2rem;
+    max-width: 960px;
+    height: 480px;
+    margin: 2rem auto 0;
   }
 
   /* Connection lines SVG */
@@ -329,7 +330,7 @@ const getSkillClass = (skillName: string) => {
   /* Central Core Node */
   .center-core {
     position: absolute;
-    top: 50%;
+    top: 52%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 130px;
@@ -407,7 +408,7 @@ const getSkillClass = (skillName: string) => {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    gap: 15rem 24rem; /* Lots of space in the middle for center-core! */
+    gap: 4rem 12rem; /* Reduced central space to pull cards closer */
     z-index: 5;
   }
 

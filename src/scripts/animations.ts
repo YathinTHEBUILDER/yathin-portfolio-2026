@@ -14,9 +14,7 @@ function initPreloader(gsap: any) {
 }
 
 // 2. Cinematic Hero Timeline & Scroll Scrub
-function initHeroAnimations(gsap: any, ScrollTrigger: any) {
-  const isMobile = window.innerWidth <= 768;
-
+function initHeroAnimations(gsap: any, ScrollTrigger: any, isMobile: boolean) {
   const heroTl = gsap.timeline({
     delay: 0.5,
   });
@@ -59,18 +57,26 @@ function initHeroAnimations(gsap: any, ScrollTrigger: any) {
   }
 
   if (visual) {
-    heroTl.fromTo(visual,
-      { opacity: 0, y: 50, rotateX: 12, rotateY: -12, filter: "blur(20px)" },
-      { opacity: 1, y: 0, rotateX: 0, rotateY: 0, filter: "blur(0px)", duration: 1.4, ease: "power4.out" },
-      "-=1.0"
-    );
+    if (isMobile) {
+      heroTl.fromTo(visual,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" },
+        "-=0.7"
+      );
+    } else {
+      heroTl.fromTo(visual,
+        { opacity: 0, y: 50, rotateX: 12, rotateY: -12, filter: "blur(20px)" },
+        { opacity: 1, y: 0, rotateX: 0, rotateY: 0, filter: "blur(0px)", duration: 1.4, ease: "power4.out" },
+        "-=1.0"
+      );
 
-    // Subtle entrance for floating card backdrops
-    heroTl.fromTo(".floating-card",
-      { opacity: 0, scale: 0.9 },
-      { opacity: 1, scale: 1, duration: 1.2, stagger: 0.15, ease: "power3.out" },
-      "-=1.1"
-    );
+      // Subtle entrance for floating card backdrops
+      heroTl.fromTo(".floating-card",
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 1.2, stagger: 0.15, ease: "power3.out" },
+        "-=1.1"
+      );
+    }
   }
 
   // Scroll Parallax / Depth separation for Hero (Desktop only)
@@ -79,6 +85,7 @@ function initHeroAnimations(gsap: any, ScrollTrigger: any) {
     const panel = document.querySelector(".product-lab-panel");
     const slab1 = document.querySelector('[data-depth-layer="1"]');
     const slab2 = document.querySelector('[data-depth-layer="2"]');
+    const slab3 = document.querySelector('[data-depth-layer="3"]');
     const glowViolet = document.querySelector(".glow-violet");
     const glowCyan = document.querySelector(".glow-cyan");
 
@@ -108,37 +115,48 @@ function initHeroAnimations(gsap: any, ScrollTrigger: any) {
 
       if (panel) {
         scrubTl.to(panel, {
-          rotateX: 10,
-          rotateY: 8,
-          y: 60,
+          rotateX: 5,
+          rotateY: 3,
+          y: 40,
           ease: "none",
         }, 0);
       }
 
       if (slab1) {
         scrubTl.to(slab1, {
-          x: -80,
-          y: -50,
-          rotateZ: -12,
-          scale: 0.92,
-          opacity: 0.25,
+          x: -50,
+          y: -30,
+          rotateZ: -6,
+          scale: 0.95,
+          opacity: 0.3,
           ease: "none",
         }, 0);
       }
 
       if (slab2) {
         scrubTl.to(slab2, {
-          x: 80,
-          y: 70,
-          rotateZ: 8,
-          scale: 0.92,
-          opacity: 0.25,
+          x: 50,
+          y: 40,
+          rotateZ: 4,
+          scale: 0.95,
+          opacity: 0.3,
+          ease: "none",
+        }, 0);
+      }
+
+      if (slab3) {
+        scrubTl.to(slab3, {
+          x: -30,
+          y: 20,
+          rotateZ: -2,
+          scale: 0.97,
+          opacity: 0.4,
           ease: "none",
         }, 0);
       }
 
       if (glowViolet) {
-        scrubTl.to(glowViolet, { y: 180, opacity: 0.1, ease: "none" }, 0);
+        scrubTl.to(glowViolet, { y: 180, opacity: 0.15, ease: "none" }, 0);
       }
       if (glowCyan) {
         scrubTl.to(glowCyan, { y: 120, opacity: 0.1, ease: "none" }, 0);
@@ -164,9 +182,7 @@ function initRevealAnimations(gsap: any, ScrollTrigger: any) {
 }
 
 // 4. Execution Loop Section (Motion Slabs Explosion)
-function initMotionCards(gsap: any, ScrollTrigger: any) {
-  const isMobile = window.innerWidth <= 768;
-
+function initMotionCards(gsap: any, ScrollTrigger: any, isMobile: boolean) {
   if (!isMobile) {
     const motionSection = document.querySelector("[data-motion-section]");
     const card1 = document.querySelector('[data-motion-card="1"]');
@@ -270,14 +286,31 @@ function initMotionCards(gsap: any, ScrollTrigger: any) {
 }
 
 // 5. Featured Project Showcases
-function initProjectShowcases(gsap: any, ScrollTrigger: any) {
-  const isMobile = window.innerWidth <= 768;
-
+function initProjectShowcases(gsap: any, ScrollTrigger: any, isMobile: boolean) {
   (gsap.utils.toArray("[data-project-showcase]") as HTMLElement[]).forEach((showcase) => {
     const copyEl = showcase.querySelector("[data-project-copy]");
     const demoEl = showcase.querySelector("[data-project-depth-scene]");
     
-    if (!copyEl || !demoEl) return;
+    if (!copyEl) return;
+
+    if (isMobile) {
+      gsap.fromTo(showcase,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: showcase,
+            start: "top 80%",
+          }
+        }
+      );
+      return;
+    }
+
+    if (!demoEl) return;
 
     // A. Entrance reveal timeline
     const showcaseTl = gsap.timeline({
@@ -301,11 +334,12 @@ function initProjectShowcases(gsap: any, ScrollTrigger: any) {
     const slabBack = demoEl.querySelector('[data-project-depth-layer="1"]');
     const slabMid = demoEl.querySelector('[data-project-depth-layer="2"]');
     const annotations = demoEl.querySelectorAll("[data-project-annotation]");
+    const badges = copyEl.querySelectorAll(".stack-badge");
 
     // Demo frame rotates into place
     if (mainFrame) {
       showcaseTl.fromTo(mainFrame,
-        { opacity: 0, y: 80, scale: 0.94, rotateX: 8, rotateY: -10 },
+        { opacity: 0, y: 80, scale: 0.94, rotateX: 5, rotateY: -10 },
         { opacity: 1, y: 0, scale: 1, rotateX: 0, rotateY: 0, duration: 1.3, ease: "power4.out" },
         "-=0.7"
       );
@@ -337,44 +371,69 @@ function initProjectShowcases(gsap: any, ScrollTrigger: any) {
       );
     }
 
-    // B. Desktop-only scroll-scrub parallax
-    if (!isMobile) {
-      const scrubTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: showcase,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        }
-      });
+    // Rise stack badges with stagger
+    if (badges.length > 0) {
+      showcaseTl.fromTo(Array.from(badges),
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: "power2.out" },
+        "-=0.4"
+      );
+    }
 
-      if (mainFrame) {
-        scrubTl.fromTo(mainFrame, { yPercent: 5 }, { yPercent: -5, ease: "none" }, 0);
+    // B. Desktop-only scroll-scrub parallax
+    const scrubTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: showcase,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
       }
-      if (slabBack) {
-        scrubTl.fromTo(slabBack, 
-          { z: -80, yPercent: 9, rotate: -4 }, 
-          { z: -40, yPercent: -9, rotate: -2, ease: "none" }, 
-          0
-        );
-      }
-      if (slabMid) {
-        scrubTl.fromTo(slabMid, 
-          { z: -45, yPercent: 4, rotate: 3 }, 
-          { z: -15, yPercent: -4, rotate: 1, ease: "none" }, 
-          0
-        );
-      }
+    });
+
+    if (mainFrame) {
+      scrubTl.fromTo(mainFrame, { yPercent: 5 }, { yPercent: -5, ease: "none" }, 0);
+    }
+    if (slabBack) {
+      scrubTl.fromTo(slabBack, 
+        { z: -80, yPercent: 9, rotate: -4 }, 
+        { z: -40, yPercent: -9, rotate: -2, ease: "none" }, 
+        0
+      );
+    }
+    if (slabMid) {
+      scrubTl.fromTo(slabMid, 
+        { z: -45, yPercent: 4, rotate: 3 }, 
+        { z: -15, yPercent: -4, rotate: 1, ease: "none" }, 
+        0
+      );
     }
   });
 }
 
 // 6. AI Experiments Section
-function initExperiments(gsap: any, ScrollTrigger: any) {
-  const isMobile = window.innerWidth <= 768;
+function initExperiments(gsap: any, ScrollTrigger: any, isMobile: boolean) {
   const expSection = document.querySelector("[data-experiment-section]");
   
   if (expSection) {
+    if (isMobile) {
+      const cards = expSection.querySelectorAll("[data-experiment-card]");
+      gsap.fromTo(cards,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: expSection,
+            start: "top 80%",
+          }
+        }
+      );
+      return;
+    }
+
     const cards = expSection.querySelectorAll("[data-experiment-card]");
     
     const expTl = gsap.timeline({
@@ -393,7 +452,7 @@ function initExperiments(gsap: any, ScrollTrigger: any) {
         const chips = cardWrapper.querySelectorAll(".diagnostic-chip");
 
         expTl.fromTo(card,
-          { opacity: 0, y: 80, rotateX: 10 },
+          { opacity: 0, y: 70, rotateX: 8 },
           { opacity: 1, y: 0, rotateX: 0, duration: 1.1, ease: "power4.out" },
           "-=0.9"
         );
@@ -411,6 +470,16 @@ function initExperiments(gsap: any, ScrollTrigger: any) {
             { opacity: 0, scale: 0.7 },
             { opacity: 0.25, scale: 1, duration: 0.5, stagger: 0.1, ease: "back.out(1.5)" },
             "-=0.5"
+          );
+        }
+
+        // Animate waveform bars inside each card staggered after reveal
+        const bars = cardWrapper.querySelectorAll(".waveform-bars .bar");
+        if (bars.length > 0) {
+          expTl.fromTo(Array.from(bars),
+            { scaleY: 0 },
+            { scaleY: 1, duration: 0.4, stagger: 0.05, ease: "power2.out", transformOrigin: "bottom" },
+            "-=0.3"
           );
         }
       });
@@ -433,37 +502,53 @@ function initExperiments(gsap: any, ScrollTrigger: any) {
     }
 
     // Desktop-only subtle scrub parallax on rear slabs
-    if (!isMobile) {
-      const slabs = expSection.querySelectorAll("[data-experiment-depth-slab]");
-      slabs.forEach((slab) => {
-        gsap.fromTo(slab,
-          { yPercent: 4, z: -45 },
-          {
-            yPercent: -4,
-            z: -25,
-            ease: "none",
-            scrollTrigger: {
-              trigger: slab,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
+    const slabs = expSection.querySelectorAll("[data-experiment-depth-slab]");
+    slabs.forEach((slab) => {
+      gsap.fromTo(slab,
+        { yPercent: 4, z: -45 },
+        {
+          yPercent: -4,
+          z: -25,
+          ease: "none",
+          scrollTrigger: {
+            trigger: slab,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
           }
-        );
-      });
-    }
+        }
+      );
+    });
   }
 }
 
 // 7. Skills Topology Map
-function initSkillsTopology(gsap: any, ScrollTrigger: any) {
-  const isMobile = window.innerWidth <= 768;
+function initSkillsTopology(gsap: any, ScrollTrigger: any, isMobile: boolean) {
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
   const skillsSection = document.querySelector("[data-skills-section]");
   if (skillsSection) {
+    if (isMobile) {
+      const cards = skillsSection.querySelectorAll("[data-skill-group]");
+      gsap.fromTo(cards,
+        { opacity: 0, y: 30 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.8, 
+          stagger: 0.15,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: skillsSection,
+            start: "top 80%",
+          } 
+        }
+      );
+      return;
+    }
+
     const centerNode = skillsSection.querySelector("[data-skill-center]");
     const lines = skillsSection.querySelectorAll("[data-skill-line]");
     const groups = skillsSection.querySelectorAll("[data-skill-group]");
@@ -510,13 +595,13 @@ function initSkillsTopology(gsap: any, ScrollTrigger: any) {
       groups.forEach((group, idx) => {
         // Expand outwards based on layout quadrant
         let startX = 0, startY = 0, rotY = 0, rotX = 0;
-        if (group.classList.contains("position-languages")) { startX = -40; startY = -40; rotY = -12; rotX = 8; }
-        else if (group.classList.contains("position-frontend")) { startX = 40; startY = -40; rotY = 12; rotX = 8; }
-        else if (group.classList.contains("position-backend")) { startX = -40; startY = 40; rotY = -12; rotX = -8; }
-        else if (group.classList.contains("position-ai")) { startX = 40; startY = 40; rotY = 12; rotX = -8; }
+        if (group.classList.contains("position-languages")) { startX = -30; startY = -30; rotY = -8; rotX = 5; }
+        else if (group.classList.contains("position-frontend")) { startX = 30; startY = -30; rotY = 8; rotX = 5; }
+        else if (group.classList.contains("position-backend")) { startX = -30; startY = 30; rotY = -8; rotX = -5; }
+        else if (group.classList.contains("position-ai")) { startX = 30; startY = 30; rotY = 8; rotX = -5; }
 
         skillsTl.fromTo(group,
-          { opacity: 0, x: startX, y: startY, rotateX: rotX, rotateY: rotY, scale: 0.94 },
+          { opacity: 0, x: startX, y: startY, rotateX: rotX, rotateY: rotY, scale: 0.92, z: -80 },
           { 
             opacity: 1, 
             x: 0, 
@@ -524,6 +609,7 @@ function initSkillsTopology(gsap: any, ScrollTrigger: any) {
             rotateX: 0,
             rotateY: 0,
             scale: 1, 
+            z: 0,
             duration: 1.0, 
             ease: "power3.out" 
           },
@@ -535,25 +621,26 @@ function initSkillsTopology(gsap: any, ScrollTrigger: any) {
     // D. Micro-stagger individual skill pills
     if (pills.length > 0) {
       skillsTl.fromTo(Array.from(pills),
-        { opacity: 0, y: 12 },
+        { opacity: 0, y: 10, scale: 0.9 },
         { 
           opacity: 1, 
           y: 0, 
+          scale: 1,
           duration: 0.4, 
-          stagger: 0.03, 
+          stagger: 0.02, 
           ease: "power1.out" 
         },
-        "-=0.6"
+        "-=0.5"
       );
     }
 
     // E. Desktop-only Continuous Floating Loop
-    if (!isMobile && !prefersReducedMotion) {
+    if (!prefersReducedMotion) {
       // Float center core
       if (centerNode) {
         gsap.to(centerNode, {
-          y: -6,
-          duration: 3.5,
+          y: -5,
+          duration: 3.0,
           repeat: -1,
           yoyo: true,
           ease: "sine.inOut"
@@ -564,12 +651,12 @@ function initSkillsTopology(gsap: any, ScrollTrigger: any) {
       if (groups.length > 0) {
         groups.forEach((group, idx) => {
           gsap.to(group, {
-            y: -4,
-            duration: 3 + idx * 0.5,
+            y: -3,
+            duration: 2.5 + idx * 0.4,
             repeat: -1,
             yoyo: true,
             ease: "sine.inOut",
-            delay: idx * 0.4
+            delay: idx * 0.3
           });
         });
       }
@@ -578,10 +665,27 @@ function initSkillsTopology(gsap: any, ScrollTrigger: any) {
 }
 
 // 8. Playground Terminal
-function initPlayground(gsap: any, ScrollTrigger: any) {
-  const isMobile = window.innerWidth <= 768;
+function initPlayground(gsap: any, ScrollTrigger: any, isMobile: boolean) {
   const playgroundSection = document.querySelector("[data-playground-section]");
   if (playgroundSection) {
+    if (isMobile) {
+      gsap.fromTo(playgroundSection.querySelectorAll("[data-playground-copy], .terminal-deck-wrapper"),
+        { opacity: 0, y: 30 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.8, 
+          stagger: 0.15, 
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: playgroundSection,
+            start: "top 80%",
+          }
+        }
+      );
+      return;
+    }
+
     const copyContainer = playgroundSection.querySelector("[data-playground-copy]");
     const terminalWrapper = playgroundSection.querySelector(".terminal-deck-wrapper");
     const backplate = playgroundSection.querySelector(".terminal-backplate");
@@ -625,11 +729,12 @@ function initPlayground(gsap: any, ScrollTrigger: any) {
 
     if (backplate) {
       playgroundTl.fromTo(backplate,
-        { opacity: 0, scale: 0.9, z: -80 },
+        { opacity: 0, scale: 0.9, z: -80, yPercent: 10 },
         { 
           opacity: 1, 
           scale: 1, 
           z: -35, 
+          yPercent: 0,
           duration: 1.0, 
           ease: "power3.out" 
         },
@@ -653,35 +758,50 @@ function initPlayground(gsap: any, ScrollTrigger: any) {
     }
 
     // Scroll Parallax (Desktop only)
-    if (!isMobile) {
-      const scrubTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: playgroundSection,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        }
-      });
+    const scrubTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: playgroundSection,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      }
+    });
 
-      if (terminalWrapper) {
-        scrubTl.fromTo(terminalWrapper, { yPercent: 4 }, { yPercent: -4, ease: "none" }, 0);
-      }
-      if (backplate) {
-        scrubTl.fromTo(backplate, { z: -45, yPercent: 7 }, { z: -25, yPercent: -7, ease: "none" }, 0);
-      }
+    if (terminalWrapper) {
+      scrubTl.fromTo(terminalWrapper, { yPercent: 4 }, { yPercent: -4, ease: "none" }, 0);
+    }
+    if (backplate) {
+      scrubTl.fromTo(backplate, { z: -45, yPercent: 7 }, { z: -25, yPercent: -7, ease: "none" }, 0);
     }
   }
 }
 
 // 9. Contact Section
-function initContact(gsap: any, ScrollTrigger: any) {
-  const isMobile = window.innerWidth <= 768;
+function initContact(gsap: any, ScrollTrigger: any, isMobile: boolean) {
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
   const contactSection = document.querySelector("[data-contact-section]");
   if (contactSection) {
+    if (isMobile) {
+      gsap.fromTo(contactSection.querySelectorAll("[data-contact-copy], [data-contact-card], [data-contact-cta]"),
+        { opacity: 0, y: 30 },
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 0.8, 
+          stagger: 0.12, 
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: contactSection,
+            start: "top 80%",
+          }
+        }
+      );
+      return;
+    }
+
     const copyContainer = contactSection.querySelector("[data-contact-copy]");
     const cards = contactSection.querySelectorAll("[data-contact-card]");
     const ctaPanel = contactSection.querySelector("[data-contact-cta]");
@@ -738,7 +858,7 @@ function initContact(gsap: any, ScrollTrigger: any) {
     }
 
     // Micro-magnetic hover for CTA buttons (Desktop only)
-    if (!isMobile && !prefersReducedMotion) {
+    if (!prefersReducedMotion) {
       const buttons = contactSection.querySelectorAll(".cta-actions a");
       buttons.forEach((btn) => {
         if (!(btn instanceof HTMLElement)) return;
@@ -769,8 +889,7 @@ function initContact(gsap: any, ScrollTrigger: any) {
 }
 
 // 10. Global 3D Hover Tilt system
-function initGlobal3DHover(gsap: any) {
-  const isMobile = window.innerWidth <= 768;
+function initGlobal3DHover(gsap: any, isMobile: boolean) {
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
@@ -813,7 +932,7 @@ function initGlobal3DHover(gsap: any) {
 
       rotateXTo(rotateX);
       rotateYTo(rotateY);
-      yTo(-6);
+      yTo(-4);
       scaleTo(1.02);
     });
 
@@ -932,15 +1051,17 @@ export async function initAnimations() {
 
   gsap.registerPlugin(ScrollTrigger);
 
+  const isMobile = window.innerWidth <= 768;
+
   // Execute modular animations in sequence
   initPreloader(gsap);
-  initHeroAnimations(gsap, ScrollTrigger);
+  initHeroAnimations(gsap, ScrollTrigger, isMobile);
   initRevealAnimations(gsap, ScrollTrigger);
-  initMotionCards(gsap, ScrollTrigger);
-  initProjectShowcases(gsap, ScrollTrigger);
-  initExperiments(gsap, ScrollTrigger);
-  initSkillsTopology(gsap, ScrollTrigger);
-  initPlayground(gsap, ScrollTrigger);
-  initContact(gsap, ScrollTrigger);
-  initGlobal3DHover(gsap);
+  initMotionCards(gsap, ScrollTrigger, isMobile);
+  initProjectShowcases(gsap, ScrollTrigger, isMobile);
+  initExperiments(gsap, ScrollTrigger, isMobile);
+  initSkillsTopology(gsap, ScrollTrigger, isMobile);
+  initPlayground(gsap, ScrollTrigger, isMobile);
+  initContact(gsap, ScrollTrigger, isMobile);
+  initGlobal3DHover(gsap, isMobile);
 }
