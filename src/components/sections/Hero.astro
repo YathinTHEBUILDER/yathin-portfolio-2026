@@ -18,7 +18,9 @@ import { projects } from "../../data/projects";
       </p>
       
       <h1 class="hero-title" data-hero-title>
-        I BUILD<br />THINGS THAT<br />THINK.
+        <span class="line-wrapper"><span class="line-inner">I BUILD</span></span>
+        <span class="line-wrapper"><span class="line-inner">THINGS THAT</span></span>
+        <span class="line-wrapper"><span class="line-inner">THINK.</span></span>
       </h1>
       
       <p class="hero-copy" data-hero-copy>
@@ -26,14 +28,14 @@ import { projects } from "../../data/projects";
       </p>
       
       <div class="hero-actions" data-hero-actions>
-        <a href="#projects" class="btn btn-primary">
+        <a href="#projects" class="btn btn-primary" data-magnetic>
           <span>Explore Work</span>
           <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8 3L13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M13 8H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
         </a>
-        <a href="#contact" class="btn btn-secondary">
+        <a href="#contact" class="btn btn-secondary" data-magnetic>
           <span>Contact Me</span>
         </a>
       </div>
@@ -110,10 +112,13 @@ import { projects } from "../../data/projects";
   .hero-section {
     position: relative;
     min-height: 100svh;
+    padding-top: clamp(6rem, 10vh, 8rem);
+    padding-bottom: clamp(3rem, 6vh, 5rem);
+    padding-left: 2rem;
+    padding-right: 2rem;
     display: flex;
     align-items: center;
-    padding: 7.5rem 2rem 3rem;
-    background: #030305;
+    background: transparent; /* Transparent so R3F Canvas shows behind */
     overflow: hidden;
     z-index: 1;
   }
@@ -123,12 +128,12 @@ import { projects } from "../../data/projects";
     position: absolute;
     inset: 0;
     background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
     background-size: 50px 50px;
     background-position: center;
     pointer-events: none;
-    z-index: -2;
+    z-index: 0;
   }
 
   /* Radial Glow Effects */
@@ -137,14 +142,14 @@ import { projects } from "../../data/projects";
     border-radius: 50%;
     filter: blur(140px);
     pointer-events: none;
-    z-index: -1;
-    opacity: 0.45;
+    z-index: 0;
+    opacity: 0.3;
   }
 
   .glow-violet {
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
     top: 15%;
     left: -10%;
   }
@@ -152,7 +157,7 @@ import { projects } from "../../data/projects";
   .glow-cyan {
     width: 650px;
     height: 650px;
-    background: radial-gradient(circle, rgba(51, 230, 255, 0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(51, 230, 255, 0.1) 0%, transparent 70%);
     bottom: 10%;
     right: -5%;
   }
@@ -160,19 +165,22 @@ import { projects } from "../../data/projects";
   /* Container */
   .hero-container {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 3.5rem;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: clamp(2rem, 4vw, 4rem);
     align-items: center;
-    width: min(1200px, calc(100% - 2rem));
+    width: min(1280px, calc(100% - 3rem));
     margin: 0 auto;
+    position: relative;
+    z-index: 2;
   }
 
   /* Left Column - Hero Text */
   .hero-text {
+    position: relative;
+    z-index: 10;
     display: flex;
     flex-direction: column;
-    z-index: 5;
-    position: relative;
+    justify-content: center;
     text-align: left;
   }
 
@@ -194,29 +202,55 @@ import { projects } from "../../data/projects";
   }
 
   .hero-title {
+    display: block;
+    visibility: visible;
     font-family: var(--font-display);
-    font-size: clamp(4.5rem, 9vw, 9rem);
+    font-size: clamp(4rem, 8.2vw, 8.25rem);
     line-height: 0.86;
     letter-spacing: -0.075em;
     font-weight: 800;
+    margin: 0 0 1rem;
+    max-width: 760px;
     color: var(--text);
-    margin: 0 0 1rem 0;
     text-transform: uppercase;
+    position: relative;
+    z-index: 11;
   }
+
+  .line-wrapper {
+    display: block;
+    overflow: hidden;
+    line-height: 0.88;
+  }
+
+  .line-inner {
+    display: block;
+    will-change: transform, opacity, filter;
+  }
+
+  html.js .line-inner {
+    transform: translateY(100%);
+    opacity: 0;
+    filter: blur(8px);
+  }
+
 
   .hero-copy {
     font-family: var(--font-body);
     font-size: clamp(1rem, 2vw, 1.15rem);
     line-height: 1.5;
     color: var(--text-muted);
-    max-width: 520px;
-    margin: 0 0 1.8rem 0;
+    max-width: 620px;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    opacity: 1;
+    transform: none;
   }
 
   /* Buttons */
@@ -273,12 +307,15 @@ import { projects } from "../../data/projects";
   /* Right Column - Hero Visual */
   .hero-visual {
     position: relative;
+    z-index: 5;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 4;
     perspective: 1400px;
     max-height: 80vh;
+    max-width: 430px;
+    justify-self: center;
+    transform: none;
   }
 
   /* Floating Background Cards */
@@ -357,8 +394,9 @@ import { projects } from "../../data/projects";
   .product-lab-panel {
     position: relative;
     width: 100%;
-    max-width: 400px;
-    max-height: 70vh;
+    max-width: 420px;
+    max-height: none;
+    transform: none;
     background: rgba(13, 15, 23, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--radius-lg);
@@ -558,47 +596,69 @@ import { projects } from "../../data/projects";
   }
 
   /* Responsive Design */
-  @media (max-width: 1024px) {
-    .hero-container {
-      gap: 2.5rem;
-    }
-    .hero-title {
-      font-size: clamp(3rem, 7.5vw, 6rem);
-    }
-  }
-
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     .hero-section {
-      padding: 7rem 1.2rem 4rem;
+      padding: clamp(5rem, 8vh, 6rem) 1.5rem clamp(3rem, 6vh, 4rem);
       min-height: auto;
     }
+    
     .hero-container {
       grid-template-columns: 1fr;
-      gap: 3rem;
-      text-align: center;
+      gap: 2.5rem;
+      text-align: left;
+      width: 100%;
     }
+    
     .hero-text {
-      text-align: center;
+      text-align: left;
+      align-items: flex-start;
     }
+    
     .hero-eyebrow {
-      justify-content: center;
-      margin-bottom: 1.2rem;
+      justify-content: flex-start;
+      margin-bottom: 0.8rem;
     }
+    
+    .hero-title {
+      font-size: clamp(3.2rem, 16vw, 5.8rem);
+      text-align: left;
+      max-width: 100%;
+    }
+    
     .hero-copy {
-      margin: 0 auto 2rem;
+      margin: 0 0 1.5rem 0;
+      max-width: 100%;
     }
+    
     .hero-actions {
-      justify-content: center;
+      justify-content: flex-start;
     }
+    
     .hero-visual {
       margin-top: 1rem;
       width: 100%;
+      max-width: 100%;
+      perspective: none;
     }
+    
     .product-lab-panel {
       max-width: 100%;
+      transform: none !important;
     }
+    
     .floating-card {
-      display: none; /* Hide background cards on small screens for visual simplicity */
+      display: none !important; /* Hide background cards on small screens for visual simplicity */
     }
+  }
+
+  /* Temporary Debug Safety Rules */
+  .hero-title {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  [data-hero-title] {
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 </style>

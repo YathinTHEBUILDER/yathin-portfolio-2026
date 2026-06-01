@@ -3,6 +3,47 @@ html.js [data-reveal] {
   transform: translateY(32px);
 }
 
+@keyframes live-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+@keyframes sound-bounce {
+  0% { height: 3px; }
+  100% { height: 16px; }
+}
+
+@keyframes scan {
+  0% { top: -10%; }
+  100% { top: 110%; }
+}
+
+@keyframes core-glow-pulse {
+  0% { opacity: 0.15; transform: scale(0.9); }
+  100% { opacity: 0.4; transform: scale(1.15); }
+}
+
+@keyframes core-rotate-scan {
+  0% { transform: rotate(0deg); border-color: var(--cyan); }
+  50% { border-color: var(--blue); }
+  100% { transform: rotate(360deg); border-color: var(--cyan); }
+}
+
+@keyframes grid-drift {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes text-blink {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
     opacity: 1 !important;
@@ -18,3 +59,4 @@ html.js [data-reveal] {
     scroll-behavior: auto !important;
   }
 }
+

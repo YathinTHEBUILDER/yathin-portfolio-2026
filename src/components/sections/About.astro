@@ -1,6 +1,384 @@
-<section id="about" class="section">
-  <div class="container">
-    <p data-reveal>ABOUT / PLACEHOLDER</p>
-    <h2 data-reveal>Coming next</h2>
+---
+import { profile } from "../../data/profile";
+---
+
+<section id="about" class="about-section" data-about-section>
+  <div class="grid-overlay"></div>
+  <div class="about-glow"></div>
+
+  <div class="container about-container">
+    <!-- Left Column: Biography & System Telemetry -->
+    <div class="about-left" data-reveal>
+      <div class="section-badge">
+        <span class="badge-num">02</span>
+        <span class="badge-line"></span>
+        <span class="badge-title">BUILDER PROFILE</span>
+      </div>
+      
+      <h2 class="section-headline">I build interfaces that bridge human intention with computational logic.</h2>
+      
+      <p class="about-desc">
+        I am Yathin G, an AI Product Builder based in Mysuru, India. Focusing on high-performance web systems, custom interactive layouts, and local/multimodal AI experiments, my ethos revolves around building robust software architecture designed to execute efficiently.
+      </p>
+
+      <!-- Monospace Telemetry Readout Box -->
+      <div class="telemetry-box">
+        <div class="telemetry-header">
+          <span class="status-indicator"></span>
+          <span>SYSTEM READOUT // ACTIVE_CORE</span>
+        </div>
+        <div class="telemetry-content">
+          <div class="telemetry-row">
+            <span class="t-label">OPERATOR:</span>
+            <span class="t-value">YATHIN_G // BUILDER</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="t-label">LOCATION:</span>
+            <span class="t-value">{profile.location.toUpperCase()}</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="t-label">ACTIVE_STATUS:</span>
+            <span class="t-value text-cyan">OK // CONTINUOUS_INTEGRATION</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="t-label">COMPILER:</span>
+            <span class="t-value">ASTRO_v6.4 // VITE_PIPELINE</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="t-label">INTEGRATIONS:</span>
+            <span class="t-value text-violet">GSAP // THREE_JS // REACT_19</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="t-label">TELEMETRY:</span>
+            <span class="t-value text-green">LATENCY_STABLE // 60_FPS_LENIS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Attributes Stack & Technical Markers -->
+    <div class="about-right perspective-scene scroll-3d-safe" data-reveal>
+      <div class="vertical-timeline-line"></div>
+      
+      <div class="attributes-stack">
+        <!-- Attribute 1 -->
+        <div class="attribute-item depth-card" data-tilt-card>
+          <div class="attr-node"></div>
+          <div class="attr-card-inner">
+            <span class="attr-num">01 / CAPABILITY</span>
+            <h3 class="attr-title">AI Engine Integration</h3>
+            <p class="attr-desc">Bridging local models, real-time audio channels, and search engines into performant product interfaces.</p>
+          </div>
+        </div>
+
+        <!-- Attribute 2 -->
+        <div class="attribute-item depth-card" data-tilt-card>
+          <div class="attr-node"></div>
+          <div class="attr-card-inner">
+            <span class="attr-num">02 / INTERFACE</span>
+            <h3 class="attr-title">Cinematic Motion</h3>
+            <p class="attr-desc">Translating math into custom interactive layouts using GSAP, Three.js shaders, and smooth layout scroll dynamics.</p>
+          </div>
+        </div>
+
+        <!-- Attribute 3 -->
+        <div class="attribute-item depth-card" data-tilt-card>
+          <div class="attr-node"></div>
+          <div class="attr-card-inner">
+            <span class="attr-num">03 / ARCHITECTURE</span>
+            <h3 class="attr-title">Robust Backend Routing</h3>
+            <p class="attr-desc">Connecting edge databases (Supabase, Postgres) with fast routing layers (FastAPI) for lightweight API scaling.</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .about-section {
+    position: relative;
+    padding: 10rem 2rem;
+    background: #030305;
+    overflow: hidden;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+  }
+
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.007) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.007) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center;
+    pointer-events: none;
+    z-index: -2;
+  }
+
+  .about-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+    top: 20%;
+    right: 10%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .about-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .about-container {
+      grid-template-columns: 1fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Left Column */
+  .about-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 1.8rem;
+  }
+
+  .section-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .badge-num {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+  }
+
+  .badge-line {
+    width: 24px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .badge-title {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .section-headline {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .about-desc {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 520px;
+  }
+
+  /* Telemetry Readout Box */
+  .telemetry-box {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: rgba(7, 8, 13, 0.4);
+    padding: 1.2rem;
+    max-width: 520px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .telemetry-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .status-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
+    animation: live-pulse 1.8s infinite;
+  }
+
+  .telemetry-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .telemetry-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: monospace;
+    font-size: 0.75rem;
+  }
+
+  .t-label {
+    color: var(--text-dim);
+  }
+
+  .t-value {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .text-cyan { color: var(--cyan); }
+  .text-violet { color: var(--violet); }
+  .text-green { color: var(--green); }
+
+  /* Right Column Timeline & Stack */
+  .about-right {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-left: 2rem;
+  }
+
+  @media (max-width: 900px) {
+    .about-right {
+      justify-content: flex-start;
+      padding-left: 1.5rem;
+      margin-top: 1.5rem;
+    }
+  }
+
+  .vertical-timeline-line {
+    position: absolute;
+    left: 22px;
+    top: 5%;
+    bottom: 5%;
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(51, 230, 255, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
+    pointer-events: none;
+  }
+
+  .attributes-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+    width: 100%;
+    max-width: 440px;
+    z-index: 2;
+  }
+
+  .attribute-item {
+    position: relative;
+    padding-left: 3rem;
+  }
+
+  .attr-node {
+    position: absolute;
+    left: 17px;
+    top: 24px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #030305;
+    border: 2.5px solid var(--cyan);
+    transform: translateY(-50%);
+    z-index: 5;
+    box-shadow: 0 0 8px var(--cyan);
+    transition: all 0.3s var(--ease-out);
+  }
+
+  .attribute-item:nth-child(2) .attr-node {
+    border-color: var(--violet);
+    box-shadow: 0 0 8px var(--violet);
+  }
+
+  .attribute-item:nth-child(3) .attr-node {
+    border-color: var(--green);
+    box-shadow: 0 0 8px var(--green);
+  }
+
+  .attribute-item:hover .attr-node {
+    transform: translateY(-50%) scale(1.3);
+    background: var(--cyan);
+  }
+
+  .attr-card-inner {
+    background: rgba(13, 15, 23, 0.45);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: all 0.4s var(--ease-out);
+  }
+
+  .attribute-item:hover .attr-card-inner {
+    background: rgba(13, 15, 23, 0.6);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .attr-num {
+    font-family: monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .attr-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .attr-desc {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* Support reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .attr-card-inner {
+      transition: none;
+    }
+    .attr-node {
+      transition: none;
+    }
+  }
+</style>

@@ -18,8 +18,8 @@ import Cursor from "../components/global/Cursor";
   </head>
   <body>
     <Preloader />
-    <BackgroundScene client:load />
-    <Cursor client:load />
+    <BackgroundScene client:only="react" />
+    <Cursor client:only="react" />
 
     <Navbar />
 

@@ -441,6 +441,28 @@ const getSkillClass = (skillName: string) => {
     transform: translateY(-2px);
   }
 
+  /* Connecting lines glow brightness triggers on card hovers */
+  .topology-map-wrapper:has(.position-languages:hover) .line-tl {
+    stroke-width: 2.2;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 6px var(--green));
+  }
+  .topology-map-wrapper:has(.position-frontend:hover) .line-tr {
+    stroke-width: 2.2;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 6px var(--blue));
+  }
+  .topology-map-wrapper:has(.position-backend:hover) .line-bl {
+    stroke-width: 2.2;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 6px var(--yellow));
+  }
+  .topology-map-wrapper:has(.position-ai:hover) .line-br {
+    stroke-width: 2.2;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 6px var(--violet));
+  }
+
   /* Hover accent-glow setups */
   .border-green:hover { border-color: rgba(61, 217, 160, 0.35); box-shadow: 0 10px 30px -15px rgba(61, 217, 160, 0.12); }
   .border-blue:hover { border-color: rgba(79, 124, 255, 0.35); box-shadow: 0 10px 30px -15px rgba(79, 124, 255, 0.12); }
