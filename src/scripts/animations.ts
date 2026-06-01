@@ -149,7 +149,7 @@ function initHeroAnimations(gsap: any, ScrollTrigger: any) {
 
 // 3. Standard Scroll Reveal Elements
 function initRevealAnimations(gsap: any, ScrollTrigger: any) {
-  gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((el) => {
+  (gsap.utils.toArray("[data-reveal]") as HTMLElement[]).forEach((el) => {
     gsap.to(el, {
       opacity: 1,
       y: 0,
@@ -273,7 +273,7 @@ function initMotionCards(gsap: any, ScrollTrigger: any) {
 function initProjectShowcases(gsap: any, ScrollTrigger: any) {
   const isMobile = window.innerWidth <= 768;
 
-  gsap.utils.toArray<HTMLElement>("[data-project-showcase]").forEach((showcase) => {
+  (gsap.utils.toArray("[data-project-showcase]") as HTMLElement[]).forEach((showcase) => {
     const copyEl = showcase.querySelector("[data-project-copy]");
     const demoEl = showcase.querySelector("[data-project-depth-scene]");
     
