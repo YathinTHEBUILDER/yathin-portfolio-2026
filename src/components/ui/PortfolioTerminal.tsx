@@ -336,7 +336,7 @@ export default function PortfolioTerminal() {
   return (
     <div
       onClick={handleTerminalClick}
-      className={`relative flex flex-col w-full h-[380px] bg-[#030305]/85 border rounded-2xl overflow-hidden font-mono text-xs cursor-text shadow-[0_20px_50px_rgba(0,0,0,0.5)] select-none transition-all duration-300 ${
+      className={`relative flex flex-col w-full h-[380px] bg-[#030305]/85 border rounded-2xl overflow-hidden font-mono text-xs cursor-text shadow-[0_20px_50px_rgba(0,0,0,0.5)] select-text transition-all duration-300 ${
         isFocused ? "border-[#3dd9a0]/40 shadow-[0_0_20px_rgba(51,230,255,0.12)]" : "border-white/10"
       }`}
     >
@@ -344,7 +344,7 @@ export default function PortfolioTerminal() {
       <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,_rgba(0,0,0,0.25)_50%),_linear-gradient(90deg,_rgba(255,0,0,0.06),_rgba(0,255,0,0.02),_rgba(0,0,255,0.06))] bg-[size:100%_4px,_6px_100%] opacity-40 z-10"></div>
 
       {/* Terminal header */}
-      <div className="flex items-center justify-between px-4 py-3 border-bottom border-white/10 bg-white/[0.02] shrink-0">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/[0.02] shrink-0">
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
           <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />

@@ -76,43 +76,56 @@ export default function Cursor() {
 
   return (
     <>
-      {/* 1. Glowing Core Dot */}
+      {/* 1. Glowing Core Dot Positioning Wrapper */}
       <div
         ref={dotRef}
         style={{
           position: "fixed",
           top: 0,
           left: 0,
-          width: "8px",
-          height: "8px",
-          backgroundColor: "var(--cyan)",
-          borderRadius: "50%",
           zIndex: 9999,
           pointerEvents: "none",
-          boxShadow: "0 0 8px var(--cyan)",
-          transform: `scale(${hovered ? 0.6 : 1})`,
-          transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
-      />
-      {/* 2. Outer Soft Trailing Ring */}
+      >
+        {/* Core Dot scaling element */}
+        <div
+          style={{
+            width: "8px",
+            height: "8px",
+            backgroundColor: "var(--cyan)",
+            borderRadius: "50%",
+            boxShadow: "0 0 8px var(--cyan)",
+            transform: `scale(${hovered ? 0.6 : 1})`,
+            transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        />
+      </div>
+
+      {/* 2. Outer Soft Trailing Ring Positioning Wrapper */}
       <div
         ref={ringRef}
         style={{
           position: "fixed",
           top: 0,
           left: 0,
-          width: "36px",
-          height: "36px",
-          border: hovered ? "1.5px solid var(--cyan)" : "1.5px solid rgba(51, 230, 255, 0.35)",
-          borderRadius: "50%",
           zIndex: 9998,
           pointerEvents: "none",
-          backgroundColor: hovered ? "rgba(51, 230, 255, 0.06)" : "transparent",
-          transform: `scale(${hovered ? 1.45 : 1})`,
-          transition: "transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s, border-color 0.25s",
-          boxShadow: hovered ? "0 0 12px rgba(51, 230, 255, 0.15)" : "none",
         }}
-      />
+      >
+        {/* Trailing Ring scaling element */}
+        <div
+          style={{
+            width: "36px",
+            height: "36px",
+            border: hovered ? "1.5px solid var(--cyan)" : "1.5px solid rgba(51, 230, 255, 0.35)",
+            borderRadius: "50%",
+            backgroundColor: hovered ? "rgba(51, 230, 255, 0.06)" : "transparent",
+            transform: `scale(${hovered ? 1.45 : 1})`,
+            transition: "transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s, border-color 0.25s",
+            boxShadow: hovered ? "0 0 12px rgba(51, 230, 255, 0.15)" : "none",
+          }}
+        />
+      </div>
     </>
   );
 }

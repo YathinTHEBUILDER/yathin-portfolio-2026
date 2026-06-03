@@ -12,7 +12,7 @@ export default function BackgroundScene() {
     
     // Check mobile state
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 968);
     };
     checkMobile();
     window.addEventListener("resize", checkMobile);

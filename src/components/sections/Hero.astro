@@ -1,36 +1,37 @@
 ---
-import { profile } from "../../data/profile";
-import { projects } from "../../data/projects";
+import HeroScene from "../three/HeroScene";
 ---
 
-<section id="home" class="hero-section">
-  <!-- Visual background effects -->
-  <div class="radial-glow glow-violet"></div>
-  <div class="radial-glow glow-cyan"></div>
-  <div class="grid-overlay"></div>
+<section id="home" class="hero-rebuild hero-section">
+  <!-- Interactive 3D scene canvas loaded as client-only island to avoid SSR conflicts -->
+  <div class="hero-bg" aria-hidden="true" data-hero-visual>
+    <HeroScene client:only="react" />
+  </div>
 
   <div class="container hero-container">
-    <div class="hero-text">
-      <p class="hero-eyebrow" data-hero-eyebrow>
-        <span>YATHIN.G</span>
+    <div class="hero-content hero-text">
+      <p class="hero-kicker" data-hero-eyebrow>
+        <span>YATHIN G</span>
         <span class="divider">/</span>
-        <span>AI PRODUCT BUILDER</span>
+        <span>FULL-STACK DEVELOPER</span>
+        <span class="divider">/</span>
+        <span>AI ENGINEERING STUDENT</span>
       </p>
-      
+
       <h1 class="hero-title" data-hero-title>
         <span class="line-wrapper"><span class="line-inner">I BUILD</span></span>
         <span class="line-wrapper"><span class="line-inner">THINGS THAT</span></span>
         <span class="line-wrapper"><span class="line-inner">THINK.</span></span>
       </h1>
-      
+
       <p class="hero-copy" data-hero-copy>
-        {profile.subheadline}
+        I design and ship AI-powered web products, experimental interfaces, and systems that turn ideas into working software.
       </p>
-      
+
       <div class="hero-actions" data-hero-actions>
         <a href="#projects" class="btn btn-primary" data-magnetic>
           <span>Explore Work</span>
-          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M8 3L13 8L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M13 8H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
@@ -40,187 +41,93 @@ import { projects } from "../../data/projects";
         </a>
       </div>
     </div>
+  </div>
 
-    <div class="hero-visual perspective-scene scroll-3d-safe" data-hero-visual>
-      <!-- Layer 1: System Grid Slab -->
-      <div class="floating-card bg-card-1 depth-card" data-depth-layer="1">
-        <div class="slab-grid-bg"></div>
-        <div class="slab-tech-label">SYS_GRID // NODE_01A</div>
-      </div>
-      
-      <!-- Layer 2: Project Status Slab -->
-      <div class="floating-card bg-card-2 depth-card" data-depth-layer="2">
-        <div class="slab-status-bg"></div>
-        <div class="slab-tech-label">STATUS // VERIFIED_BUILD</div>
-      </div>
-
-      <!-- Layer 3: Command Output Slab -->
-      <div class="floating-card bg-card-3 depth-card" data-depth-layer="3">
-        <div class="slab-command-bg"></div>
-        <div class="slab-tech-label">CMD // OUTPUT_STREAM</div>
-      </div>
-
-      <!-- Layer 4: Main Glass Product Lab Panel -->
-      <div class="product-lab-panel depth-card" data-tilt-card data-depth-layer="4">
-        <div class="panel-header">
-          <div class="panel-dots">
-            <span class="p-dot red"></span>
-            <span class="p-dot yellow"></span>
-            <span class="p-dot green"></span>
-          </div>
-          <div class="panel-title">product-lab // active-projects</div>
-        </div>
-
-        <div class="panel-content">
-          <!-- Terminal output eyebrow -->
-          <div class="fake-console">
-            <div class="console-line"><span class="c-accent">yathing-portfolio</span> $ npm run dev:ai</div>
-            <div class="console-line c-dim">> product-lab@3.2.0 initialized successfully</div>
-          </div>
-
-          <!-- Project Rows (Stacked Drawer Interface Layers) -->
-          <div class="project-rows">
-            {
-              projects.slice(0, 3).map((proj) => (
-                <div class="project-row">
-                  <div class="row-details">
-                    <span class="project-name">{proj.name}</span>
-                    <span class="project-type">{proj.type}</span>
-                  </div>
-                  <div class="row-status">
-                    <span class={`status-dot ${proj.accent}`}></span>
-                    <span class="status-text">{proj.status}</span>
-                  </div>
-                </div>
-              ))
-            }
-          </div>
-
-          <!-- Command Logs -->
-          <div class="fake-commands">
-            <div class="cmd-line"><span class="cmd-op">build</span>.<span class="cmd-fn">product</span>()</div>
-            <div class="cmd-line"><span class="cmd-op">ship</span>.<span class="cmd-fn">fast</span>()</div>
-            <div class="cmd-line"><span class="cmd-op">iterate</span>.<span class="cmd-fn">always</span>()</div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="hero-scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line" aria-hidden="true"></div>
   </div>
 </section>
 
 <style>
-  .hero-section {
+  .hero-rebuild {
     position: relative;
     min-height: 100svh;
-    padding-top: clamp(6rem, 10vh, 8rem);
-    padding-bottom: clamp(3rem, 6vh, 5rem);
-    padding-left: 2rem;
-    padding-right: 2rem;
+    width: 100%;
     display: flex;
     align-items: center;
-    background: transparent; /* Transparent so R3F Canvas shows behind */
+    background: var(--bg, #030305);
     overflow: hidden;
+    padding: clamp(6rem, 12vh, 10rem) 2rem clamp(4rem, 8vh, 6rem);
     z-index: 1;
   }
 
-  /* Grid Overlay & Noise */
-  .grid-overlay {
+  .hero-bg {
     position: absolute;
     inset: 0;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 50px 50px;
-    background-position: center;
-    pointer-events: none;
     z-index: 0;
-  }
-
-  /* Radial Glow Effects */
-  .radial-glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(140px);
     pointer-events: none;
-    z-index: 0;
-    opacity: 0.3;
   }
 
-  .glow-violet {
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
-    top: 15%;
-    left: -10%;
-  }
-
-  .glow-cyan {
-    width: 650px;
-    height: 650px;
-    background: radial-gradient(circle, rgba(51, 230, 255, 0.1) 0%, transparent 70%);
-    bottom: 10%;
-    right: -5%;
-  }
-
-  /* Container */
   .hero-container {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-    gap: clamp(2rem, 4vw, 4rem);
-    align-items: center;
-    width: min(1280px, calc(100% - 3rem));
+    width: min(1200px, 100%);
     margin: 0 auto;
     position: relative;
-    z-index: 2;
+    z-index: 10;
+    pointer-events: none;
   }
 
-  /* Left Column - Hero Text */
-  .hero-text {
-    position: relative;
-    z-index: 10;
+  .hero-content {
+    max-width: 720px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     text-align: left;
+    pointer-events: none;
   }
 
-  .hero-eyebrow {
-    display: flex;
+  /* Reactivate interactions on text/buttons specifically */
+  .hero-content a,
+  .hero-content span,
+  .hero-content h1,
+  .hero-content p {
+    pointer-events: auto;
+  }
+
+  .hero-kicker {
+    display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.5rem;
     font-family: var(--font-body);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.15em;
-    color: var(--cyan);
-    margin-bottom: 0.8rem;
+    color: var(--cyan, #33e6ff);
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
   }
 
-  .hero-eyebrow .divider {
-    color: var(--text-dim);
+  .hero-kicker .divider {
+    color: var(--text-dim, #626b78);
     opacity: 0.5;
   }
 
   .hero-title {
-    display: block;
-    visibility: visible;
     font-family: var(--font-display);
-    font-size: clamp(4rem, 8.2vw, 8.25rem);
-    line-height: 0.86;
-    letter-spacing: -0.075em;
+    font-size: clamp(3.6rem, 8.5vw, 8rem);
+    line-height: 0.88;
+    letter-spacing: -0.06em;
     font-weight: 800;
-    margin: 0 0 1rem;
-    max-width: 760px;
-    color: var(--text);
+    margin: 0 0 1.5rem 0;
+    color: var(--text, #f5f7fb);
     text-transform: uppercase;
-    position: relative;
-    z-index: 11;
+    will-change: transform, opacity;
   }
 
   .line-wrapper {
     display: block;
     overflow: hidden;
-    line-height: 0.88;
+    line-height: 0.9;
   }
 
   .line-inner {
@@ -228,55 +135,53 @@ import { projects } from "../../data/projects";
     will-change: transform, opacity, filter;
   }
 
+  /* Default hidden state for JS reveal */
   html.js .line-inner {
     transform: translateY(100%);
     opacity: 0;
     filter: blur(8px);
   }
 
-
   .hero-copy {
     font-family: var(--font-body);
-    font-size: clamp(1rem, 2vw, 1.15rem);
-    line-height: 1.5;
-    color: var(--text-muted);
-    max-width: 620px;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
+    font-size: clamp(1rem, 2vw, 1.125rem);
+    line-height: 1.6;
+    color: var(--text-muted, #9aa4b2);
+    max-width: 540px;
+    margin: 0 0 2.2rem 0;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    opacity: 1;
-    transform: none;
+    gap: 1.2rem;
   }
 
-  /* Buttons */
+  /* Buttons styling matching premium aesthetics */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.6rem;
-    padding: 1rem 2rem;
-    border-radius: var(--radius-md);
+    padding: 0.95rem 2.2rem;
+    border-radius: var(--radius-md, 16px);
     font-family: var(--font-body);
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     font-weight: 600;
     transition: all 0.3s var(--ease-out);
     cursor: pointer;
+    text-decoration: none;
   }
 
   .btn-primary {
-    background: var(--text);
-    color: #000;
-    border: 1px solid var(--text);
+    background: var(--text, #f5f7fb);
+    color: #000000;
+    border: 1px solid var(--text, #f5f7fb);
   }
 
   .btn-primary:hover {
-    background: var(--cyan);
-    border-color: var(--cyan);
+    background: var(--cyan, #33e6ff);
+    border-color: var(--cyan, #33e6ff);
     box-shadow: 0 0 25px rgba(51, 230, 255, 0.35);
     transform: translateY(-2px);
   }
@@ -292,373 +197,111 @@ import { projects } from "../../data/projects";
   }
 
   .btn-secondary {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--text, #f5f7fb);
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.11));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--border-strong, rgba(255, 255, 255, 0.2));
     transform: translateY(-2px);
   }
 
-  /* Right Column - Hero Visual */
-  .hero-visual {
-    position: relative;
-    z-index: 5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    perspective: 1400px;
-    max-height: 80vh;
-    max-width: 430px;
-    justify-self: center;
-    transform: none;
-  }
-
-  /* Floating Background Cards */
-  .floating-card {
+  /* Scroll indicator */
+  .hero-scroll-indicator {
     position: absolute;
-    width: 300px;
-    height: 220px;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.015) 0%, rgba(255, 255, 255, 0.003) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    z-index: 1;
-    pointer-events: none;
-    transition: all 0.8s var(--ease-out);
-  }
-
-  .bg-card-1 {
-    transform: translate(-45px, -35px) rotate(-6deg);
-    background: linear-gradient(135deg, rgba(79, 124, 255, 0.03) 0%, transparent 100%);
-    border-color: rgba(79, 124, 255, 0.08);
-    opacity: 0.55;
-  }
-
-  .bg-card-2 {
-    transform: translate(40px, 45px) rotate(4deg);
-    background: linear-gradient(135deg, rgba(51, 230, 255, 0.03) 0%, transparent 100%);
-    border-color: rgba(51, 230, 255, 0.08);
-    opacity: 0.55;
-  }
-
-  .bg-card-3 {
-    transform: translate(-10px, 35px) rotate(-2deg);
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, transparent 100%);
-    border-color: rgba(139, 92, 246, 0.06);
-    opacity: 0.65;
-  }
-
-  /* Layered Depth Slab Additions */
-  .slab-grid-bg {
-    position: absolute;
-    inset: 0;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 20px 20px;
-    background-position: center;
-    opacity: 0.6;
-    border-radius: inherit;
-  }
-
-  .slab-status-bg {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 70% 30%, rgba(51, 230, 255, 0.05) 0%, transparent 60%);
-    border-radius: inherit;
-  }
-
-  .slab-command-bg {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.04) 0%, transparent 60%);
-    border-radius: inherit;
-  }
-
-  .slab-tech-label {
-    position: absolute;
-    bottom: 12px;
-    left: 16px;
-    font-family: monospace;
-    font-size: 0.6rem;
-    font-weight: bold;
-    color: rgba(255, 255, 255, 0.2);
-    letter-spacing: 0.05em;
-  }
-
-  /* Main Glass Panel */
-  .product-lab-panel {
-    position: relative;
-    width: 100%;
-    max-width: 420px;
-    max-height: none;
-    transform: none;
-    background: rgba(13, 15, 23, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: var(--radius-lg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-    z-index: 2;
-    overflow: hidden;
-  }
-
-  .panel-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .panel-dots {
-    display: flex;
-    gap: 0.4rem;
-  }
-
-  .p-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    opacity: 0.75;
-  }
-
-  .p-dot.red { background: #ff5f56; }
-  .p-dot.yellow { background: #ffbd2e; }
-  .p-dot.green { background: #27c93f; }
-
-  .panel-title {
-    font-family: var(--font-display);
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    letter-spacing: 0.05em;
-  }
-
-  .panel-content {
-    padding: 1.5rem;
-  }
-
-  /* Fake Console */
-  .fake-console {
-    background: rgba(0, 0, 0, 0.25);
-    border-radius: var(--radius-md);
-    padding: 0.85rem 1rem;
-    margin-bottom: 1.5rem;
-    font-family: monospace;
-    font-size: 0.75rem;
-  }
-
-  .console-line {
-    margin-bottom: 0.25rem;
-  }
-  .console-line:last-child {
-    margin-bottom: 0;
-  }
-
-  .c-accent {
-    color: var(--cyan);
-  }
-
-  .c-dim {
-    color: var(--text-dim);
-  }
-
-  /* Project Rows (Stacked Drawer Interface Layers) */
-  .project-rows {
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
-    margin-bottom: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-  }
-
-  .project-row {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0.95rem 1.25rem;
-    border-radius: 0;
-    background: rgba(255, 255, 255, 0.015);
-    border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    transition: all 0.3s var(--ease-out);
-  }
-
-  .project-row:last-child {
-    border-bottom: none;
-  }
-
-  .project-row:hover {
-    background: rgba(255, 255, 255, 0.035);
-    padding-left: 1.5rem;
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .row-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-
-  .project-name {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .project-type {
+    gap: 0.5rem;
     font-family: var(--font-body);
     font-size: 0.7rem;
-    color: var(--text-dim);
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim, #626b78);
+    opacity: 0.7;
+    z-index: 10;
   }
 
-  .row-status {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 0.3rem 0.6rem;
-    border-radius: 99px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+  .scroll-line {
+    width: 1px;
+    height: 35px;
+    background: linear-gradient(to bottom, var(--text-dim, #626b78) 50%, transparent 50%);
+    background-size: 100% 200%;
+    animation: scroll-pulse 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
   }
 
-  .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    position: relative;
-  }
-
-  /* Pulses for status dots */
-  .status-dot::after {
-    content: '';
-    position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    opacity: 0.4;
-    animation: status-pulse 2s infinite;
-  }
-
-  .status-dot.green { background: var(--green); }
-  .status-dot.green::after { border: 1px solid var(--green); }
-  
-  .status-dot.blue { background: var(--blue); }
-  .status-dot.blue::after { border: 1px solid var(--blue); }
-
-  .status-dot.yellow { background: var(--yellow); }
-  .status-dot.yellow::after { border: 1px solid var(--yellow); }
-
-  .status-text {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    color: var(--text-muted);
-  }
-
-  /* Fake Commands */
-  .fake-commands {
-    font-family: monospace;
-    font-size: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding-left: 0.5rem;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .cmd-line {
-    color: var(--text-dim);
-  }
-
-  .cmd-op {
-    color: var(--violet);
-  }
-
-  .cmd-fn {
-    color: var(--cyan);
-  }
-
-  @keyframes status-pulse {
+  @keyframes scroll-pulse {
     0% {
-      transform: scale(0.8);
-      opacity: 0.8;
+      background-position: 0 0;
     }
     100% {
-      transform: scale(2);
-      opacity: 0;
+      background-position: 0 100%;
     }
   }
 
   /* Responsive Design */
-  @media (max-width: 900px) {
-    .hero-section {
-      padding: clamp(5rem, 8vh, 6rem) 1.5rem clamp(3rem, 6vh, 4rem);
-      min-height: auto;
+  @media (max-width: 968px) {
+    .hero-rebuild {
+      padding: clamp(6rem, 15vh, 8rem) 1.5rem clamp(4rem, 10vh, 5rem);
     }
-    
-    .hero-container {
-      grid-template-columns: 1fr;
-      gap: 2.5rem;
-      text-align: left;
-      width: 100%;
+
+    .hero-content {
+      max-width: 100%;
     }
-    
-    .hero-text {
-      text-align: left;
-      align-items: flex-start;
-    }
-    
-    .hero-eyebrow {
-      justify-content: flex-start;
+
+    .hero-kicker {
       margin-bottom: 0.8rem;
     }
-    
+
     .hero-title {
-      font-size: clamp(3.2rem, 16vw, 5.8rem);
-      text-align: left;
-      max-width: 100%;
+      font-size: clamp(3.2rem, 14vw, 5.5rem);
+      margin-bottom: 1.2rem;
     }
-    
+
     .hero-copy {
-      margin: 0 0 1.5rem 0;
       max-width: 100%;
+      margin-bottom: 2rem;
     }
-    
+
     .hero-actions {
-      justify-content: flex-start;
+      gap: 1rem;
     }
-    
-    .hero-visual {
-      margin-top: 1rem;
+
+    .btn {
       width: 100%;
-      max-width: 100%;
-      perspective: none;
+      max-width: 280px;
     }
-    
-    .product-lab-panel {
-      max-width: 100%;
+
+    .hero-scroll-indicator {
+      display: none; /* hide on smaller viewports for cleaner aesthetics */
+    }
+  }
+
+  /* Accessibility and Reduced Motion override */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-title,
+    .line-inner,
+    .btn,
+    .scroll-line {
+      animation: none !important;
+      transition: none !important;
       transform: none !important;
+      filter: none !important;
+      opacity: 1 !important;
     }
-    
-    .floating-card {
-      display: none !important; /* Hide background cards on small screens for visual simplicity */
+
+    html.js .line-inner {
+      transform: none !important;
+      opacity: 1 !important;
+      filter: none !important;
     }
-  }
-
-  /* Temporary Debug Safety Rules */
-  .hero-title {
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-
-  [data-hero-title] {
-    opacity: 1 !important;
-    visibility: visible !important;
   }
 </style>

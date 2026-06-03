@@ -58,16 +58,9 @@ function initHeroAnimations(gsap: any, ScrollTrigger: any, isMobile: boolean) {
       );
     } else {
       heroTl.fromTo(visual,
-        { opacity: 0, y: 32, rotateX: 12, rotateY: -12, filter: "blur(8px)" },
-        { opacity: 1, y: 0, rotateX: 0, rotateY: 0, filter: "blur(0px)", duration: 1.1, ease: "power4.out" },
+        { opacity: 0, y: 32, filter: "blur(8px)" },
+        { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.1, ease: "power4.out" },
         0.25
-      );
-
-      // Subtle entrance for floating card backdrops
-      heroTl.fromTo(".floating-card",
-        { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1, duration: 0.85, stagger: 0.1, ease: "power3.out" },
-        0.35
       );
     }
   }
@@ -88,30 +81,15 @@ function initHeroAnimations(gsap: any, ScrollTrigger: any, isMobile: boolean) {
     );
   }
 
-  // Scroll Parallax / Depth disassembly for Hero (Desktop only)
+  // Scroll Parallax for Hero Text (Desktop only)
   if (!isMobile && visual) {
     const heroSection = document.querySelector(".hero-section");
     const heroText = document.querySelector(".hero-text");
-    const panel = document.querySelector(".product-lab-panel");
-    const slab1 = document.querySelector('[data-depth-layer="1"]');
-    const slab2 = document.querySelector('[data-depth-layer="2"]');
-    const slab3 = document.querySelector('[data-depth-layer="3"]');
 
-    if (heroSection) {
-      if (heroText) {
-        gsap.to(heroText, {
-          y: -40,
-          ease: "none",
-          scrollTrigger: {
-            trigger: heroSection,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          }
-        });
-      }
-
-      const scrubTl = gsap.timeline({
+    if (heroSection && heroText) {
+      gsap.to(heroText, {
+        y: -40,
+        ease: "none",
         scrollTrigger: {
           trigger: heroSection,
           start: "top top",
@@ -119,52 +97,6 @@ function initHeroAnimations(gsap: any, ScrollTrigger: any, isMobile: boolean) {
           scrub: true,
         }
       });
-
-      if (panel) {
-        scrubTl.to(panel, {
-          rotateX: 8,
-          rotateY: -10,
-          y: 60,
-          z: -50,
-          ease: "none",
-        }, 0);
-      }
-
-      if (slab1) {
-        scrubTl.to(slab1, {
-          x: -60,
-          y: -40,
-          z: -120,
-          rotateZ: -8,
-          scale: 0.92,
-          opacity: 0.25,
-          ease: "none",
-        }, 0);
-      }
-
-      if (slab2) {
-        scrubTl.to(slab2, {
-          x: 60,
-          y: 50,
-          z: -100,
-          rotateZ: 6,
-          scale: 0.92,
-          opacity: 0.25,
-          ease: "none",
-        }, 0);
-      }
-
-      if (slab3) {
-        scrubTl.to(slab3, {
-          x: -40,
-          y: 30,
-          z: -80,
-          rotateZ: -4,
-          scale: 0.94,
-          opacity: 0.3,
-          ease: "none",
-        }, 0);
-      }
     }
   }
 }
@@ -1172,7 +1104,7 @@ export async function initAnimations() {
   // Clean up all active triggers before compiling animations on the new layout
   ScrollTrigger.getAll().forEach((t) => t.kill());
 
-  const isMobile = window.innerWidth <= 768;
+  const isMobile = window.innerWidth <= 968;
 
   // Execute modular animations in sequence
   initPreloader(gsap);

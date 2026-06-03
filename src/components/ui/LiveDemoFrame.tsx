@@ -12,14 +12,15 @@ export default function LiveDemoFrame({
   url,
   accent = "blue",
 }: LiveDemoFrameProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<"blueprint" | "live">("blueprint");
+  const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [isTimeout, setIsTimeout] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 968);
     };
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -28,14 +29,14 @@ export default function LiveDemoFrame({
 
   // 5 seconds loading timeout
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading && viewMode === "live") {
       const timer = setTimeout(() => {
         setIsTimeout(true);
         setIsLoading(false);
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [isLoading]);
+  }, [isLoading, viewMode]);
 
   const handleIframeLoad = () => {
     setIsLoading(false);
@@ -160,7 +161,7 @@ export default function LiveDemoFrame({
       <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: "0.75rem", flexGrow: 1 }}>
         {/* Left Column: ATS Score & Skills */}
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", background: "rgba(255,255,255,0.01)", border: "1px solid rgba(255,255,255,0.04)", borderRadius: "8px", padding: "8px" }}>
-          <div style={{ display: "flex", justifyBetween: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <span style={{ fontSize: "0.55rem", color: "#626b78" }}>ATS FIT SCORE</span>
             <span style={{ color: "#3dd9a0", fontWeight: "bold" }}>92% MATCH</span>
           </div>
@@ -220,7 +221,7 @@ export default function LiveDemoFrame({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "1.5rem",
+          gap: "1rem",
           padding: "0.85rem 1.5rem",
           background: "rgba(255, 255, 255, 0.03)",
           borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
@@ -232,6 +233,7 @@ export default function LiveDemoFrame({
           <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#ffbd2e" }} />
           <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#27c93f" }} />
         </div>
+        
         <div
           className="demo-address-bar"
           style={{
@@ -244,7 +246,7 @@ export default function LiveDemoFrame({
             padding: "0.3rem",
             borderRadius: "6px",
             border: "1px solid rgba(255, 255, 255, 0.03)",
-            maxWidth: "360px",
+            maxWidth: "280px",
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
@@ -252,6 +254,60 @@ export default function LiveDemoFrame({
           }}
         >
           {url.replace("https://", "")}
+        </div>
+
+        {/* View mode toggle selector */}
+        <div
+          className="demo-mode-toggle"
+          style={{
+            display: "flex",
+            gap: "0.25rem",
+            background: "rgba(0, 0, 0, 0.35)",
+            border: "1px solid rgba(255, 255, 255, 0.05)",
+            padding: "0.2rem",
+            borderRadius: "8px",
+            zIndex: 20,
+          }}
+        >
+          <button
+            onClick={() => setViewMode("blueprint")}
+            style={{
+              padding: "0.25rem 0.5rem",
+              fontSize: "0.55rem",
+              fontFamily: "monospace",
+              fontWeight: "bold",
+              borderRadius: "5px",
+              border: "none",
+              cursor: "pointer",
+              background: viewMode === "blueprint" ? `var(--${accent})` : "transparent",
+              color: viewMode === "blueprint" ? "#000" : "rgba(255, 255, 255, 0.45)",
+              transition: "all 0.2s ease",
+            }}
+          >
+            BLUEPRINT
+          </button>
+          <button
+            onClick={() => {
+              setViewMode("live");
+              setIsLoading(true);
+              setIsTimeout(false);
+              setHasError(false);
+            }}
+            style={{
+              padding: "0.25rem 0.5rem",
+              fontSize: "0.55rem",
+              fontFamily: "monospace",
+              fontWeight: "bold",
+              borderRadius: "5px",
+              border: "none",
+              cursor: "pointer",
+              background: viewMode === "live" ? `var(--${accent})` : "transparent",
+              color: viewMode === "live" ? "#000" : "rgba(255, 255, 255, 0.45)",
+              transition: "all 0.2s ease",
+            }}
+          >
+            LIVE BUILD
+          </button>
         </div>
       </div>
 
@@ -303,7 +359,7 @@ export default function LiveDemoFrame({
               {title}
             </h4>
             <p style={{ fontSize: "0.8rem", color: "#9aa4b2", maxWidth: "240px", margin: "0 0 1.5rem 0", lineHeight: "1.5" }}>
-              Live preview is disabled on mobile.
+              Live preview is disabled on mobile/tablet.
             </p>
             <a
               href={url}
@@ -334,140 +390,144 @@ export default function LiveDemoFrame({
               {isSortMySkills ? renderSortMySkillsFallback() : null}
             </div>
 
-            {/* Loading Indicator Overlay */}
-            {isLoading && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "12px",
-                  right: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  background: "rgba(3, 3, 5, 0.8)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
-                  padding: "4px 10px",
-                  borderRadius: "6px",
-                  zIndex: 15,
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
-                }}
-              >
-                <div
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    border: "1.5px solid rgba(255,255,255,0.15)",
-                    borderTopColor: accent === "green" ? "#3dd9a0" : "#4f7cff",
-                    animation: "demo-spin 1s linear infinite",
-                  }}
-                />
-                <span
-                  style={{
-                    fontSize: "0.58rem",
-                    color: "#9aa4b2",
-                    fontFamily: "monospace",
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  SECURE SANDBOX LINK...
-                </span>
-              </div>
-            )}
-
-            {/* Error or Timeout alert block */}
-            {(hasError || isTimeout) && (
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "2rem",
-                  textAlign: "center",
-                  background: "rgba(3, 3, 5, 0.4)",
-                  backdropFilter: "blur(4px)",
-                  WebkitBackdropFilter: "blur(4px)",
-                  zIndex: 10,
-                }}
-              >
-                <div
-                  style={{
-                    background: "rgba(7, 8, 13, 0.96)",
-                    border: `1px solid ${borderColor}`,
-                    padding: "1.3rem",
-                    borderRadius: "16px",
-                    maxWidth: "310px",
-                    boxShadow: `0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px ${shadowColor}`,
-                  }}
-                >
-                  <h4 style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#fff", margin: "0 0 0.4rem 0", fontFamily: "monospace" }}>
-                    {isTimeout ? "SANDBOX TIMEOUT" : "CONNECTION REFUSED"}
-                  </h4>
-                  <p style={{ fontSize: "0.72rem", color: "#9aa4b2", margin: "0 0 1rem 0", lineHeight: "1.4", fontFamily: "monospace" }}>
-                    {isTimeout 
-                      ? "The live build took too long to respond. You can inspect the sandbox skeleton or load the live platform." 
-                      : "Your browser security policy does not allow iframe embeds. Open the live site securely in a new window."}
-                  </p>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noreferrer"
+            {viewMode === "live" && (
+              <>
+                {/* Loading Indicator Overlay */}
+                {isLoading && (
+                  <div
                     style={{
-                      display: "inline-flex",
+                      position: "absolute",
+                      top: "12px",
+                      right: "12px",
+                      display: "flex",
                       alignItems: "center",
-                      gap: "0.5rem",
-                      fontSize: "0.75rem",
-                      fontWeight: "bold",
-                      padding: "0.6rem 1.1rem",
-                      background: accent === "green" ? "#3dd9a0" : "#4f7cff",
-                      color: "#030305",
+                      gap: "8px",
+                      background: "rgba(3, 3, 5, 0.8)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      padding: "4px 10px",
                       borderRadius: "6px",
-                      textDecoration: "none",
+                      zIndex: 15,
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
                     }}
                   >
-                    <span>Open Live Site</span>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <line x1="7" y1="17" x2="17" y2="7" />
-                      <polyline points="7 7 17 7 17 17" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            )}
+                    <div
+                      style={{
+                        width: "8px",
+                        height: "8px",
+                        borderRadius: "50%",
+                        border: "1.5px solid rgba(255,255,255,0.15)",
+                        borderTopColor: accent === "green" ? "#3dd9a0" : "#4f7cff",
+                        animation: "demo-spin 1s linear infinite",
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontSize: "0.58rem",
+                        color: "#9aa4b2",
+                        fontFamily: "monospace",
+                        letterSpacing: "0.02em",
+                      }}
+                    >
+                      SECURE SANDBOX LINK...
+                    </span>
+                  </div>
+                )}
 
-            {/* Main Interactive Preview Frame */}
-            <div
-              className="iframe-scroll-wrapper"
-              data-lenis-prevent="true"
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                overflow: "hidden",
-                opacity: isLoading || hasError || isTimeout ? 0 : 1,
-                transition: "opacity 0.5s ease",
-                zIndex: 2,
-              }}
-            >
-              <iframe
-                src={url}
-                title={title}
-                onLoad={handleIframeLoad}
-                onError={handleIframeError}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  border: "none",
-                  background: "#030305",
-                }}
-                sandbox="allow-scripts allow-same-origin allow-forms"
-                loading="lazy"
-              />
-            </div>
+                {/* Error or Timeout alert block */}
+                {(hasError || isTimeout) && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "2rem",
+                      textAlign: "center",
+                      background: "rgba(3, 3, 5, 0.4)",
+                      backdropFilter: "blur(4px)",
+                      WebkitBackdropFilter: "blur(4px)",
+                      zIndex: 10,
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: "rgba(7, 8, 13, 0.96)",
+                        border: `1px solid ${borderColor}`,
+                        padding: "1.3rem",
+                        borderRadius: "16px",
+                        maxWidth: "310px",
+                        boxShadow: `0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px ${shadowColor}`,
+                      }}
+                    >
+                      <h4 style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#fff", margin: "0 0 0.4rem 0", fontFamily: "monospace" }}>
+                        {isTimeout ? "SANDBOX TIMEOUT" : "CONNECTION REFUSED"}
+                      </h4>
+                      <p style={{ fontSize: "0.72rem", color: "#9aa4b2", margin: "0 0 1rem 0", lineHeight: "1.4", fontFamily: "monospace" }}>
+                        {isTimeout 
+                          ? "The live build took too long to respond. You can inspect the sandbox skeleton or load the live platform." 
+                          : "Your browser security policy does not allow iframe embeds. Open the live site securely in a new window."}
+                      </p>
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                          fontSize: "0.75rem",
+                          fontWeight: "bold",
+                          padding: "0.6rem 1.1rem",
+                          background: accent === "green" ? "#3dd9a0" : "#4f7cff",
+                          color: "#030305",
+                          borderRadius: "6px",
+                          textDecoration: "none",
+                        }}
+                      >
+                        <span>Open Live Site</span>
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                          <line x1="7" y1="17" x2="17" y2="7" />
+                          <polyline points="7 7 17 7 17 17" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {/* Main Interactive Preview Frame */}
+                <div
+                  className="iframe-scroll-wrapper"
+                  data-lenis-prevent="true"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    overflow: "hidden",
+                    opacity: isLoading || hasError || isTimeout ? 0 : 1,
+                    transition: "opacity 0.5s ease",
+                    zIndex: 2,
+                  }}
+                >
+                  <iframe
+                    src={url}
+                    title={title}
+                    onLoad={handleIframeLoad}
+                    onError={handleIframeError}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      border: "none",
+                      background: "#030305",
+                    }}
+                    sandbox="allow-scripts allow-same-origin allow-forms"
+                    loading="lazy"
+                  />
+                </div>
+              </>
+            )}
           </>
         )}
       </div>

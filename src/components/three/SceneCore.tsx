@@ -3,7 +3,6 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import ParticleField from "./ParticleField";
 import NetworkLines from "./NetworkLines";
-import HolographicCore from "./HolographicCore";
 
 type SceneCoreProps = {
   isMobile?: boolean;
@@ -12,6 +11,7 @@ type SceneCoreProps = {
 export default function SceneCore({ isMobile = false }: SceneCoreProps) {
   const { camera } = useThree();
   const scrollYRef = useRef(0);
+  const lookAtTargetRef = useRef(new THREE.Vector3(0, 0, 0));
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -50,7 +50,8 @@ export default function SceneCore({ isMobile = false }: SceneCoreProps) {
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetCamZ, 0.06);
 
     // Make the camera look at a center point shifted down by scroll
-    camera.lookAt(new THREE.Vector3(0, camera.position.y * 0.85, -2.5));
+    lookAtTargetRef.current.set(0, camera.position.y * 0.85, -2.5);
+    camera.lookAt(lookAtTargetRef.current);
   });
 
   return (
@@ -64,8 +65,7 @@ export default function SceneCore({ isMobile = false }: SceneCoreProps) {
       {/* Network constellation (desktop only) */}
       {!isMobile && <NetworkLines count={26} maxDistance={3.5} />}
 
-      {/* Hero Holographic Core */}
-      <HolographicCore isMobile={isMobile} />
+
 
       {/* Floating Low-Opacity Tech Data Planes (desktop only) */}
       {!isMobile && (
