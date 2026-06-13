@@ -6,20 +6,18 @@ import * as THREE from "three";
 type ProjectNodeProps = {
   name: string;
   type: string;
-  status: string;
   accent: string;
   relPos: [number, number, number];
   phase: number;
 };
 
-function FloatingNode({ name, type, status, accent, relPos, phase }: ProjectNodeProps) {
+function FloatingNode({ name, type, accent, relPos, phase }: ProjectNodeProps) {
   const groupRef = useRef<THREE.Group>(null);
 
   // Store initial relative position
   const initialPos = useMemo(() => new THREE.Vector3(...relPos), [relPos]);
 
   // Calculate local vector from the core (0,0,0) to this node
-  // In the node's local coordinate system, the core is at -position
   const linePoints = useMemo(() => {
     const points = [];
     // Start at core (local -relPos)
@@ -35,22 +33,22 @@ function FloatingNode({ name, type, status, accent, relPos, phase }: ProjectNode
   // Color mapping based on accent
   const accentColor = 
     accent === "green" ? "#3dd9a0" : 
-    accent === "blue" ? "#4f7cff" : 
+    accent === "cyan" ? "#33e6ff" : 
     accent === "violet" ? "#8b5cf6" : "#ffd166";
 
-  // Create THREE.Line programmatically to avoid JSX SVG type conflicts
+  // Create THREE.Line programmatically
   const connectionLine = useMemo(() => {
     const material = new THREE.LineBasicMaterial({
       color: accentColor,
       transparent: true,
-      opacity: 0.2,
+      opacity: 0.25,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
     });
     return new THREE.Line(lineGeometry, material);
   }, [lineGeometry, accentColor]);
 
-  // Safely dispose WebGL resources on component unmount
+  // Dispose WebGL resources on component unmount
   useEffect(() => {
     return () => {
       connectionLine.geometry.dispose();
@@ -66,9 +64,9 @@ function FloatingNode({ name, type, status, accent, relPos, phase }: ProjectNode
     const time = state.clock.getElapsedTime();
     if (!groupRef.current) return;
 
-    // Floating animation (gentle Y translation and micro rotational wobble)
-    const floatY = Math.sin(time * 0.8 + phase) * 0.12;
-    const floatX = Math.cos(time * 0.6 + phase) * 0.08;
+    // Gentle float animation (slow breathing motion)
+    const floatY = Math.sin(time * 0.7 + phase) * 0.14;
+    const floatX = Math.cos(time * 0.5 + phase) * 0.08;
     
     groupRef.current.position.set(
       initialPos.x + floatX,
@@ -76,14 +74,14 @@ function FloatingNode({ name, type, status, accent, relPos, phase }: ProjectNode
       initialPos.z
     );
 
-    // Micro rotation
-    groupRef.current.rotation.z = Math.sin(time * 0.4 + phase) * 0.03;
-    groupRef.current.rotation.y = Math.cos(time * 0.5 + phase) * 0.04;
+    // Micro rotation wobble for 3D realism
+    groupRef.current.rotation.z = Math.sin(time * 0.35 + phase) * 0.02;
+    groupRef.current.rotation.y = Math.cos(time * 0.45 + phase) * 0.03;
 
-    // Pulse connection line opacity
+    // Pulse connection line opacity to feel active
     const mat = connectionLine.material as THREE.LineBasicMaterial;
     if (mat) {
-      mat.opacity = 0.15 + Math.sin(time * 4.0 + phase) * 0.12;
+      mat.opacity = 0.2 + Math.sin(time * 3.0 + phase) * 0.15;
     }
   });
 
@@ -98,34 +96,34 @@ function FloatingNode({ name, type, status, accent, relPos, phase }: ProjectNode
         <meshBasicMaterial color={accentColor} transparent opacity={0.8} />
       </mesh>
 
-      {/* Floating HTML Card */}
+      {/* Floating Holographic Badge Card */}
       <Html
         distanceFactor={4.5}
-        position={[0, 0, 0]}
+        position={[0, 0.15, 0]}
         transform
         pointerEvents="auto"
       >
         <div 
-          className="flex flex-col gap-1 p-[14px] rounded-[14px] bg-[#0d0f17]/85 border border-white/[0.08] backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-white/20 select-none pointer-events-auto"
+          className="flex items-center justify-between gap-3 px-3 py-2 rounded-xl bg-[#080b11]/85 border border-white/[0.08] backdrop-blur-md shadow-2xl transition-all duration-300 hover:border-white/20 select-none pointer-events-auto"
           style={{
-            width: "160px",
-            boxShadow: `0 8px 30px rgba(0, 0, 0, 0.4), 0 0 10px ${accentColor}12`
+            width: "210px",
+            boxShadow: `0 8px 30px rgba(0, 0, 0, 0.5), 0 0 15px ${accentColor}1c`,
+            borderLeft: `3px solid ${accentColor}`
           }}
         >
-          {/* Top category row */}
-          <div className="flex items-center justify-between w-full">
-            <span className="font-mono text-[8px] text-[#626b78] uppercase tracking-wider">{type}</span>
-            <div className="flex items-center gap-[4px] px-[6px] py-[2px] rounded-full bg-white/[0.03] border border-white/[0.04]">
-              <span className="relative flex h-[4.5px] w-[4.5px]">
-                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-[${accentColor}]`} style={{ backgroundColor: accentColor }} />
-                <span className="relative inline-flex rounded-full h-[4.5px] w-[4.5px]" style={{ backgroundColor: accentColor }} />
-              </span>
-              <span className="font-sans text-[7.5px] font-medium text-[#9aa4b2] whitespace-nowrap">{status}</span>
-            </div>
+          {/* Left section: status dot and Name */}
+          <div className="flex items-center gap-2">
+            <span className="relative flex h-[5px] w-[5px]">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: accentColor }} />
+              <span className="relative inline-flex rounded-full h-[5px] w-[5px]" style={{ backgroundColor: accentColor }} />
+            </span>
+            <span className="font-sans text-[11px] font-bold text-[#f5f7fb] tracking-wide uppercase whitespace-nowrap">{name}</span>
           </div>
 
-          {/* Project Name */}
-          <h4 className="font-sans text-[13px] font-bold text-white tracking-tight mt-0.5">{name}</h4>
+          {/* Right section: Type */}
+          <span className="font-mono text-[8.5px] font-semibold text-[#8a95a5] uppercase tracking-wider bg-white/[0.03] px-1.5 py-0.5 rounded border border-white/[0.04] whitespace-nowrap">
+            {type}
+          </span>
         </div>
       </Html>
     </group>
@@ -139,9 +137,8 @@ export default function HeroProjectNodes() {
       <FloatingNode
         name="J.A.R.V.I.S"
         type="AI Assistant"
-        status="Experiment"
-        accent="blue"
-        relPos={[-2.0, 1.3, 0.2]}
+        accent="cyan"
+        relPos={[-1.7, 0.7, 0.3]}
         phase={0}
       />
 
@@ -149,9 +146,8 @@ export default function HeroProjectNodes() {
       <FloatingNode
         name="F.R.I.D.A.Y"
         type="Realtime AI"
-        status="Experiment"
         accent="violet"
-        relPos={[2.1, 0.9, -0.4]}
+        relPos={[1.7, 0.4, -0.2]}
         phase={2.0}
       />
 
@@ -159,9 +155,8 @@ export default function HeroProjectNodes() {
       <FloatingNode
         name="InvoiceFlow"
         type="Fintech Platform"
-        status="Prototype"
         accent="green"
-        relPos={[-1.6, -1.3, 0.4]}
+        relPos={[-1.3, -0.8, 0.4]}
         phase={4.0}
       />
     </group>

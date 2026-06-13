@@ -2,14 +2,12 @@
 import HeroScene from "../three/HeroScene";
 ---
 
-<section id="home" class="hero-rebuild hero-section">
-  <!-- Interactive 3D scene canvas loaded as client-only island to avoid SSR conflicts -->
-  <div class="hero-bg" aria-hidden="true" data-hero-visual>
-    <HeroScene client:only="react" />
-  </div>
+<section id="home" class="hero-shell hero-section">
+  <!-- Dynamic premium backdrop glow effects -->
+  <div class="hero-bg-effects" aria-hidden="true"></div>
 
-  <div class="container hero-container">
-    <div class="hero-content hero-text">
+  <div class="hero-inner">
+    <div class="hero-copy hero-text">
       <p class="hero-kicker" data-hero-eyebrow>
         <span>YATHIN G</span>
         <span class="divider">/</span>
@@ -24,7 +22,7 @@ import HeroScene from "../three/HeroScene";
         <span class="line-wrapper"><span class="line-inner">THINK.</span></span>
       </h1>
 
-      <p class="hero-copy" data-hero-copy>
+      <p class="hero-description" data-hero-copy>
         I design and ship AI-powered web products, experimental interfaces, and systems that turn ideas into working software.
       </p>
 
@@ -41,6 +39,10 @@ import HeroScene from "../three/HeroScene";
         </a>
       </div>
     </div>
+
+    <div class="hero-visual" aria-hidden="true" data-hero-visual>
+      <HeroScene client:only="react" />
+    </div>
   </div>
 
   <div class="hero-scroll-indicator">
@@ -50,7 +52,7 @@ import HeroScene from "../three/HeroScene";
 </section>
 
 <style>
-  .hero-rebuild {
+  .hero-shell {
     position: relative;
     min-height: 100svh;
     width: 100%;
@@ -58,38 +60,45 @@ import HeroScene from "../three/HeroScene";
     align-items: center;
     background: var(--bg, #030305);
     overflow: hidden;
-    padding: clamp(6rem, 12vh, 10rem) 2rem clamp(4rem, 8vh, 6rem);
+    padding: clamp(7rem, 12vh, 9rem) 1.5rem clamp(4rem, 7vh, 6rem);
     z-index: 1;
   }
 
-  .hero-bg {
+  .hero-bg-effects {
     position: absolute;
     inset: 0;
     z-index: 0;
     pointer-events: none;
+    background: radial-gradient(circle at 75% 30%, rgba(51, 230, 255, 0.05) 0%, transparent 55%),
+                radial-gradient(circle at 25% 75%, rgba(139, 92, 246, 0.05) 0%, transparent 55%);
   }
 
-  .hero-container {
-    width: min(1200px, 100%);
-    margin: 0 auto;
+  .hero-inner {
     position: relative;
-    z-index: 10;
+    z-index: 2;
+    width: min(1240px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
     pointer-events: none;
   }
 
-  .hero-content {
-    max-width: 720px;
+  .hero-copy {
+    position: relative;
+    z-index: 4;
     display: flex;
     flex-direction: column;
     text-align: left;
     pointer-events: none;
   }
 
-  /* Reactivate interactions on text/buttons specifically */
-  .hero-content a,
-  .hero-content span,
-  .hero-content h1,
-  .hero-content p {
+  /* Re-enable interactions for content elements */
+  .hero-copy a,
+  .hero-copy span,
+  .hero-copy h1,
+  .hero-copy p {
     pointer-events: auto;
   }
 
@@ -114,14 +123,13 @@ import HeroScene from "../three/HeroScene";
 
   .hero-title {
     font-family: var(--font-display);
-    font-size: clamp(3.6rem, 8.5vw, 8rem);
-    line-height: 0.88;
-    letter-spacing: -0.06em;
+    font-size: clamp(3.8rem, 8.5vw, 8.5rem);
+    line-height: 0.84;
+    letter-spacing: -0.07em;
     font-weight: 800;
     margin: 0 0 1.5rem 0;
     color: var(--text, #f5f7fb);
     text-transform: uppercase;
-    will-change: transform, opacity;
   }
 
   .line-wrapper {
@@ -135,19 +143,19 @@ import HeroScene from "../three/HeroScene";
     will-change: transform, opacity, filter;
   }
 
-  /* Default hidden state for JS reveal */
-  html.js .line-inner {
-    transform: translateY(100%);
-    opacity: 0;
-    filter: blur(8px);
-  }
+  /* 
+    CRITICAL: 
+    No static html.js opacity:0 rule is declared here.
+    The text is visible by default without JS.
+    GSAP immediately applies initial hidden transform and animates it on run.
+  */
 
-  .hero-copy {
+  .hero-description {
     font-family: var(--font-body);
     font-size: clamp(1rem, 2vw, 1.125rem);
     line-height: 1.6;
     color: var(--text-muted, #9aa4b2);
-    max-width: 540px;
+    max-width: 620px;
     margin: 0 0 2.2rem 0;
   }
 
@@ -210,6 +218,38 @@ import HeroScene from "../three/HeroScene";
     transform: translateY(-2px);
   }
 
+  .hero-visual {
+    position: relative;
+    height: clamp(520px, 70vh, 760px);
+    min-height: 520px;
+    width: 100%;
+    z-index: 1;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-4%);
+  }
+
+  .hero-visual canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-visual::before {
+    content: "";
+    position: absolute;
+    width: min(680px, 90%);
+    aspect-ratio: 1;
+    border-radius: 999px;
+    background:
+      radial-gradient(circle at center, rgba(34, 211, 238, 0.16), transparent 42%),
+      radial-gradient(circle at center, rgba(139, 92, 246, 0.13), transparent 62%);
+    filter: blur(34px);
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
   /* Scroll indicator */
   .hero-scroll-indicator {
     position: absolute;
@@ -249,24 +289,26 @@ import HeroScene from "../three/HeroScene";
 
   /* Responsive Design */
   @media (max-width: 968px) {
-    .hero-rebuild {
+    .hero-shell {
       padding: clamp(6rem, 15vh, 8rem) 1.5rem clamp(4rem, 10vh, 5rem);
     }
 
-    .hero-content {
-      max-width: 100%;
-    }
-
-    .hero-kicker {
-      margin-bottom: 0.8rem;
-    }
-
-    .hero-title {
-      font-size: clamp(3.2rem, 14vw, 5.5rem);
-      margin-bottom: 1.2rem;
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      pointer-events: auto;
     }
 
     .hero-copy {
+      max-width: 100%;
+    }
+
+    .hero-title {
+      font-size: clamp(3.2rem, 12vw, 5.5rem);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-description {
       max-width: 100%;
       margin-bottom: 2rem;
     }
@@ -280,12 +322,18 @@ import HeroScene from "../three/HeroScene";
       max-width: 280px;
     }
 
+    .hero-visual {
+      height: clamp(300px, 42vh, 400px);
+      min-height: 300px;
+      transform: none;
+    }
+
     .hero-scroll-indicator {
-      display: none; /* hide on smaller viewports for cleaner aesthetics */
+      display: none; /* Hide scroll indicator on mobile */
     }
   }
 
-  /* Accessibility and Reduced Motion override */
+  /* Accessibility and Reduced Motion overrides */
   @media (prefers-reduced-motion: reduce) {
     .hero-title,
     .line-inner,
@@ -296,12 +344,6 @@ import HeroScene from "../three/HeroScene";
       transform: none !important;
       filter: none !important;
       opacity: 1 !important;
-    }
-
-    html.js .line-inner {
-      transform: none !important;
-      opacity: 1 !important;
-      filter: none !important;
     }
   }
 </style>

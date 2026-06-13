@@ -6,131 +6,169 @@ export default function HeroCore() {
   const coreGroupRef = useRef<THREE.Group>(null);
   const innerRef = useRef<THREE.Mesh>(null);
   const outerGlassRef = useRef<THREE.Mesh>(null);
+  const outerShellRef = useRef<THREE.Mesh>(null);
+  
+  // Orbit ring refs
   const ring1Ref = useRef<THREE.Mesh>(null);
   const ring2Ref = useRef<THREE.Mesh>(null);
   const ring3Ref = useRef<THREE.Mesh>(null);
+  const ring4Ref = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
 
-    // Rotate core group slowly
+    // 1. Slow, premium base core group rotation
     if (coreGroupRef.current) {
-      coreGroupRef.current.rotation.y = time * 0.1;
+      coreGroupRef.current.rotation.y = time * 0.06;
     }
 
-    // Inner wireframe rotation (slightly faster, counter-direction)
+    // 2. Inner wireframe rotation (slightly faster, counter-direction)
     if (innerRef.current) {
-      innerRef.current.rotation.y = -time * 0.25;
-      innerRef.current.rotation.x = time * 0.15;
+      innerRef.current.rotation.y = -time * 0.18;
+      innerRef.current.rotation.x = time * 0.12;
       
-      // Subtle pulse
-      const scale = 0.85 + Math.sin(time * 2.5) * 0.05;
+      // Subtle organic breathing pulse
+      const scale = 0.88 + Math.sin(time * 2.0) * 0.04;
       innerRef.current.scale.set(scale, scale, scale);
     }
 
-    // Outer glass shell pulse
+    // 3. Outer glass shell micro-pulse
     if (outerGlassRef.current) {
-      const scale = 1.0 + Math.sin(time * 1.5) * 0.02;
+      const scale = 1.02 + Math.sin(time * 1.2) * 0.015;
       outerGlassRef.current.scale.set(scale, scale, scale);
     }
 
-    // Rings rotating on different axes
+    // 4. Subtle large transparent outer wireframe shell rotation
+    if (outerShellRef.current) {
+      outerShellRef.current.rotation.y = time * 0.025;
+      outerShellRef.current.rotation.z = -time * 0.015;
+    }
+
+    // 5. Orbit rings rotating slowly on different axes (no chaotic spinning)
     if (ring1Ref.current) {
-      ring1Ref.current.rotation.x = time * 0.4;
-      ring1Ref.current.rotation.y = time * 0.2;
+      ring1Ref.current.rotation.x = time * 0.08;
+      ring1Ref.current.rotation.y = time * 0.04;
     }
     if (ring2Ref.current) {
-      ring2Ref.current.rotation.y = -time * 0.3;
-      ring2Ref.current.rotation.z = time * 0.15;
+      ring2Ref.current.rotation.y = -time * 0.06;
+      ring2Ref.current.rotation.z = time * 0.03;
     }
     if (ring3Ref.current) {
-      ring3Ref.current.rotation.x = time * 0.15;
-      ring3Ref.current.rotation.z = -time * 0.35;
+      ring3Ref.current.rotation.x = time * 0.03;
+      ring3Ref.current.rotation.z = -time * 0.07;
+    }
+    if (ring4Ref.current) {
+      ring4Ref.current.rotation.y = time * 0.05;
+      ring4Ref.current.rotation.x = -time * 0.05;
     }
   });
 
   return (
     <group ref={coreGroupRef}>
-      {/* 1. Inner dense wireframe core */}
+      {/* 1. Inner dense wireframe core (violet emissive geometry) */}
       <mesh ref={innerRef}>
-        <icosahedronGeometry args={[0.7, 1]} />
+        <icosahedronGeometry args={[0.75, 1]} />
         <meshStandardMaterial
           color="#8b5cf6" // Violet core
           wireframe={true}
           transparent={true}
-          opacity={0.6}
+          opacity={0.65}
           emissive="#8b5cf6"
-          emissiveIntensity={1.2}
+          emissiveIntensity={1.5}
         />
       </mesh>
 
-      {/* 2. Volumetric internal light sphere */}
+      {/* 2. Volumetric internal light sphere (cyan glow center) */}
       <mesh>
-        <sphereGeometry args={[0.4, 16, 16]} />
-        <meshBasicMaterial
-          color="#33e6ff" // Cyan glow center
-          transparent={true}
-          opacity={0.3}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-
-      {/* 3. Outer reflective glass-like sphere */}
-      <mesh ref={outerGlassRef}>
-        <sphereGeometry args={[1.05, 32, 32]} />
-        <meshPhysicalMaterial
-          color="#0b0f19"
-          roughness={0.1}
-          metalness={0.1}
-          transparent={true}
-          opacity={0.4}
-          transmission={0.8}
-          thickness={1.5}
-          ior={1.5}
-          clearcoat={1.0}
-          clearcoatRoughness={0.1}
-          emissive="#33e6ff"
-          emissiveIntensity={0.15}
-        />
-      </mesh>
-
-      {/* 4. Orbit Rings (Thin, technical, glowing) */}
-      {/* Ring 1 - Outer cyan ring */}
-      <mesh ref={ring1Ref} rotation={[Math.PI / 4, 0, 0]}>
-        <torusGeometry args={[1.5, 0.012, 8, 64]} />
+        <sphereGeometry args={[0.55, 32, 32]} />
         <meshBasicMaterial
           color="#33e6ff"
           transparent={true}
-          opacity={0.4}
+          opacity={0.35}
           blending={THREE.AdditiveBlending}
         />
       </mesh>
 
-      {/* Ring 2 - Mid violet ring */}
+      {/* 3. Outer reflective glass-like sphere (highly polished glass shell) */}
+      <mesh ref={outerGlassRef}>
+        <sphereGeometry args={[1.05, 64, 64]} />
+        <meshPhysicalMaterial
+          color="#0b0f19"
+          roughness={0.05}
+          metalness={0.1}
+          transparent={true}
+          opacity={0.45}
+          transmission={0.9}
+          thickness={2.0}
+          ior={1.6}
+          clearcoat={1.0}
+          clearcoatRoughness={0.05}
+          emissive="#33e6ff"
+          emissiveIntensity={0.25}
+        />
+      </mesh>
+
+      {/* 4. Subtle large transparent outer wireframe shell (added volume and tech details) */}
+      <mesh ref={outerShellRef}>
+        <dodecahedronGeometry args={[1.4, 0]} />
+        <meshBasicMaterial
+          color="#33e6ff"
+          wireframe={true}
+          transparent={true}
+          opacity={0.08}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* 5. Orbit Rings (Thin, technical, wrapping at different angles to build 3D volume) */}
+      {/* Ring 1 - Cyan ring */}
+      <mesh ref={ring1Ref} rotation={[Math.PI / 4, 0, 0]}>
+        <torusGeometry args={[1.65, 0.008, 8, 96]} />
+        <meshBasicMaterial
+          color="#33e6ff"
+          transparent={true}
+          opacity={0.45}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+
+      {/* Ring 2 - Violet ring */}
       <mesh ref={ring2Ref} rotation={[-Math.PI / 3, Math.PI / 6, 0]}>
-        <torusGeometry args={[1.8, 0.008, 8, 64]} />
+        <torusGeometry args={[1.95, 0.006, 8, 96]} />
         <meshBasicMaterial
           color="#8b5cf6"
+          transparent={true}
+          opacity={0.35}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+
+      {/* Ring 3 - Deep blue/cyan ring */}
+      <mesh ref={ring3Ref} rotation={[Math.PI / 6, -Math.PI / 4, 0]}>
+        <torusGeometry args={[2.25, 0.005, 8, 96]} />
+        <meshBasicMaterial
+          color="#4f7cff"
           transparent={true}
           opacity={0.3}
           blending={THREE.AdditiveBlending}
         />
       </mesh>
 
-      {/* Ring 3 - Outer thin blue ring */}
-      <mesh ref={ring3Ref} rotation={[Math.PI / 6, -Math.PI / 4, 0]}>
-        <torusGeometry args={[2.1, 0.006, 6, 48]} />
+      {/* Ring 4 - Thin outer cyan ring */}
+      <mesh ref={ring4Ref} rotation={[-Math.PI / 6, Math.PI / 5, Math.PI / 3]}>
+        <torusGeometry args={[2.55, 0.004, 6, 96]} />
         <meshBasicMaterial
-          color="#4f7cff"
+          color="#33e6ff"
           transparent={true}
           opacity={0.25}
           blending={THREE.AdditiveBlending}
         />
       </mesh>
 
-      {/* 5. Center localized point light to cast shadows/reflections */}
-      <pointLight color="#33e6ff" intensity={2.0} distance={5} decay={2} />
-      <pointLight color="#8b5cf6" intensity={1.5} distance={4} decay={2} />
+      {/* 6. Center localized point lights to cast reflections/glowing aura */}
+      <pointLight color="#33e6ff" intensity={5.0} distance={8} decay={1.5} />
+      <pointLight color="#8b5cf6" intensity={4.0} distance={6} decay={1.5} />
     </group>
   );
 }

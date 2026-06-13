@@ -59,7 +59,7 @@ function InteractiveScene({ isMobile }: { isMobile: boolean }) {
       targetRotX = -scrollRatio * 0.08;
       targetRotY = baseRotationY * 0.4; // slower rotation on mobile
       targetZ = -scrollRatio * 0.8;
-      targetY = -0.8 - scrollRatio * 0.3; // shifted down base position
+      targetY = -scrollRatio * 0.3; // centered base position on mobile
     }
 
     // Apply smooth interpolation (lerp)
@@ -69,8 +69,8 @@ function InteractiveScene({ isMobile }: { isMobile: boolean }) {
     sceneGroupRef.current.position.y = THREE.MathUtils.lerp(sceneGroupRef.current.position.y, targetY, 0.08);
   });
 
-  // Position group to the right on desktop, center on mobile
-  const groupBasePos: [number, number, number] = isMobile ? [0, -0.8, 0] : [2.0, 0, 0];
+  // Centered group base position
+  const groupBasePos: [number, number, number] = [0, 0, 0];
 
   return (
     <>
@@ -80,7 +80,7 @@ function InteractiveScene({ isMobile }: { isMobile: boolean }) {
       <directionalLight position={[-5, -5, -5]} intensity={0.1} />
 
       {/* Main floating group combining core, nodes, lines */}
-      <group ref={sceneGroupRef} position={groupBasePos}>
+      <group ref={sceneGroupRef} position={groupBasePos} scale={isMobile ? 0.95 : 1.55}>
         {/* Core AI/Builder engine */}
         <HeroCore />
 
@@ -90,15 +90,6 @@ function InteractiveScene({ isMobile }: { isMobile: boolean }) {
 
       {/* Performant background star field */}
       <HeroParticles count={isMobile ? 120 : 350} mouseRef={mouseRef} />
-
-      {/* Technical grid floor at bottom (desktop only) */}
-      {!isMobile && (
-        <gridHelper
-          args={[30, 24, "#8b5cf6", "rgba(139, 92, 246, 0.03)"]}
-          position={[0, -2.8, -2]}
-          rotation={[0.1, 0, 0]}
-        />
-      )}
     </>
   );
 }
@@ -146,7 +137,7 @@ export default function HeroScene() {
   return (
     <div className="w-full h-full absolute inset-0 pointer-events-none z-0">
       <Canvas
-        camera={{ position: [0, 0, 5.5], fov: 50 }}
+        camera={{ position: [0, 0, 5.2], fov: 34 }}
         dpr={[1, 1.5]} // limit DPR for high performance on retina displays
         gl={{
           antialias: true,
