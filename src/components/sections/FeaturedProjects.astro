@@ -4,6 +4,54 @@ import LiveDemoFrame from "../ui/LiveDemoFrame";
 
 // Filter only featured projects (InvoiceFlow and SortMySkills)
 const featuredProjects = projects.filter((p) => p.featured);
+
+// Custom Tailored Metadata for Product Launches
+const projectLaunches = {
+  invoiceflow: {
+    role: "Full-Stack Architect",
+    timeline: "Jan 2026 - Present",
+    metrics: "₹1.56Cr+ Discounted // 99.8% Success",
+    challenges: [
+      "Engineered automated GSTIN invoice parsing with multi-party digital signature validation.",
+      "Built a secure discount pooling mechanism with Supabase Row-Level Security policies.",
+      "Designed a real-time investment dashboard showcasing discounted yield parameters."
+    ],
+    architecture: [
+      { name: "Browser", desc: "Next.js UI & client uploads" },
+      { name: "Parser API", desc: "Groq Llama OCR pipeline" },
+      { name: "Escrow Engine", desc: "Automated payment channels" },
+      { name: "Database", desc: "Supabase Postgres ledger" }
+    ],
+    flow: [
+      { num: "01", name: "Invoice Upload", desc: "MSME uploads digital invoice invoices with GST credentials." },
+      { num: "02", name: "AI Verification", desc: "Llama-powered parsing validates invoice records in real-time." },
+      { num: "03", name: "Discount Pooling", desc: "Investors audit yield rates and fund verified discounting pools." },
+      { num: "04", name: "Escrow Payout", desc: "Escrow handles secure distribution to MSME ledgers." }
+    ]
+  },
+  sortmyskills: {
+    role: "Lead Engineer & Designer",
+    timeline: "Feb 2026 - Mar 2026",
+    metrics: "96% Parser Precision // 12K+ Users",
+    challenges: [
+      "Designed an interactive skill gap topology rendering dynamic learning paths with GSAP.",
+      "Optimized OCR parsing speed of unstructured PDF resume uploads under 2.5 seconds.",
+      "Integrated job specification vectors to measure precise career compatibility ratings."
+    ],
+    architecture: [
+      { name: "Astro client", desc: "Lenis smooth-scroll interface" },
+      { name: "Resume Parser", desc: "Local PDF context parser" },
+      { name: "Gap Analyzer", desc: "Embedding vector search engine" },
+      { name: "Roadmap compiler", desc: "Dynamic GSAP tree structure" }
+    ],
+    flow: [
+      { num: "01", name: "Resume Intake", desc: "Student drops PDF resume into active browser dropzone." },
+      { num: "02", name: "Vector Parsing", desc: "Context engine extracts skill nodes and calculates ATS score." },
+      { num: "03", name: "Gap Analysis", desc: "System measures credentials against target job profiles." },
+      { num: "04", name: "Roadmap Compile", desc: "Astro compiles an interactive adaptive course study tree." }
+    ]
+  }
+};
 ---
 
 <section id="projects" class="projects-section">
@@ -13,18 +61,22 @@ const featuredProjects = projects.filter((p) => p.featured);
     {/* Section Header */}
     <div class="section-header" data-reveal>
       <div class="section-badge">
-        <span class="badge-num">03</span>
+        <span class="badge-num">04</span>
         <span class="badge-line"></span>
-        <span class="badge-title">FEATURED WORK</span>
+        <span class="badge-title">FEATURED PRODUCTS</span>
       </div>
-      <h2 class="section-headline">Products that moved past the idea stage.</h2>
+      <h2 class="section-headline">Product Launches</h2>
+      <p class="section-subtitle">Real-world applications built for scale, performance, and utility.</p>
     </div>
 
     {/* Project Showcases */}
     <div class="showcases-list">
       {
         featuredProjects.map((proj, index) => {
+          const launchData = projectLaunches[proj.slug as keyof typeof projectLaunches];
+          if (!launchData) return null;
           const isEven = index % 2 === 0;
+
           return (
             <div 
               class={`project-showcase ${isEven ? "layout-normal" : "layout-reverse"}`}
@@ -33,8 +85,8 @@ const featuredProjects = projects.filter((p) => p.featured);
               {/* Project Radial Glow behind visual */}
               <div class={`project-glow glow-${proj.accent}`}></div>
 
-              {/* Left Column: Project Copy */}
-              <div class="project-copy" data-project-copy>
+              {/* Column 1: Product Specifications & Telemetry */}
+              <div class="project-specs-col" data-project-copy>
                 <div class="showcase-eyebrow">
                   <span class="showcase-num">0{index + 1}</span>
                   <span class="showcase-divider">/</span>
@@ -42,11 +94,56 @@ const featuredProjects = projects.filter((p) => p.featured);
                 </div>
                 
                 <h3 class="showcase-name">{proj.name}</h3>
-                
                 <h4 class="showcase-headline">{proj.headline}</h4>
-                
-                <p class="showcase-desc">{proj.description}</p>
-                
+
+                {/* Sidebar Specifications */}
+                <div class="specs-grid">
+                  <div class="spec-item">
+                    <span class="spec-label">ROLE:</span>
+                    <span class="spec-val">{launchData.role}</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">TIMELINE:</span>
+                    <span class="spec-val">{launchData.timeline}</span>
+                  </div>
+                  <div class="spec-item">
+                    <span class="spec-label">METRICS:</span>
+                    <span class="spec-val text-white font-bold">{launchData.metrics}</span>
+                  </div>
+                </div>
+
+                {/* Technical Architecture Block */}
+                <div class="arch-container">
+                  <span class="arch-title">// SYSTEM ARCHITECTURE</span>
+                  <div class="arch-flow">
+                    {launchData.architecture.map((node, nIdx) => (
+                      <>
+                        <div class="arch-node">
+                          <span class="arch-node-name">{node.name}</span>
+                          <span class="arch-node-desc">{node.desc}</span>
+                        </div>
+                        {nIdx < launchData.architecture.length - 1 && (
+                          <div class="arch-arrow">➔</div>
+                        )}
+                      </>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Challenges Solved */}
+                <div class="challenges-box">
+                  <span class="challenges-title">CHALLENGES SOLVED:</span>
+                  <ul class="challenges-list-items">
+                    {launchData.challenges.map((challenge) => (
+                      <li>
+                        <span class="challenge-dot"></span>
+                        <span class="challenge-text">{challenge}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Tech Stack Badge List */}
                 <div class="showcase-stack">
                   {proj.stack.map((tech) => (
                     <span class="stack-badge">{tech}</span>
@@ -77,53 +174,68 @@ const featuredProjects = projects.filter((p) => p.featured);
                       <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="github-icon">
                         <path d="M8 0C3.58 0 0 3.58 0 8C0 11.54 2.29 14.53 5.47 15.59C5.87 15.66 6.02 15.42 6.02 15.21C6.02 15.02 6.01 14.39 6.01 13.72C4 14.09 3.48 13.23 3.32 12.78C3.23 12.55 2.84 11.84 2.5 11.65C2.22 11.5 1.82 11.13 2.49 11.12C3.12 11.11 3.57 11.7 3.72 11.94C4.44 13.15 5.59 12.81 6.05 12.6C6.12 12.08 6.33 11.73 6.56 11.53C4.78 11.33 2.92 10.64 2.92 7.58C2.92 6.71 3.23 5.99 3.74 5.43C3.66 5.23 3.38 4.41 3.82 3.31C3.82 3.31 4.49 3.1 6.02 4.13C6.66 3.95 7.34 3.86 8.02 3.86C8.7 3.86 9.38 3.95 10.02 4.13C11.55 3.09 12.22 3.31 12.22 3.31C12.66 4.41 12.38 5.23 12.3 5.43C12.81 5.99 13.12 6.7 13.12 7.58C13.12 10.65 11.25 11.33 9.47 11.53C9.76 11.78 10.01 12.26 10.01 13.01C10.01 14.08 10 14.94 10 15.21C10 15.42 10.15 15.67 10.55 15.59C13.71 14.53 16 11.53 16 8C16 3.58 12.42 0 8 0Z" fill="currentColor"/>
                       </svg>
-                      <span>Repository</span>
+                      <span>Codebase</span>
                     </a>
                   )}
                 </div>
               </div>
 
-              {/* Right Column: Interactive Browser Preview */}
-              <div class="project-demo perspective-scene scroll-3d-safe" data-project-depth-scene>
-                {/* Dynamic drawing connection lines */}
-                <svg class="project-connection-line" viewBox="0 0 500 400" fill="none" preserveAspectRatio="none">
-                  <path
-                    data-project-line
-                    d={proj.slug === "invoiceflow" ? "M -40,160 L 80,160 L 140,240 L 260,240" : "M 540,160 L 420,160 L 360,240 L 240,240"}
-                    stroke={`var(--${proj.accent})`}
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                  />
-                </svg>
+              {/* Column 2: Product Simulation & Step-by-Step Flow */}
+              <div class="project-demo-col">
+                <div class="project-demo perspective-scene scroll-3d-safe" data-project-depth-scene>
+                  {/* Dynamic drawing connection lines */}
+                  <svg class="project-connection-line" viewBox="0 0 500 400" fill="none" preserveAspectRatio="none">
+                    <path
+                      data-project-line
+                      d={proj.slug === "invoiceflow" ? "M -40,160 L 80,160 L 140,240 L 260,240" : "M 540,160 L 420,160 L 360,240 L 240,240"}
+                      stroke={`var(--${proj.accent})`}
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
 
-                {/* Layer 1 & 2: Background UI Slabs */}
-                <div class="project-slab-bg slab-back depth-card" data-project-depth-layer="1"></div>
-                <div class="project-slab-bg slab-mid depth-card" data-project-depth-layer="2"></div>
+                  {/* Layer 1 & 2: Background UI Slabs */}
+                  <div class="project-slab-bg slab-back depth-card" data-project-depth-layer="1"></div>
+                  <div class="project-slab-bg slab-mid depth-card" data-project-depth-layer="2"></div>
 
-                {/* Layer 3: Main Browser Mockup Frame */}
-                <div class="project-slab-main depth-card" data-project-depth-layer="3" data-tilt-card>
-                  {proj.live && (
+                  {/* Layer 3: Main Browser Mockup Frame */}
+                  <div class="project-slab-main depth-card" data-project-depth-layer="3" data-tilt-card>
                     <LiveDemoFrame 
                       client:visible
                       title={proj.name}
                       url={proj.live}
                       accent={proj.accent as any}
                     />
-                  )}
+                  </div>
+
+                  {/* Technical Annotation Labels */}
+                  <div class="project-annotation ann-left" data-project-annotation>
+                    <span class="ann-dot"></span>
+                    <span class="ann-txt">LIVE SIMULATOR</span>
+                  </div>
+                  <div class="project-annotation ann-right" data-project-annotation>
+                    <span class="ann-dot"></span>
+                    <span class="ann-txt">PRODUCTION DEPLOY</span>
+                  </div>
                 </div>
 
-                {/* Technical Annotation Labels */}
-                <div class="project-annotation ann-left" data-project-annotation>
-                  <span class="ann-dot"></span>
-                  <span class="ann-txt">LIVE PRODUCT</span>
-                </div>
-                <div class="project-annotation ann-right" data-project-annotation>
-                  <span class="ann-dot"></span>
-                  <span class="ann-txt">VERIFIED BUILD</span>
-                </div>
-                <div class="project-annotation ann-bottom" data-project-annotation>
-                  <span class="ann-dot"></span>
-                  <span class="ann-txt">OPEN DEMO</span>
+                {/* Step-by-Step Interactive Flow Sequence */}
+                <div class="product-flow-wrapper">
+                  <span class="flow-title">// TRANSACTION STEPS</span>
+                  <div class="flow-steps-grid">
+                    {launchData.flow.map((step) => (
+                      <div class="flow-step-item">
+                        <div class="flow-step-num-box">
+                          <span class={`flow-step-num border-${proj.accent}`}>{step.num}</span>
+                          <span class="flow-step-line"></span>
+                        </div>
+                        <div class="flow-step-info">
+                          <h5 class="flow-step-name">{step.name}</h5>
+                          <p class="flow-step-desc">{step.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -148,8 +260,8 @@ const featuredProjects = projects.filter((p) => p.featured);
     position: absolute;
     inset: 0;
     background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.007) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.007) 1px, transparent 1px);
     background-size: 60px 60px;
     background-position: center;
     pointer-events: none;
@@ -168,7 +280,7 @@ const featuredProjects = projects.filter((p) => p.featured);
   .section-header {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     max-width: 680px;
     border-left: 1px solid rgba(255, 255, 255, 0.1);
     padding-left: 1.5rem;
@@ -212,19 +324,27 @@ const featuredProjects = projects.filter((p) => p.featured);
     margin: 0;
   }
 
+  .section-subtitle {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
   /* Showcases List */
   .showcases-list {
     display: flex;
     flex-direction: column;
-    gap: 10rem;
+    gap: 12rem;
   }
 
   .project-showcase {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1.15fr;
-    gap: 5rem;
-    align-items: center;
+    gap: 6rem;
+    align-items: flex-start;
   }
 
   /* Glowing backgrounds */
@@ -234,25 +354,25 @@ const featuredProjects = projects.filter((p) => p.featured);
     height: 500px;
     border-radius: 50%;
     filter: blur(130px);
-    opacity: 0.25;
+    opacity: 0.22;
     pointer-events: none;
     z-index: -1;
   }
 
   .glow-green {
-    background: radial-gradient(circle, rgba(61, 217, 160, 0.2) 0%, transparent 70%);
-    top: -10%;
+    background: radial-gradient(circle, rgba(61, 217, 160, 0.15) 0%, transparent 70%);
+    top: -5%;
     right: -10%;
   }
 
   .glow-blue {
-    background: radial-gradient(circle, rgba(79, 124, 255, 0.2) 0%, transparent 70%);
-    top: -10%;
+    background: radial-gradient(circle, rgba(79, 124, 255, 0.15) 0%, transparent 70%);
+    top: -5%;
     left: -10%;
   }
 
-  /* Left Column: Copy */
-  .project-copy {
+  /* Column 1: Specifications */
+  .project-specs-col {
     display: flex;
     flex-direction: column;
     z-index: 2;
@@ -291,42 +411,169 @@ const featuredProjects = projects.filter((p) => p.featured);
     line-height: 0.95;
     letter-spacing: -0.05em;
     color: var(--text);
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 1.2rem 0;
     text-transform: uppercase;
   }
 
   .showcase-headline {
     font-family: var(--font-body);
-    font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
     font-weight: 700;
     line-height: 1.4;
     color: var(--text);
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 2rem 0;
     letter-spacing: -0.01em;
   }
 
-  .showcase-desc {
+  /* Specifications Grid */
+  .specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 0;
+    margin-bottom: 2rem;
+  }
+
+  .spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .spec-label {
+    font-family: monospace;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .spec-val {
     font-family: var(--font-body);
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 0.82rem;
     color: var(--text-muted);
-    margin: 0 0 2.5rem 0;
+  }
+
+  /* Technical Architecture Block */
+  .arch-container {
+    background: rgba(255, 255, 255, 0.012);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .arch-title {
+    font-family: monospace;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .arch-flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .arch-node {
+    display: flex;
+    flex-direction: column;
+    background: rgba(7, 8, 13, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .arch-node-name {
+    font-family: monospace;
+    font-size: 0.72rem;
+    font-weight: bold;
+    color: var(--text);
+  }
+
+  .arch-node-desc {
+    font-size: 0.55rem;
+    color: var(--text-dim);
+    margin-top: 1px;
+  }
+
+  .arch-arrow {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    opacity: 0.5;
+  }
+
+  /* Challenges Box */
+  .challenges-box {
+    margin-bottom: 2rem;
+  }
+
+  .challenges-title {
+    font-family: monospace;
+    font-size: 0.68rem;
+    font-weight: bold;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  .challenges-list-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .challenges-list-items li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .challenge-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--cyan);
+    margin-top: 6px;
+    shrink: 0;
+  }
+
+  .project-showcase:nth-child(2) .challenge-dot {
+    background: var(--blue);
+  }
+
+  .challenge-text {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: var(--text-muted);
   }
 
   /* Stack tags */
   .showcase-stack {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-bottom: 3.5rem;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
   }
 
   .stack-badge {
     font-family: monospace;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     background: var(--surface);
     border: 1px solid var(--border);
-    padding: 0.4rem 0.8rem;
+    padding: 0.35rem 0.7rem;
     border-radius: 99px;
     color: var(--text-muted);
     transition: all 0.3s var(--ease-out);
@@ -415,7 +662,13 @@ const featuredProjects = projects.filter((p) => p.featured);
     height: 14px;
   }
 
-  /* Right Column: Demo */
+  /* Column 2: Demo & Flow */
+  .project-demo-col {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
   .project-demo {
     position: relative;
     width: 100%;
@@ -473,24 +726,18 @@ const featuredProjects = projects.filter((p) => p.featured);
     transform: translateZ(-30px) translateY(10px) rotate(2deg);
   }
 
-  /* Fintech accent overrides for InvoiceFlow slabs */
+  /* Slabs accent borders */
   .project-showcase:nth-child(1) .slab-back {
     border-color: rgba(61, 217, 160, 0.08);
-    background: radial-gradient(circle at 10% 20%, rgba(61, 217, 160, 0.03) 0%, transparent 60%);
   }
   .project-showcase:nth-child(1) .slab-mid {
     border-color: rgba(51, 230, 255, 0.08);
-    background: radial-gradient(circle at 80% 70%, rgba(51, 230, 255, 0.03) 0%, transparent 60%);
   }
-
-  /* Career/AI accent overrides for SortMySkills slabs */
   .project-showcase:nth-child(2) .slab-back {
     border-color: rgba(79, 124, 255, 0.08);
-    background: radial-gradient(circle at 10% 20%, rgba(79, 124, 255, 0.03) 0%, transparent 60%);
   }
   .project-showcase:nth-child(2) .slab-mid {
     border-color: rgba(139, 92, 246, 0.08);
-    background: radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.03) 0%, transparent 60%);
   }
 
   /* Annotation labels */
@@ -511,23 +758,10 @@ const featuredProjects = projects.filter((p) => p.featured);
     pointer-events: none;
     backdrop-filter: blur(8px);
     opacity: 0.7;
-    transition: opacity 0.3s var(--ease-out);
   }
 
-  .ann-left {
-    top: 15%;
-    left: -40px;
-  }
-
-  .ann-right {
-    top: 40%;
-    right: -40px;
-  }
-
-  .ann-bottom {
-    bottom: -15px;
-    left: 10%;
-  }
+  .ann-left { top: 15%; left: -30px; }
+  .ann-right { bottom: 15%; right: -30px; }
 
   .ann-dot {
     width: 4px;
@@ -538,15 +772,88 @@ const featuredProjects = projects.filter((p) => p.featured);
   .project-showcase:nth-child(1) .ann-dot { background: var(--green); }
   .project-showcase:nth-child(2) .ann-dot { background: var(--blue); }
 
+  /* Product Flow steps vertical list styling */
+  .product-flow-wrapper {
+    background: rgba(13, 15, 23, 0.3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.8rem;
+  }
+
+  .flow-title {
+    font-family: monospace;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+
+  .flow-steps-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .flow-step-item {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+  }
+
+  .flow-step-num-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+
+  .flow-step-num {
+    font-family: monospace;
+    font-size: 0.72rem;
+    font-weight: bold;
+    padding: 0.25rem 0.45rem;
+    border: 1px solid;
+    border-radius: 4px;
+    line-height: 1;
+    background: rgba(7, 8, 13, 0.8);
+  }
+
+  .border-green { border-color: rgba(61, 217, 160, 0.4); color: var(--green); }
+  .border-blue { border-color: rgba(79, 124, 255, 0.4); color: var(--blue); }
+
+  .flow-step-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .flow-step-name {
+    font-family: var(--font-display);
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .flow-step-desc {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
   /* Layout Alternation on Widescreen */
   @media (min-width: 769px) {
     .layout-reverse {
       grid-template-columns: 1.15fr 1fr;
     }
-    .layout-reverse .project-copy {
+    .layout-reverse .project-specs-col {
       grid-column: 2;
     }
-    .layout-reverse .project-demo {
+    .layout-reverse .project-demo-col {
       grid-column: 1;
       grid-row: 1;
     }
@@ -554,7 +861,7 @@ const featuredProjects = projects.filter((p) => p.featured);
 
   @media (max-width: 1024px) {
     .project-showcase {
-      gap: 3rem;
+      gap: 4rem;
     }
   }
 
@@ -563,7 +870,7 @@ const featuredProjects = projects.filter((p) => p.featured);
       gap: 5rem;
     }
     .showcases-list {
-      gap: 6rem;
+      gap: 8rem;
     }
     .project-showcase {
       grid-template-columns: 1fr;
@@ -588,6 +895,20 @@ const featuredProjects = projects.filter((p) => p.featured);
     }
     .project-slab-main {
       transform: none !important;
+    }
+    .specs-grid {
+      grid-template-columns: 1fr;
+      padding: 1.2rem 0;
+      gap: 1rem;
+    }
+    .arch-flow {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+    }
+    .arch-arrow {
+      transform: rotate(90deg);
+      margin-left: 0.8rem;
     }
   }
 </style>

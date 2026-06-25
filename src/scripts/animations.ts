@@ -2,13 +2,80 @@
 function initPreloader(gsap: any) {
   const preloader = document.querySelector("[data-preloader]");
   if (!preloader) return;
-  gsap.to(preloader, {
-    opacity: 0,
-    duration: 0.8,
-    delay: 0.4,
-    ease: "power3.out",
-    onComplete: () => preloader.remove(),
+
+  const pct = preloader.querySelector("[data-preloader-pct]");
+  const bar = preloader.querySelector(".hud-progress-bar");
+  const lines = preloader.querySelectorAll(".console-line");
+  const skipBtn = preloader.querySelector("[data-preloader-skip]");
+
+  let isSkipped = false;
+
+  const skipIntro = () => {
+    if (isSkipped) return;
+    isSkipped = true;
+    
+    tl.kill();
+    gsap.killTweensOf([bar, pct, lines]);
+    window.removeEventListener("keydown", handleKeyDown);
+
+    gsap.to(preloader, {
+      opacity: 0,
+      duration: 0.4,
+      ease: "power2.inOut",
+      onComplete: () => {
+        preloader.remove();
+        window.dispatchEvent(new Event("intro-complete"));
+      },
+    });
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      skipIntro();
+    }
+  };
+
+  window.addEventListener("keydown", handleKeyDown);
+  if (skipBtn) {
+    skipBtn.addEventListener("click", skipIntro);
+  }
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      gsap.to(preloader, {
+        opacity: 0,
+        duration: 0.6,
+        ease: "power3.inOut",
+        onComplete: () => {
+          preloader.remove();
+          window.dispatchEvent(new Event("intro-complete"));
+        },
+      });
+    }
   });
+
+  if (bar && pct) {
+    const count = { val: 0 };
+    tl.to(bar, { width: "100%", duration: 1.8, ease: "power2.inOut" }, 0);
+    tl.to(count, {
+      val: 100,
+      duration: 1.8,
+      ease: "power2.inOut",
+      onUpdate: () => {
+        pct.textContent = `${Math.floor(count.val).toString().padStart(3, "0")}%`;
+      }
+    }, 0);
+  }
+
+  if (lines.length > 0) {
+    tl.fromTo(lines,
+      { opacity: 0, y: 6 },
+      { opacity: 1, y: 0, duration: 0.25, stagger: 0.22, ease: "power2.out" },
+      0.08
+    );
+  }
 }
 
 // 2. Cinematic Hero Timeline & Scroll Scrub
@@ -117,121 +184,98 @@ function initRevealAnimations(gsap: any, ScrollTrigger: any) {
   });
 }
 
-// 4. Execution Loop Section (Motion Cards pinned timeline)
-function initMotionCards(gsap: any, ScrollTrigger: any, isMobile: boolean) {
-  const motionSection = document.querySelector("[data-motion-section]");
-  if (!motionSection) return;
+// 4. How I Build Section (Engineering Process pinned timeline)
+function initHowIBuild(gsap: any, ScrollTrigger: any, isMobile: boolean) {
+  const buildSection = document.querySelector("[data-how-i-build-section]");
+  if (!buildSection) return;
 
-  if (isMobile) {
-    const cards = motionSection.querySelectorAll("[data-motion-card]");
-    if (cards.length > 0) {
-      gsap.fromTo(cards,
-        { opacity: 0, y: 30 },
-        { 
-          opacity: 1, 
-          y: 0, 
-          duration: 0.8, 
-          stagger: 0.15,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: motionSection,
-            start: "top 75%",
-          } 
-        }
-      );
+  if (isMobile) return; // Stacks vertically naturally on mobile, handled by CSS
+
+  const navItems = buildSection.querySelectorAll(".nav-step-item");
+  const cards = buildSection.querySelectorAll(".step-card");
+  const lineFill = buildSection.querySelector("[data-build-line-fill]");
+
+  if (navItems.length === 0 || cards.length === 0) return;
+
+  // Set initial active state for the first card
+  gsap.set(cards, { opacity: 0, z: -80, rotateX: 6, pointerEvents: "none" });
+  gsap.set(cards[0], { opacity: 1, z: 0, rotateX: 0, pointerEvents: "auto" });
+
+  const buildTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: buildSection,
+      start: "top top",
+      end: "+=350%",
+      scrub: 0.5,
+      pin: true,
+      anticipatePin: 1,
     }
-    return;
-  }
+  });
 
-  const card1 = motionSection.querySelector('[data-motion-card="1"]');
-  const card2 = motionSection.querySelector('[data-motion-card="2"]');
-  const card3 = motionSection.querySelector('[data-motion-card="3"]');
-  const motionNum = motionSection.querySelector("[data-motion-number]");
-  const motionWord = motionSection.querySelector("[data-motion-word]");
-  const motionLines = motionSection.querySelectorAll("[data-motion-line]");
-  const motionTags = motionSection.querySelectorAll("[data-motion-tag]");
+  // Animate indicator progress line fill
+  buildTl.to(lineFill, { height: "100%", ease: "none" }, 0);
 
-  if (card1 && card2 && card3) {
-    gsap.set([card1, card2, card3], { transformOrigin: "center center", transformStyle: "preserve-3d" });
-    gsap.set(motionLines, { transformOrigin: "center center" });
+  const stepCount = navItems.length;
+  cards.forEach((card, idx) => {
+    if (idx === 0) return;
 
-    // Initial compressed stack setup
-    gsap.set([card1, card2, card3], { x: 0, y: 0, z: 0, rotate: 0, scale: 1 });
+    const prevCard = cards[idx - 1];
+    const navItem = navItems[idx];
+    const prevNavItem = navItems[idx - 1];
+    const position = (idx / stepCount) * 0.9;
 
-    const cardsTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: motionSection,
-        start: "top top",
-        end: "+=180%",
-        scrub: 1,
-        pin: true,
-        anticipatePin: 1,
+    // Transition between steps
+    buildTl.to(prevCard, {
+      opacity: 0,
+      z: -100,
+      rotateX: -10,
+      pointerEvents: "none",
+      duration: 0.15,
+      ease: "power2.inOut",
+      onStart: () => {
+        prevNavItem.classList.remove("active");
+      },
+      onReverseComplete: () => {
+        prevNavItem.classList.add("active");
       }
+    }, position);
+
+    buildTl.to(card, {
+      opacity: 1,
+      z: 0,
+      rotateX: 0,
+      pointerEvents: "auto",
+      duration: 0.25,
+      ease: "power2.inOut",
+      onStart: () => {
+        navItem.classList.add("active");
+      },
+      onReverseComplete: () => {
+        navItem.classList.remove("active");
+      }
+    }, position + 0.05);
+  });
+
+  // Dynamic Navigation Clicks
+  navItems.forEach((btn, idx) => {
+    btn.addEventListener("click", () => {
+      const scrollTriggerInstance = ScrollTrigger.create({
+        trigger: buildSection,
+        start: "top top",
+        end: "+=350%"
+      });
+      const start = scrollTriggerInstance.start;
+      const end = scrollTriggerInstance.end;
+      const targetScroll = start + (end - start) * (idx / (stepCount - 1));
+      
+      if ((window as any).lenis) {
+        (window as any).lenis.scrollTo(targetScroll);
+      } else {
+        window.scrollTo({ top: targetScroll, behavior: "smooth" });
+      }
+      scrollTriggerInstance.kill();
     });
-
-    if (motionNum) {
-      cardsTl.fromTo(motionNum,
-        { yPercent: 0 },
-        { yPercent: -15, ease: "none" },
-        0
-      );
-    }
-
-    if (motionWord) {
-      cardsTl.fromTo(motionWord,
-        { xPercent: 0 },
-        { xPercent: -20, ease: "none" },
-        0
-      );
-    }
-
-    // Draw technical grid lines
-    if (motionLines.length > 0) {
-      cardsTl.fromTo(motionLines,
-        { scaleX: 0, scaleY: 0 },
-        { scaleX: 1, scaleY: 1, duration: 0.4, ease: "power3.inOut" },
-        0
-      );
-    }
-
-    // Pinned cards 3D split-out assembly
-    // BUILD card slides left & deep
-    cardsTl.fromTo(card1,
-      { x: 0, y: 0, z: 0, rotateY: 0, scale: 1 },
-      { x: "-29vw", y: -16, z: -100, rotateY: -15, rotateZ: -6, scale: 0.94, ease: "power2.inOut" },
-      0.1
-    );
-
-    // SHIP card moves forward
-    cardsTl.fromTo(card2,
-      { x: 0, y: 0, z: 0, scale: 1 },
-      { x: 0, y: -8, z: 60, scale: 1.08, ease: "power2.inOut" },
-      0.1
-    );
-
-    // ITERATE card slides right & deep
-    cardsTl.fromTo(card3,
-      { x: 0, y: 0, z: 0, rotateY: 0, scale: 1 },
-      { x: "29vw", y: 16, z: -100, rotateY: 15, rotateZ: 6, scale: 0.94, ease: "power2.inOut" },
-      0.1
-    );
-
-    // Floating tech tags scatter around cards composition
-    if (motionTags.length > 0) {
-      cardsTl.fromTo(motionTags,
-        { x: 0, y: 0, z: 0, opacity: 0 },
-        { 
-          x: (i: number) => [-36, 46, -46, 36, -26, 26][i % 6] + "vw",
-          y: (i: number) => [-160, -110, 110, 150, -40, 50][i % 6],
-          z: (i: number) => [40, -40, 30, -30, 60, -20][i % 6],
-          opacity: 0.9,
-          stagger: 0.03,
-          ease: "power2.out"
-        },
-        0.15
-      );
-    }
-  }
+  });
 }
 
 // 5. About Section scroll reveal
@@ -1010,7 +1054,7 @@ export async function initAnimations() {
     preloader?.remove();
     
     // Instant reveal of all data-reveal elements
-    document.querySelectorAll("[data-reveal]").forEach((el) => {
+    document.querySelectorAll("[data-reveal], .step-card, .nav-step-item").forEach((el) => {
       if (el instanceof HTMLElement) {
         el.style.opacity = "1";
         el.style.transform = "none";
@@ -1110,7 +1154,7 @@ export async function initAnimations() {
   initPreloader(gsap);
   initHeroAnimations(gsap, ScrollTrigger, isMobile);
   initRevealAnimations(gsap, ScrollTrigger);
-  initMotionCards(gsap, ScrollTrigger, isMobile);
+  initHowIBuild(gsap, ScrollTrigger, isMobile);
   initAbout(gsap, ScrollTrigger, isMobile);
   initProjectShowcases(gsap, ScrollTrigger, isMobile);
   initExperiments(gsap, ScrollTrigger, isMobile);

@@ -24,7 +24,13 @@ const experimentalProjects = projects.filter((p) => !p.featured);
       {
         experimentalProjects.map((proj) => {
           // Setup logs depending on system
-          const logs = proj.slug === "jarvis" 
+          const logs = proj.slug === "sortmyskills" 
+            ? [
+                { command: "parse.resume()", response: "92% MATCH // OK" },
+                { command: "assess.gaps()", response: "3 STACK_GAPS" },
+                { command: "roadmap.generate()", response: "COMPILED" }
+              ]
+            : proj.slug === "jarvis"
             ? [
                 { command: "wake.signal()", response: "ACTIVE // OK" },
                 { command: "search.live()", response: "LATENCY < 45MS" },
@@ -35,8 +41,6 @@ const experimentalProjects = projects.filter((p) => !p.featured);
                 { command: "audio.listen()", response: "MIC ACTIVE // HZ" },
                 { command: "context.reason()", response: "CONTEXT RESOLVED" }
               ];
-
-          const isJarvis = proj.slug === "jarvis";
 
           return (
             <div class="experiment-card-wrapper depth-card" data-experiment-card>

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -14,6 +14,22 @@ export default function HeroCore() {
   const ring3Ref = useRef<THREE.Mesh>(null);
   const ring4Ref = useRef<THREE.Mesh>(null);
 
+  const isAssembledRef = useRef(false);
+
+  useEffect(() => {
+    const handleIntroComplete = () => {
+      isAssembledRef.current = true;
+    };
+    window.addEventListener("intro-complete", handleIntroComplete);
+
+    // If preloader is already gone, trigger instantly
+    if (!document.querySelector("[data-preloader]")) {
+      isAssembledRef.current = true;
+    }
+
+    return () => window.removeEventListener("intro-complete", handleIntroComplete);
+  }, []);
+
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
 
@@ -22,44 +38,63 @@ export default function HeroCore() {
       coreGroupRef.current.rotation.y = time * 0.06;
     }
 
+    // Assembly target parameters
+    const targetRingScale = isAssembledRef.current ? 1.0 : 6.0;
+    const targetInnerScale = isAssembledRef.current ? 1.0 : 0.05;
+
     // 2. Inner wireframe rotation (slightly faster, counter-direction)
     if (innerRef.current) {
       innerRef.current.rotation.y = -time * 0.18;
       innerRef.current.rotation.x = time * 0.12;
       
+      const assembleScale = THREE.MathUtils.lerp(innerRef.current.scale.x, targetInnerScale, 0.05);
       // Subtle organic breathing pulse
-      const scale = 0.88 + Math.sin(time * 2.0) * 0.04;
-      innerRef.current.scale.set(scale, scale, scale);
+      const pulse = 0.88 + Math.sin(time * 2.0) * 0.04;
+      const finalScale = assembleScale * pulse;
+      innerRef.current.scale.set(finalScale, finalScale, finalScale);
     }
 
     // 3. Outer glass shell micro-pulse
     if (outerGlassRef.current) {
-      const scale = 1.02 + Math.sin(time * 1.2) * 0.015;
-      outerGlassRef.current.scale.set(scale, scale, scale);
+      const targetGlassScale = isAssembledRef.current ? 1.0 : 0.05;
+      const assembleScale = THREE.MathUtils.lerp(outerGlassRef.current.scale.x, targetGlassScale, 0.04);
+      const pulse = 1.02 + Math.sin(time * 1.2) * 0.015;
+      const finalScale = assembleScale * pulse;
+      outerGlassRef.current.scale.set(finalScale, finalScale, finalScale);
     }
 
     // 4. Subtle large transparent outer wireframe shell rotation
     if (outerShellRef.current) {
       outerShellRef.current.rotation.y = time * 0.025;
       outerShellRef.current.rotation.z = -time * 0.015;
+      const s = THREE.MathUtils.lerp(outerShellRef.current.scale.x, targetRingScale * 0.6, 0.03);
+      outerShellRef.current.scale.set(s, s, s);
     }
 
-    // 5. Orbit rings rotating slowly on different axes (no chaotic spinning)
+    // 5. Orbit rings rotating slowly and assembling dynamically at staggered speeds
     if (ring1Ref.current) {
       ring1Ref.current.rotation.x = time * 0.08;
       ring1Ref.current.rotation.y = time * 0.04;
+      const s = THREE.MathUtils.lerp(ring1Ref.current.scale.x, targetRingScale, 0.035);
+      ring1Ref.current.scale.set(s, s, s);
     }
     if (ring2Ref.current) {
       ring2Ref.current.rotation.y = -time * 0.06;
       ring2Ref.current.rotation.z = time * 0.03;
+      const s = THREE.MathUtils.lerp(ring2Ref.current.scale.x, targetRingScale, 0.045);
+      ring2Ref.current.scale.set(s, s, s);
     }
     if (ring3Ref.current) {
       ring3Ref.current.rotation.x = time * 0.03;
       ring3Ref.current.rotation.z = -time * 0.07;
+      const s = THREE.MathUtils.lerp(ring3Ref.current.scale.x, targetRingScale, 0.055);
+      ring3Ref.current.scale.set(s, s, s);
     }
     if (ring4Ref.current) {
       ring4Ref.current.rotation.y = time * 0.05;
       ring4Ref.current.rotation.x = -time * 0.05;
+      const s = THREE.MathUtils.lerp(ring4Ref.current.scale.x, targetRingScale, 0.065);
+      ring4Ref.current.scale.set(s, s, s);
     }
   });
 
